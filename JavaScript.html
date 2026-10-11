@@ -1043,7 +1043,8 @@
     run('getDashboardData',[state.dashboardDate],function(d){
       var stockByUnit={};
       (d.inventory||[]).forEach(function(row){var unit=String(row.BaseUnit||'Pcs').trim()||'Pcs';stockByUnit[unit]=(stockByUnit[unit]||0)+Number(row.OnHand||0);});
-      var stockSummary=Object.keys(stockByUnit).sort(function(a,b){return a.localeCompare(b);}).map(function(unit){return Number(stockByUnit[unit]).toLocaleString('en-BD',{maximumFractionDigits:2})+' '+unit;}).join(' · ')||'0';
+      function dashboardUnitShortName(value){var name=String(value||'').trim(),key=name.toLowerCase().replace(/[\s._-]/g,'');var abbreviations={carton:'CTN',cartons:'CTN',ctn:'CTN',gram:'GM',grams:'GM',gm:'GM',g:'GM',millilitre:'ML',millilitres:'ML',milliliter:'ML',milliliters:'ML',ml:'ML',kilogram:'KG',kilograms:'KG',kilo:'KG',kilos:'KG',kg:'KG',litre:'L',litres:'L',liter:'L',liters:'L',piece:'PCS',pieces:'PCS',pc:'PCS',pcs:'PCS',pack:'PK',packs:'PK',box:'BOX',boxes:'BOX',dozen:'DZ',dz:'DZ'};return abbreviations[key]||name;}
+      var stockSummary=Object.keys(stockByUnit).sort(function(a,b){return a.localeCompare(b);}).map(function(unit){return Number(stockByUnit[unit]).toLocaleString('en-BD',{maximumFractionDigits:2})+' '+dashboardUnitShortName(unit);}).join(' · ')||'0';
       var values=[
         {label:'Security Deposit',value:'৳ '+money(d.securityDeposit),icon:'◈',view:'agreements',note:'Approved suppliers'},
         {label:'Total Purchase Value',value:'৳ '+money(d.supplyValue),icon:'⇩',view:'purchases',note:'Purchase register'},
