@@ -22,8 +22,13 @@
           <span class="brand-mark" id="app-brand-mark">DC</span>
           <img id="app-company-logo" class="brand-logo-image is-hidden" alt="Company logo">
           <div class="brand-copy"><strong id="app-company-name">Distribution ERP</strong><span id="app-software-name" class="brand-subtitle">Distribution ERP</span><small id="app-company-address" class="brand-address is-hidden"></small></div>
-          <button class="mobile-toggle sidebar-corner-toggle" id="mobile-toggle" type="button" aria-label="Collapse navigation" title="Collapse navigation">‹</button>
         </div>
+        <button type="button" class="sidebar-profile-card" id="sidebar-profile-button" aria-label="Open my account">
+          <span id="sidebar-profile-avatar" class="sidebar-profile-avatar" aria-hidden="true">A</span>
+          <span class="sidebar-profile-copy"><strong id="sidebar-profile-name">User</strong><small id="sidebar-profile-role">Account</small></span>
+          <span class="sidebar-profile-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <label class="sidebar-menu-search"><span aria-hidden="true">⌕</span><input id="sidebar-menu-search-input" type="search" placeholder="Search menu…" autocomplete="off" aria-label="Search menu"><kbd>/</kbd></label>
         <nav class="main-nav">
           <button class="nav-item is-active" data-view="dashboard"><span>⌂</span>Dashboard</button>
           <div class="nav-group"><div class="nav-label">Operations</div>
@@ -52,9 +57,11 @@
             <button class="nav-item" data-view="accounting"><span>▤</span>Accounting</button>
           </div>
         </nav>
+        <button type="button" class="sidebar-signout" id="sidebar-logout-button"><span aria-hidden="true">↪</span>Sign out</button>
       </aside>
       <main class="main-content">
         <header class="topbar">
+          <button class="mobile-toggle topbar-menu-toggle" id="mobile-toggle" type="button" aria-label="Open navigation" title="Open navigation">☰</button>
           <div class="workspace-topbar-brand is-hidden" id="workspace-topbar-brand" aria-label="Company workspace">
             <span class="workspace-topbar-mark" id="workspace-topbar-mark" aria-hidden="true">A</span>
             <span class="workspace-topbar-copy"><strong id="workspace-company-name">Business workspace</strong><small><i aria-hidden="true"></i><span id="workspace-software-name">ERP</span></small></span>
@@ -62,13 +69,19 @@
           <div class="workspace-topbar-route is-hidden" id="workspace-topbar-route"><small>WORKSPACE MODULE</small><strong id="workspace-current-view">Goods Receipt (GRN)</strong></div>
           <section class="dashboard-topbar-context is-hidden" id="dashboard-topbar-context" aria-label="Business overview">
             <div class="dashboard-topbar-copy"><p>Business overview</p><h2 id="dashboard-welcome-title">Welcome to Distribution ERP</h2><span>Sales, purchases, dealer collections and live inventory in one view.</span></div>
-            <div class="dashboard-product-search is-hidden" id="dashboard-product-search">
-              <div class="dashboard-product-search-control"><span class="dashboard-product-search-icon" aria-hidden="true"></span><input id="dashboard-product-search-input" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="dashboard-product-search-results" placeholder="Search product, SKU, price or mobile" autocomplete="off"><button type="button" id="dashboard-product-search-button" aria-label="Search products" title="Search">Search</button></div>
-              <div id="dashboard-product-search-results" class="dashboard-product-search-results is-hidden" role="listbox" aria-label="Product search results"></div>
-            </div>
             <div class="dashboard-date-box"><label for="dashboard-date">Activity date</label><input id="dashboard-date" type="date"><small>Updates sales, purchase and collection totals</small></div>
           </section>
-          <div class="topbar-user"><button type="button" id="online-user-indicator" class="online-user-indicator admin-profile-item is-hidden" title="Show active sessions">0 online</button><span class="version" id="app-version"></span><div class="profile-menu-wrap"><button class="profile-chip" id="profile-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profile-menu"><span id="current-user-avatar" class="profile-avatar" aria-hidden="true">A</span><span class="profile-copy"><span id="current-user" class="current-user"></span><small id="current-user-role" class="profile-role"></small></span><span class="profile-caret" aria-hidden="true">⌄</span></button><div class="profile-menu is-hidden" id="profile-menu" role="menu"><div class="profile-menu-summary"><span id="profile-menu-avatar" class="profile-menu-avatar" aria-hidden="true">A</span><div><strong id="profile-menu-name"></strong><span id="profile-menu-phone"></span><small id="profile-menu-id"></small></div></div><button type="button" class="profile-menu-item" data-profile-action="account" role="menuitem"><span>♙</span><span>My account</span></button><button type="button" class="profile-menu-item" data-profile-action="change-password" role="menuitem"><span>♙</span><span>Change password</span></button><button type="button" class="profile-menu-item" data-profile-action="login-history" role="menuitem"><span>◷</span><span>Login history</span></button><button type="button" class="profile-menu-item admin-profile-item is-hidden" data-profile-view="user-management" role="menuitem"><span>☷</span><span>User management</span></button><button type="button" class="profile-menu-item admin-profile-item is-hidden" data-profile-view="settings" role="menuitem"><span>⚙</span><span>Company settings</span></button><div class="profile-menu-divider"></div><button type="button" class="profile-menu-item profile-signout" id="logout-button" role="menuitem"><span>↪</span><span>Sign out</span></button></div></div></div>
+          <div class="dashboard-product-search is-hidden" id="dashboard-product-search">
+            <div class="dashboard-product-search-control"><span class="dashboard-product-search-icon" aria-hidden="true"></span><input id="dashboard-product-search-input" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="dashboard-product-search-results" placeholder="Search product, SKU, price or mobile" autocomplete="off"><button type="button" id="dashboard-product-search-button" aria-label="Search products" title="Search">Search</button></div>
+            <div id="dashboard-product-search-results" class="dashboard-product-search-results is-hidden" role="listbox" aria-label="Product search results"></div>
+          </div>
+          <div class="topbar-tools">
+            <button type="button" class="topbar-balance-button" id="check-balance-button"><span aria-hidden="true">◉</span>Check balance</button>
+            <div class="topbar-language" role="group" aria-label="Language"><button type="button" class="is-active" data-interface-language="en" aria-pressed="true">EN</button><button type="button" data-interface-language="bn" aria-pressed="false">বাংলা</button></div>
+            <button type="button" id="online-user-indicator" class="online-user-indicator admin-profile-item is-hidden" title="Show active sessions">0 online</button>
+            <span class="version" id="app-version"></span>
+            <div class="profile-menu-wrap"><button class="profile-chip" id="profile-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profile-menu"><span id="current-user-avatar" class="profile-avatar" aria-hidden="true">A</span><span class="profile-copy"><span id="current-user" class="current-user"></span><small id="current-user-role" class="profile-role"></small></span><span class="profile-caret" aria-hidden="true">⌄</span></button><div class="profile-menu is-hidden" id="profile-menu" role="menu"><div class="profile-menu-summary"><span id="profile-menu-avatar" class="profile-menu-avatar" aria-hidden="true">A</span><div><strong id="profile-menu-name"></strong><span id="profile-menu-phone"></span><small id="profile-menu-id"></small></div></div><button type="button" class="profile-menu-item" data-profile-action="account" role="menuitem"><span>♙</span><span>My account</span></button><button type="button" class="profile-menu-item" data-profile-action="change-password" role="menuitem"><span>♙</span><span>Change password</span></button><button type="button" class="profile-menu-item" data-profile-action="login-history" role="menuitem"><span>◷</span><span>Login history</span></button><button type="button" class="profile-menu-item admin-profile-item is-hidden" data-profile-view="user-management" role="menuitem"><span>☷</span><span>User management</span></button><button type="button" class="profile-menu-item admin-profile-item is-hidden" data-profile-view="settings" role="menuitem"><span>⚙</span><span>Company settings</span></button><div class="profile-menu-divider"></div><button type="button" class="profile-menu-item profile-signout" id="logout-button" role="menuitem"><span>↪</span><span>Sign out</span></button></div></div>
+          </div>
         </header>
         <div id="message" class="message is-hidden"></div>
         <div id="app-view"></div>
