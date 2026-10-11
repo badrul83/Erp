@@ -1,0 +1,34 @@
+DEPO ERP — XAMPP LOCALHOST SETUP (বাংলা)
+===================================
+এই প্যাকেজে কোনো পুরোনো business record নেই। install.php নতুন database tables এবং প্রথম Admin তৈরি করে।
+
+1) XAMPP-এ Apache ও MySQL start করুন। PHP 8.1+ ও pdo_mysql চালু থাকতে হবে।
+2) এই folder-এর ফাইলগুলো C:\xampp\htdocs\Depo\ তে extract করুন।
+   খেয়াল করুন: C:\xampp\htdocs\Depo\index.php সরাসরি থাকতে হবে।
+3) http://localhost/phpmyadmin খুলে নতুন, ফাঁকা database তৈরি করুন:
+     depo_erp
+   Collation: utf8mb4_unicode_ci (যদি পাওয়া যায়)
+4) config.php-এ local credentials আগে থেকে আছে:
+     host = 127.0.0.1
+     port = 3306
+     name = depo_erp
+     user = root
+     pass = ''
+   আপনার XAMPP root-এর password থাকলে pass পরিবর্তন করুন। যদি MySQL port আলাদা হয়, port সংশোধন করুন।
+5) http://localhost/Depo/install.php খুলুন। আপনার Administrator name, বাংলাদেশি মোবাইল নম্বর এবং অন্তত 8-character password দিয়ে Install করুন।
+   Installer নিজেই schema ও অন্যান্য database/*.sql চালাবে; আলাদা SQL import সাধারণত দরকার নেই।
+6) 'Database installed' হলে http://localhost/Depo/ খুলে ইনস্টলেশনের সময় দেওয়া mobile/password দিয়ে login করুন।
+7) সফল হলে install.php-কে install.php.disabled নাম দিন, যাতে installer আবার চালানো না যায়।
+
+CHECKLIST:
+- SQLSTATE[HY000] [1045] = database username/password ভুল। config.php দেখুন।
+- Unknown database = phpMyAdmin-এ depo_erp তৈরি হয়নি, বা config name মেলেনি।
+- Missing table = install.php সফল হয়নি।
+- Do not import old database if you want a fresh start.
+
+IMPORTANT SECURITY:
+- root / blank password কেবল default local XAMPP-এর জন্য; এটি Internet/cPanel-এ ব্যবহার করবেন না।
+- cPanel-এ পরে deployment-এর সময় বর্তমান production config.php রাখবেন; local config.php কখনো upload/overwrite করবেন না।
+- Database backup এবং application backup আলাদাভাবে নেবেন।
+- Public hosting-এ install.php সরিয়ে ফেলবেন।
+- বর্তমান .htaccess ইচ্ছাকৃতভাবে .html access ব্লক করে; index.php সেগুলো server-side include করে। সমস্যা না হলে .htaccess পরিবর্তন করবেন না।

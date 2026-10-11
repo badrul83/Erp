@@ -1,0 +1,10 @@
+Options -Indexes
+DirectoryIndex index.php
+
+<FilesMatch "^(config\.php|config\.example\.php|.*\.(gs|html|sql|md))$">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "^(Database|AuthService|AgreementService|DealerService|ExpenseService|GoodsReceiptService|InventoryService|LookupService|PaymentService|ProductReturnService|ProductService|PurchaseService|ReportingService|SalesService|SettingsService|SupplyService|Code|Config)\.gs$">
+  Require all denied
+</FilesMatch>

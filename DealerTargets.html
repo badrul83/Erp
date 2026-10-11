@@ -1,0 +1,184 @@
+<script>
+/* Dealer Incentive submenu. Uses the app's existing session, theme and RPC. */
+window.installDealerTargets = function (app) {
+  'use strict';
+  var state=app.state, esc=app.esc, money=app.money, run=app.run, activePage=null;
+  function el(id){return document.getElementById(id);}
+  function field(id,label,control){return '<div class="field"><label for="'+id+'">'+label+'</label>'+control+'</div>';}
+  function selected(value,current){return value===current?' selected':'';}
+  function offerText(row){var parts=[];if(row.EligibleCash>0)parts.push('৳ '+money(row.EligibleCash));(row.EligibleGifts||[]).forEach(function(g){parts.push(g.Quantity+' × '+g.Description);});return parts.join(' + ')||(row.Target&&row.Target.Tiers.length?'Not yet eligible':'No offer configured');}
+  function eligibleDealer(row){return ['APPROVED','ACTIVE'].indexOf(row.Status)>=0;}
+  function defaults(){var date=app.today();return {Month:date.slice(0,7),Period:'MONTHLY',Date:date,WeekStart:'6',From:date.slice(0,7)+'-01',To:date,DealerID:'',Area:'',TargetStatus:'',Search:'',Tab:'targets'};}
+  function statusLabel(value){return {NOT_SET:'Not set',PAUSED:'Paused',ACHIEVED:'Achieved',IN_PROGRESS:'In progress'}[value]||value;}
+  function offerRules(config){
+    if(!config||!config.Tiers.length)return '';
+    return '<details class="dt-offer-rules"><summary>Configured incentives</summary>'+config.Tiers.map(function(t){var parts=[];if(t.CashValue>0)parts.push(t.CashType==='PERCENT'?t.CashValue+'% of net sales':'৳ '+money(t.CashValue));if(t.Gift)parts.push(t.GiftQuantity+' × '+t.Gift);return '<div>'+esc(t.Threshold+'% achievement → '+parts.join(' + '))+'</div>';}).join('')+'<small>'+esc(config.TierMode==='CUMULATIVE'?'Add all achieved tiers':'Highest achieved tier only')+'</small></details>';
+  }
+
+  function printSummary(rows,range,criteria){
+    var previousFocus=document.activeElement;
+    var branding=state.branding||{},total=function(key){return rows.reduce(function(n,r){return n+Number(r[key]||0);},0);};
+    var html='<!doctype html><html><head><meta charset="utf-8"><title>Dealer Target Summary · '+esc(range.Month)+'</title><style>@page{size:A4 landscape;margin:12mm}*{box-sizing:border-box}body{margin:0;background:#e9efec;color:#173b32;font:11px Arial,sans-serif}.toolbar{padding:12px 20px;background:#173b32;color:white;display:flex;justify-content:space-between;gap:12px}.toolbar button{padding:8px 12px;border:0;border-radius:6px;margin-left:8px;cursor:pointer}.page{width:297mm;min-height:210mm;padding:12mm;background:white;margin:20px auto}.header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #008f69;padding-bottom:12px;gap:20px}.header img{max-width:95px;max-height:65px;object-fit:contain}.header h1{font-size:22px;margin:0 0 6px}.header p{white-space:pre-line;margin:0}.report-title{margin:16px 0 8px}.criteria{line-height:1.5;color:#55766c}.totals{display:flex;gap:22px;padding:12px;background:#f3fbf8;margin:12px 0;border:1px solid #cfe8df}table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{padding:8px;border:1px solid #a9c9bf;vertical-align:top;overflow-wrap:anywhere}th{background:#eaf8f3;text-align:left;font-size:10px}th:first-child{width:4%}th:nth-child(2){width:21%}th:last-child{width:23%}td small{display:block;color:#55766c;margin-top:4px}.note{font-size:10px;color:#55766c;line-height:1.5;margin-top:12px}.signatures{display:flex;justify-content:space-between;margin:48px 15px 16px;break-inside:avoid}.signatures span{border-top:1px solid #55766c;min-width:160px;padding:7px;text-align:center}footer{border-top:1px solid #cfe8df;padding-top:8px;color:#55766c;font-size:10px}@media print{body{background:white}.toolbar{display:none}.page{width:auto;min-height:0;padding:0;margin:0}thead{display:table-header-group}tr{break-inside:avoid}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="toolbar"><strong>Dealer Target Summary · A4</strong><div><button onclick="window.print()">Print / Save as PDF</button><button onclick="window.close()">Close</button></div></div><main class="page"><header class="header"><div><h1>'+esc(branding.CompanyName||'Distribution ERP')+'</h1><p>'+esc(branding.Address||'')+'</p></div>'+(branding.LogoDataUrl?'<img src="'+esc(branding.LogoDataUrl)+'" alt="Company logo">':'')+'</header><h2 class="report-title">Dealer Targets & Achievement — '+esc(range.Month)+'</h2><p class="criteria">Period: '+esc(range.From+' to '+range.To)+' · '+esc(criteria)+'</p><div class="totals"><span>Monthly target: <strong>৳ '+money(total('EffectiveTarget'))+'</strong></span><span>Period net sales: <strong>৳ '+money(total('PeriodNetSales'))+'</strong></span><span>Eligible cash: <strong>৳ '+money(total('EligibleCash'))+'</strong></span></div><table><thead><tr><th>SL</th><th>Dealer</th><th>Period Net Sales</th><th>Monthly Target</th><th>Month Net Sales</th><th>Achievement</th><th>Eligible Offer</th></tr></thead><tbody>'+rows.map(function(r,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(r.DealerName)+'<small>'+esc((r.DealerCode||r.DealerID)+' · '+(r.Area||r.Region||''))+'</small></td><td>৳ '+money(r.PeriodNetSales)+'</td><td>'+(r.Target?'৳ '+money(r.Target.TargetAmount):'—')+'</td><td>৳ '+money(r.MonthlyNetSales)+'</td><td>'+statusLabel(r.TargetStatus)+(r.EffectiveTarget>0?' · '+r.Achievement.toFixed(1)+'%':'')+'</td><td>'+esc(offerText(r))+'</td></tr>';}).join('')+'</tbody></table><p class="note">Monthly targets and eligible offers use the entire calendar month. Daily/weekly/custom filters affect period sales only. Free/gift sales are excluded. Returns follow each dealer’s monthly setting. Paused targets are excluded from the summary target. Eligible offers are estimates, not payment or gift-issue receipts.</p><div class="signatures"><span>Prepared By</span><span>Checked By</span><span>Authorized Signature</span></div><footer>'+esc(branding.CompanyName||'Distribution ERP')+' · Generated '+esc(new Date().toLocaleString('en-BD'))+'</footer></main></body></html>';
+    var preview=document.createElement('div');preview.className='modal-backdrop dt-report-backdrop';
+    preview.innerHTML='<section class="dt-report-preview" role="dialog" aria-modal="true" aria-labelledby="dt-report-title"><header><strong id="dt-report-title">Dealer Target Summary · A4</strong><div class="dt-actions"><button type="button" class="primary-button dt-report-print" disabled>Print / Save as PDF</button><button type="button" class="secondary-button dt-report-close">Close Preview</button></div></header><iframe title="A4 Dealer Target Summary" sandbox="allow-same-origin allow-modals"></iframe></section>';
+    var frame=preview.querySelector('iframe'),printButton=preview.querySelector('.dt-report-print');
+    function close(){preview.remove();if(previousFocus&&previousFocus.isConnected)previousFocus.focus();}
+    preview.querySelector('.dt-report-close').addEventListener('click',close);
+    preview.addEventListener('keydown',function(event){if(event.key==='Escape')close();});
+    frame.addEventListener('load',function(){printButton.disabled=false;});
+    printButton.addEventListener('click',function(){frame.contentWindow.focus();frame.contentWindow.print();});
+    frame.srcdoc=html.replace(/<div class="toolbar">.*?<\/div><\/div>/,'');
+    document.body.appendChild(preview);preview.querySelector('.dt-report-close').focus();
+  }
+
+  function openSetup(dealerId,month,canConfigure,onSaved){
+    if(!canConfigure)return;
+    var dealers=(state.lookups.dealers||[]).filter(eligibleDealer),modal=document.createElement('div');
+    modal.className='modal-backdrop dt-setup-backdrop';
+    modal.innerHTML='<div class="modal-card dt-setup" role="dialog" aria-modal="true" aria-labelledby="dt-setup-title">'+
+      '<div class="modal-card-header"><div><p class="eyebrow">Monthly dealer target</p><h2 id="dt-setup-title">Dealer Incentive Setup</h2></div><button type="button" class="modal-close" aria-label="Close">×</button></div>'+
+      '<p class="dt-help">Set a monthly sales amount for this dealer. Offers use the entire calendar month’s delivered sales. Free/gift sales are excluded.</p>'+
+      '<form id="dt-setup-form"><div class="dt-config-grid">'+
+      field('dt-config-month','Target month *','<input id="dt-config-month" type="month" min="2000-01" max="2099-12" required value="'+esc(month)+'">')+
+      field('dt-config-dealer','Dealer *','<select id="dt-config-dealer" required><option value="">Select dealer</option>'+dealers.map(function(d){return '<option value="'+esc(d.DealerID)+'"'+selected(d.DealerID,dealerId)+'>'+esc(d.DealerName+' ('+(d.DealerCode||d.DealerID)+')')+'</option>';}).join('')+'</select>')+
+      field('dt-config-amount','Monthly sales target (৳) *','<input id="dt-config-amount" type="number" min="0.01" max="999999999999.99" step="0.01" required placeholder="100000">')+
+      field('dt-config-increment','Target increment % (optional)','<input id="dt-config-increment" type="number" min="0" max="10000" step="0.01" placeholder="Increase on previous month">')+
+      field('dt-config-enabled','Target status','<select id="dt-config-enabled"><option value="1">Active</option><option value="0">Paused</option></select>')+
+      field('dt-config-returns','Sales returns','<select id="dt-config-returns"><option value="1">Deduct from return month</option><option value="0">Do not deduct</option></select>')+
+      field('dt-config-mode','Offer tier rule','<select id="dt-config-mode"><option value="HIGHEST">Highest achieved tier only</option><option value="CUMULATIVE">Add all achieved tiers</option></select>')+'</div>'+
+      '<div class="dt-offer-heading"><h3>Cash / Gift Offers</h3><button type="button" class="secondary-button" id="dt-add-tier">+ Add Tier</button></div>'+
+      '<p class="dt-help">Target increment increases the previous month’s target. Leave it blank to set an amount directly. Achievement % is the qualifying threshold; incentive % is paid on eligible monthly net sales. Gift quantity counts the described gift units.</p><div id="dt-tier-list"></div>'+
+      field('dt-config-notes','Notes (optional)','<input id="dt-config-notes" maxlength="160" placeholder="Offer conditions or internal note">')+
+      '<div id="dt-config-message" class="dt-config-message" role="status"></div><div class="modal-actions"><button type="submit" class="primary-button" id="dt-config-save">Save Target & Incentive</button><button type="button" class="secondary-button" id="dt-copy-previous">Copy Previous Month</button><button type="button" class="secondary-button dt-config-cancel">Cancel</button></div></form></div>';
+    document.body.appendChild(modal);
+    var form=modal.querySelector('form'),loadedKey='',version=0,request=0,busy=false,loading=false,dirty=false,tierIndex=0;
+    function q(selector){return modal.querySelector(selector);}
+    function message(text,error){q('#dt-config-message').textContent=text;q('#dt-config-message').classList.toggle('is-error',!!error);}
+    function close(){if(busy)return;modal.remove();}
+    q('.modal-close').addEventListener('click',close);q('.dt-config-cancel').addEventListener('click',close);
+    function buttons(){q('#dt-config-save').disabled=loading||busy||!loadedKey;q('#dt-copy-previous').disabled=loading||busy||!loadedKey;}
+    function tierRow(tier){
+      var t=tier||{Threshold:100,CashType:'FIXED',CashValue:0,Gift:'',GiftQuantity:1},node=document.createElement('div'),prefix='dt-tier-'+(++tierIndex);
+      node.className='dt-tier';
+      node.innerHTML=field(prefix+'-threshold','Achievement %','<input id="'+prefix+'-threshold" data-tier="Threshold" type="number" min="0.01" max="10000" step="0.01" required value="'+esc(t.Threshold)+'">')+
+        field(prefix+'-type','Cash type','<select id="'+prefix+'-type" data-tier="CashType"><option value="FIXED"'+selected('FIXED',t.CashType)+'>Fixed ৳</option><option value="PERCENT"'+selected('PERCENT',t.CashType)+'>% of net sales</option></select>')+
+        field(prefix+'-cash',t.CashType==='PERCENT'?'Incentive %':'Cash amount (৳)','<input id="'+prefix+'-cash" data-tier="CashValue" type="number" min="0" step="0.01" required value="'+esc(t.CashValue)+'">')+
+        field(prefix+'-gift','Gift (optional)','<input id="'+prefix+'-gift" data-tier="Gift" maxlength="160" value="'+esc(t.Gift)+'" placeholder="Gift name / unit">')+
+        field(prefix+'-qty','Gift quantity','<input id="'+prefix+'-qty" data-tier="GiftQuantity" type="number" min="0.01" max="1000000" step="0.01" value="'+esc(t.GiftQuantity||1)+'">')+
+        '<button type="button" class="danger-button" aria-label="Remove offer tier">×</button>';
+      node.querySelector('button').addEventListener('click',function(){node.remove();dirty=true;});
+      node.querySelector('[data-tier="CashType"]').addEventListener('change',function(){var cash=node.querySelector('[data-tier="CashValue"]');cash.closest('.field').querySelector('label').textContent=this.value==='PERCENT'?'Incentive %':'Cash amount (৳)';cash.max=this.value==='PERCENT'?'100':'999999999999.99';});
+      q('#dt-tier-list').appendChild(node);
+    }
+    q('#dt-add-tier').addEventListener('click',function(){if(q('#dt-tier-list').children.length>=12){message('Maximum 12 offer tiers.',true);return;}tierRow();dirty=true;});
+    function fill(config){config=config||{};q('#dt-config-amount').value=config.TargetAmount||'';q('#dt-config-increment').value=config.IncrementPercent==null?'':config.IncrementPercent;q('#dt-config-enabled').value=config.Enabled===false?'0':'1';q('#dt-config-returns').value=config.DeductReturns===false?'0':'1';q('#dt-config-mode').value=config.TierMode||'HIGHEST';q('#dt-config-notes').value=config.Notes||'';q('#dt-tier-list').innerHTML='';(config.Tiers||[]).forEach(tierRow);}
+    function load(){
+      var m=q('#dt-config-month').value,d=q('#dt-config-dealer').value,token=++request;
+      loadedKey='';version=0;dirty=false;fill(null);loading=!!(m&&d);buttons();
+      if(!loading){message('Choose a month and dealer.');return;}
+      message('Loading monthly configuration…');
+      run('getDealerTargetConfig',[m,d],function(config){if(!modal.isConnected||token!==request)return;loadedKey=m+'|'+d;version=config?config.Version:0;fill(config);loading=false;buttons();message(config?'Saved monthly configuration loaded.':'No target yet. Enter an amount and optionally add offers.');},function(error){if(token!==request)return;loading=false;buttons();message(error.message||String(error),true);});
+    }
+    q('#dt-config-month').addEventListener('change',load);q('#dt-config-dealer').addEventListener('change',load);
+    form.addEventListener('input',function(){dirty=true;});
+    q('#dt-config-amount').addEventListener('input',function(){q('#dt-config-increment').value='';});
+    q('#dt-config-increment').addEventListener('change',function(){
+      var increment=this.value;if(increment===''||!this.checkValidity()||!loadedKey)return;
+      var parts=q('#dt-config-month').value.split('-'),previous=new Date(Number(parts[0]),Number(parts[1])-2,1),pm=previous.getFullYear()+'-'+String(previous.getMonth()+1).padStart(2,'0'),token=++request;
+      loading=true;buttons();message('Calculating from previous month’s target…');
+      run('getDealerTargetConfig',[pm,q('#dt-config-dealer').value],function(config){if(!modal.isConnected||token!==request)return;loading=false;buttons();if(!config){q('#dt-config-increment').value='';message('No previous-month target. Enter a monthly amount directly.',true);return;}q('#dt-config-amount').value=(config.TargetAmount*(1+Number(increment)/100)).toFixed(2);dirty=true;message('Previous target ৳ '+money(config.TargetAmount)+' + '+increment+'%. Review and save.');},function(error){if(token!==request)return;loading=false;buttons();message(error.message||String(error),true);});
+    });
+    q('#dt-copy-previous').addEventListener('click',function(){
+      if(dirty&&!window.confirm('Replace these unsaved values with the previous month’s configuration?'))return;
+      var m=q('#dt-config-month').value,d=q('#dt-config-dealer').value,parts=m.split('-'),previous=new Date(Number(parts[0]),Number(parts[1])-2,1),pm=previous.getFullYear()+'-'+String(previous.getMonth()+1).padStart(2,'0'),token=++request;
+      loading=true;buttons();message('Loading previous month…');
+      run('getDealerTargetConfig',[pm,d],function(config){if(!modal.isConnected||token!==request)return;loading=false;buttons();if(!config){message('No target was configured for '+pm+'.',true);return;}fill(config);q('#dt-config-increment').value='';dirty=true;message('Copied '+pm+'. Review and save to '+m+'.');},function(error){if(token!==request)return;loading=false;buttons();message(error.message||String(error),true);});
+    });
+    form.addEventListener('submit',function(event){
+      event.preventDefault();if(busy||loading||!form.reportValidity())return;
+      var monthValue=q('#dt-config-month').value,id=q('#dt-config-dealer').value;
+      if(loadedKey!==monthValue+'|'+id){message('Load this month and dealer before saving.',true);return;}
+      var payload={Month:monthValue,DealerID:id,Version:version,TargetAmount:q('#dt-config-amount').value,Enabled:q('#dt-config-enabled').value==='1',DeductReturns:q('#dt-config-returns').value==='1',TierMode:q('#dt-config-mode').value,Notes:q('#dt-config-notes').value,Tiers:Array.from(q('#dt-tier-list').children).map(function(node){var t={};node.querySelectorAll('[data-tier]').forEach(function(input){t[input.dataset.tier]=input.value;});return t;})};
+      payload.IncrementPercent=q('#dt-config-increment').value;
+      busy=true;buttons();message('Saving…');
+      run('saveDealerTarget',[payload],function(){busy=false;modal.remove();app.showMessage('Monthly dealer target and offers saved.');onSaved(monthValue);},function(error){busy=false;buttons();message(error.message||String(error),true);});
+    });
+    load();q('#dt-config-dealer').focus();
+  }
+
+  function render(){
+    var filters=state.dealerTargetFilters||(state.dealerTargetFilters=defaults()),page=document.createElement('div');
+    page.className='card dealer-register-card dt-page';activePage=page;
+    page.innerHTML='<div class="dt-heading"><div><p class="eyebrow">Dealer · Monthly performance</p><h2>Dealer Incentive</h2><p class="dt-help">Target vs Achievement · Incentive % · Cash & Gifts</p></div><div class="dt-actions"><button type="button" class="secondary-button" id="dt-refresh">Refresh</button><button type="button" class="primary-button" id="dt-setup-button">Configure Target & Incentive</button></div></div>'+
+      '<div class="dt-filters">'+field('dt-month','Target month','<input id="dt-month" type="month" min="2000-01" max="2099-12" value="'+esc(filters.Month)+'">')+
+      field('dt-period','Sales period','<select id="dt-period">'+['DAILY','WEEKLY','MONTHLY','CUSTOM'].map(function(p){return '<option value="'+p+'"'+selected(p,filters.Period)+'>'+p.charAt(0)+p.slice(1).toLowerCase()+'</option>';}).join('')+'</select>')+
+      field('dt-date','Date in selected week / day','<input id="dt-date" type="date" value="'+esc(filters.Date)+'">')+
+      field('dt-week-start','Week starts on','<select id="dt-week-start">'+['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].map(function(name,i){return '<option value="'+i+'"'+selected(String(i),filters.WeekStart)+'>'+name+'</option>';}).join('')+'</select>')+
+      field('dt-from','From','<input id="dt-from" type="date" value="'+esc(filters.From)+'">')+field('dt-to','To','<input id="dt-to" type="date" value="'+esc(filters.To)+'">')+
+      field('dt-dealer','Dealer','<select id="dt-dealer"><option value="">All dealers</option></select>')+
+      field('dt-area','Area','<select id="dt-area"><option value="">All areas</option></select>')+
+      field('dt-target-status','Achievement','<select id="dt-target-status"><option value="">All targets</option>'+['ACHIEVED','IN_PROGRESS','NOT_SET','PAUSED'].map(function(s){return '<option value="'+s+'"'+selected(s,filters.TargetStatus)+'>'+statusLabel(s)+'</option>';}).join('')+'</select>')+
+      field('dealer-search','Search dealer / code / phone','<input id="dealer-search" type="search" placeholder="Search dealers" value="'+esc(filters.Search)+'">')+'</div>'+
+      '<div id="dt-feedback" role="status" class="dt-help">Loading target achievement…</div><div id="dt-kpis" class="dt-kpis"></div>'+
+      '<div class="dt-results-heading"><div class="dt-tabs" role="group" aria-label="Dealer view"><button type="button" class="secondary-button" data-dt-tab="targets">Targets & Offers</button><button type="button" class="secondary-button" data-dt-tab="register">Dealer Details</button></div><div class="dt-actions"><button type="button" class="secondary-button" id="dt-print-summary">Target Summary / PDF</button><button type="button" class="secondary-button" id="print-dealer-register">Print Dealer List / PDF</button></div></div>'+
+      '<div id="dealer-history">Loading dealer register…</div>';
+    el('app-view').replaceChildren(page);
+    var data=null,filtered=[],request=0;
+    function q(selector){return page.querySelector(selector);}
+    function current(){return page.isConnected&&activePage===page;}
+    q('#dt-setup-button').hidden=!(state.user&&state.user.Role==='ADMIN');
+    function showSetup(id){openSetup(id||filters.DealerID,filters.Month,!!(state.user&&state.user.Role==='ADMIN'),function(month){filters.Month=month;if(current())render();});}
+    q('#dt-setup-button').addEventListener('click',function(){showSetup('');});
+    function periodFields(){
+      q('#dt-date').closest('.field').hidden=['DAILY','WEEKLY'].indexOf(filters.Period)<0;
+      q('#dt-week-start').closest('.field').hidden=filters.Period!=='WEEKLY';
+      q('#dt-from').closest('.field').hidden=filters.Period!=='CUSTOM';q('#dt-to').closest('.field').hidden=filters.Period!=='CUSTOM';
+      var parts=filters.Month.split('-'),last=new Date(Number(parts[0]),Number(parts[1]),0).getDate(),start=filters.Month+'-01',end=filters.Month+'-'+last;
+      ['dt-date','dt-from','dt-to'].forEach(function(id){q('#'+id).min=start;q('#'+id).max=end;});
+    }
+    function fetchData(){
+      if(!filters.Month)return;var token=++request;data=null;filtered=[];
+      q('#dt-feedback').textContent='Loading target achievement…';q('#dt-kpis').innerHTML='';q('#dealer-history').textContent='Loading…';q('#print-dealer-register').disabled=true;q('#dt-print-summary').disabled=true;
+      periodFields();
+      run('getDealerTargetDashboard',[filters],function(result){if(!current()||token!==request)return;data=result;
+        q('#dt-dealer').innerHTML='<option value="">All dealers</option>'+result.Rows.map(function(d){return '<option value="'+esc(d.DealerID)+'"'+selected(d.DealerID,filters.DealerID)+'>'+esc(d.DealerName+' · '+(d.DealerCode||d.DealerID))+'</option>';}).join('');
+        var areas=Array.from(new Set(result.Rows.map(function(d){return d.Area||d.Region||'';}).filter(Boolean))).sort();
+        q('#dt-area').innerHTML='<option value="">All areas</option>'+areas.map(function(a){return '<option'+selected(a,filters.Area)+'>'+esc(a)+'</option>';}).join('');
+        filters.DealerID=q('#dt-dealer').value;filters.Area=q('#dt-area').value;draw();
+      },function(error){if(!current()||token!==request)return;q('#dt-feedback').textContent='Could not load targets: '+(error.message||String(error));q('#dealer-history').textContent='Use Refresh to try again.';});
+    }
+    function draw(){
+      if(!data)return;
+      var query=filters.Search.trim().toLowerCase();filtered=data.Rows.filter(function(r){return (!filters.DealerID||r.DealerID===filters.DealerID)&&(!filters.Area||(r.Area||r.Region)===filters.Area)&&(!filters.TargetStatus||r.TargetStatus===filters.TargetStatus)&&(!query||app.dealerSearchValue(r).indexOf(query)>=0);});
+      var sum=function(key,rows){return (rows||filtered).reduce(function(n,r){return n+Number(r[key]||0);},0);},targetRows=filtered.filter(function(r){return r.EffectiveTarget>0;}),target=sum('EffectiveTarget'),net=sum('MonthlyNetSales',targetRows),remaining=sum('Remaining',targetRows),achieved=targetRows.filter(function(r){return r.TargetStatus==='ACHIEVED';}).length,percent=target>0?Math.max(0,net)/target*100:0;
+      q('#dt-feedback').textContent='Period: '+app.purchaseDate(data.Range.From)+' – '+app.purchaseDate(data.Range.To)+'. Targets and offer eligibility always use the whole '+filters.Month+' calendar month. Returns are deducted in their return month when enabled. Offers shown are not yet paid or issued.'+(data.LegacyDateGroups?' Older records without delivery evidence use invoice date.':'');
+      q('#dt-kpis').innerHTML=[['Monthly Target','৳ '+money(target),targetRows.length+' of '+filtered.length+' dealers configured'],['Period Net Sales','৳ '+money(sum('PeriodNetSales')),'Sales ৳ '+money(sum('PeriodSales'))+' · Returns ৳ '+money(sum('PeriodReturns'))],['Monthly Achievement',percent.toFixed(1)+'%','৳ '+money(net)+' against configured targets'],['Target Met',achieved+' / '+targetRows.length,'Remaining ৳ '+money(remaining)],['Eligible Cash','৳ '+money(sum('EligibleCash')),filtered.filter(function(r){return r.EligibleGifts.length;}).length+' dealers eligible for gifts']].map(function(k){return '<div class="dt-kpi"><span>'+k[0]+'</span><strong>'+k[1]+'</strong><small>'+esc(k[2])+'</small></div>';}).join('');
+      page.querySelectorAll('[data-dt-tab]').forEach(function(b){b.classList.toggle('is-active',b.dataset.dtTab===filters.Tab);b.setAttribute('aria-pressed',b.dataset.dtTab===filters.Tab?'true':'false');});
+      q('#print-dealer-register').disabled=!filtered.length;
+      q('#dt-print-summary').disabled=!filtered.length;
+      if(filters.Tab==='register')drawRegister();else drawTargets();
+    }
+    function detailLink(row){return '<button type="button" class="dt-dealer-link" data-dealer-details="'+esc(row.DealerID)+'">'+esc(row.DealerName)+'</button>'}
+    function bindDetails(){page.querySelectorAll('[data-dealer-details]').forEach(function(b){b.addEventListener('click',function(){app.openDealerModal(b.dataset.dealerDetails);});});}
+    function drawTargets(){
+      q('#dealer-history').innerHTML=app.table(['SL','Dealer','Period Net Sales','Monthly Target','Month Net Sales','Achievement','Eligible Offer','Setup'],filtered,function(r,index){
+        var active=r.EffectiveTarget>0,progress=Math.min(100,r.Achievement),target=r.Target;
+        return '<tr><td>'+(index+1)+'</td><td class="dt-dealer-cell">'+detailLink(r)+'<small>'+esc((r.DealerCode||r.DealerID)+' · '+(r.Area||r.Region||'No area'))+'</small></td><td>৳ '+money(r.PeriodNetSales)+'</td><td>'+(target?'৳ '+money(target.TargetAmount):'—')+(target&&target.IncrementPercent!=null?'<small class="dt-cell-note">Increment: '+esc(target.IncrementPercent)+'%</small>':'')+'</td><td>৳ '+money(r.MonthlyNetSales)+'<small class="dt-cell-note">Returns: ৳ '+money(r.MonthlyReturns)+(target&&!target.DeductReturns?' (not deducted)':'')+'</small></td><td class="dt-progress-cell"><div class="dt-progress-label"><strong>'+ (active?r.Achievement.toFixed(1)+'%':'—')+'</strong><span>'+statusLabel(r.TargetStatus)+'</span></div><progress max="100" value="'+progress+'" aria-label="Monthly achievement for '+esc(r.DealerName)+'"></progress><small>'+(active?'Remaining ৳ '+money(r.Remaining):'')+'</small></td><td class="dt-offer-cell">'+esc(offerText(r))+offerRules(target)+'</td><td>'+(data.CanConfigure&&eligibleDealer(r)?'<button type="button" class="secondary-button" data-target-setup="'+esc(r.DealerID)+'">'+(target?'Edit':'Set Target')+'</button>':app.status(r.Status))+'</td></tr>';
+      });
+      bindDetails();page.querySelectorAll('[data-target-setup]').forEach(function(b){b.addEventListener('click',function(){showSetup(b.dataset.targetSetup);});});
+    }
+    function drawRegister(){
+      q('#dealer-history').innerHTML=app.table(['SL','Dealer Code','Dealer','Area','Address','Phone','Status','Actions'],filtered,function(r,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(r.DealerCode||r.DealerID)+'</td><td>'+detailLink(r)+'</td><td>'+esc(r.Area||r.Region||'-')+'</td><td>'+esc(r.Address||'-')+'</td><td>'+esc(r.DealerMobile||r.Phone||'-')+'</td><td>'+app.status(r.Status)+'</td><td><button type="button" class="secondary-button" data-dealer-details="'+esc(r.DealerID)+'">'+(r.Status==='DRAFT'?'Approve':r.Status==='ARCHIVED'?'Restore':'View / Edit')+'</button></td></tr>';});bindDetails();
+    }
+    q('#print-dealer-register').addEventListener('click',function(){app.printDealerRegister(filtered,'Target month: '+filters.Month+' · '+(filters.Area||'All areas')+' · '+(filters.TargetStatus?statusLabel(filters.TargetStatus):'All targets')+' · Search: '+(filters.Search||'All'));});
+    q('#dt-print-summary').addEventListener('click',function(){if(data)printSummary(filtered,data.Range,(filters.Area||'All areas')+' · '+(filters.TargetStatus?statusLabel(filters.TargetStatus):'All targets')+' · Search: '+(filters.Search||'All'));});
+    page.querySelectorAll('[data-dt-tab]').forEach(function(b){b.addEventListener('click',function(){filters.Tab=b.dataset.dtTab;draw();});});
+    [['dt-dealer','DealerID'],['dt-area','Area'],['dt-target-status','TargetStatus']].forEach(function(pair){q('#'+pair[0]).addEventListener('change',function(){filters[pair[1]]=this.value;draw();});});
+    q('#dealer-search').addEventListener('input',function(){filters.Search=this.value;draw();});
+    [['dt-period','Period'],['dt-date','Date'],['dt-week-start','WeekStart'],['dt-from','From'],['dt-to','To']].forEach(function(pair){q('#'+pair[0]).addEventListener('change',function(){filters[pair[1]]=this.value;fetchData();});});
+    q('#dt-month').addEventListener('change',function(){if(!this.value)return;filters.Month=this.value;filters.Date=filters.Month===app.today().slice(0,7)?app.today():filters.Month+'-01';filters.From=filters.Month+'-01';var parts=filters.Month.split('-');filters.To=filters.Month+'-'+new Date(Number(parts[0]),Number(parts[1]),0).getDate();q('#dt-date').value=filters.Date;q('#dt-from').value=filters.From;q('#dt-to').value=filters.To;fetchData();});
+    q('#dt-refresh').addEventListener('click',fetchData);fetchData();
+  }
+  return render;
+};
+</script>

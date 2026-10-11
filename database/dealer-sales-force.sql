@@ -1,0 +1,55 @@
+CREATE TABLE IF NOT EXISTS DealerSalesRepresentatives (
+  SRID VARCHAR(20) PRIMARY KEY,
+  DealerID VARCHAR(20) NOT NULL,
+  SRCode VARCHAR(30) NOT NULL,
+  SRName VARCHAR(160) NOT NULL,
+  Mobile VARCHAR(30) NOT NULL,
+  Territory VARCHAR(160) NOT NULL,
+  RouteName VARCHAR(160) NULL,
+  NID VARCHAR(80) NULL,
+  JoiningDate DATE NULL,
+  Status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  CreatedAt DATETIME NOT NULL,
+  CreatedBy VARCHAR(120) NOT NULL,
+  UpdatedAt DATETIME NOT NULL,
+  UpdatedBy VARCHAR(120) NOT NULL,
+  UNIQUE KEY dealer_sr_code (DealerID, SRCode),
+  INDEX dealer_sr_status (DealerID, Status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS DealerSRTargets (
+  TargetID VARCHAR(20) PRIMARY KEY,
+  DealerID VARCHAR(20) NOT NULL,
+  SRID VARCHAR(20) NOT NULL,
+  PeriodType VARCHAR(20) NOT NULL,
+  PeriodStart DATE NOT NULL,
+  PeriodEnd DATE NOT NULL,
+  TargetAmount DECIMAL(16,2) NOT NULL DEFAULT 0,
+  TargetCollection DECIMAL(16,2) NOT NULL DEFAULT 0,
+  TargetVisits INT NOT NULL DEFAULT 0,
+  CreatedAt DATETIME NOT NULL,
+  CreatedBy VARCHAR(120) NOT NULL,
+  UpdatedAt DATETIME NOT NULL,
+  UpdatedBy VARCHAR(120) NOT NULL,
+  UNIQUE KEY sr_period_target (SRID, PeriodType, PeriodStart),
+  INDEX dealer_target_period (DealerID, PeriodStart, PeriodEnd)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS DealerSRSales (
+  SRSaleID VARCHAR(20) PRIMARY KEY,
+  DealerID VARCHAR(20) NOT NULL,
+  SRID VARCHAR(20) NOT NULL,
+  SaleDate DATE NOT NULL,
+  OutletName VARCHAR(200) NOT NULL,
+  OutletMobile VARCHAR(30) NULL,
+  InvoiceRef VARCHAR(100) NULL,
+  SalesAmount DECIMAL(16,2) NOT NULL DEFAULT 0,
+  CollectionAmount DECIMAL(16,2) NOT NULL DEFAULT 0,
+  VisitCount INT NOT NULL DEFAULT 1,
+  Notes TEXT NULL,
+  Status VARCHAR(20) NOT NULL DEFAULT 'POSTED',
+  CreatedAt DATETIME NOT NULL,
+  CreatedBy VARCHAR(120) NOT NULL,
+  INDEX dealer_sr_sale_date (DealerID, SaleDate),
+  INDEX sr_sale_date (SRID, SaleDate)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -1,0 +1,70 @@
+CREATE TABLE IF NOT EXISTS ChartOfAccounts (
+  AccountID VARCHAR(20) PRIMARY KEY,
+  AccountName VARCHAR(180) NOT NULL,
+  AccountType VARCHAR(20) NOT NULL,
+  AccountGroup VARCHAR(80) NULL,
+  NormalBalance VARCHAR(10) NOT NULL,
+  IsControl TINYINT(1) NOT NULL DEFAULT 0,
+  Status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  SystemKey VARCHAR(80) NULL UNIQUE,
+  CreatedAt DATETIME NOT NULL,
+  CreatedBy VARCHAR(120) NOT NULL,
+  UpdatedAt DATETIME NOT NULL,
+  UpdatedBy VARCHAR(120) NOT NULL,
+  INDEX (AccountType), INDEX (Status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS AccountingSettings (
+  SettingKey VARCHAR(80) PRIMARY KEY,
+  SettingValue LONGTEXT NOT NULL,
+  UpdatedAt DATETIME NOT NULL,
+  UpdatedBy VARCHAR(120) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS AccountingPeriods (
+  PeriodID VARCHAR(20) PRIMARY KEY,
+  StartDate DATE NOT NULL,
+  EndDate DATE NOT NULL,
+  Status VARCHAR(20) NOT NULL DEFAULT 'OPEN',
+  ClosedAt DATETIME NULL,
+  ClosedBy VARCHAR(120) NULL,
+  UNIQUE KEY accounting_period_dates (StartDate, EndDate)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS AccountingVouchers (
+  VoucherID VARCHAR(20) PRIMARY KEY,
+  VoucherDate DATE NOT NULL,
+  VoucherType VARCHAR(20) NOT NULL,
+  Status VARCHAR(20) NOT NULL,
+  SourceType VARCHAR(40) NULL,
+  SourceID VARCHAR(80) NULL,
+  SourceNo VARCHAR(160) NULL,
+  PartyType VARCHAR(20) NULL,
+  PartyID VARCHAR(40) NULL,
+  Narration TEXT NULL,
+  TotalDebit DECIMAL(16,2) NOT NULL DEFAULT 0,
+  TotalCredit DECIMAL(16,2) NOT NULL DEFAULT 0,
+  ReversalOf VARCHAR(20) NULL,
+  CreatedAt DATETIME NOT NULL,
+  CreatedBy VARCHAR(120) NOT NULL,
+  PostedAt DATETIME NULL,
+  PostedBy VARCHAR(120) NULL,
+  INDEX (VoucherDate), INDEX (SourceType, SourceID), INDEX (PartyType, PartyID), INDEX (ReversalOf)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS AccountingVoucherLines (
+  VoucherLineID VARCHAR(24) PRIMARY KEY,
+  VoucherID VARCHAR(20) NOT NULL,
+  LineNo INT NOT NULL,
+  AccountID VARCHAR(20) NOT NULL,
+  Debit DECIMAL(16,2) NOT NULL DEFAULT 0,
+  Credit DECIMAL(16,2) NOT NULL DEFAULT 0,
+  PartyType VARCHAR(20) NULL,
+  PartyID VARCHAR(40) NULL,
+  ReferenceNo VARCHAR(160) NULL,
+  Narration VARCHAR(500) NULL,
+  CreatedAt DATETIME NOT NULL,
+  CreatedBy VARCHAR(120) NOT NULL,
+  UNIQUE KEY voucher_line_number (VoucherID, LineNo),
+  INDEX (AccountID), INDEX (PartyType, PartyID)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?!= include('CSS'); ?>
+  </head>
+  <body>
+    <section id="login-screen" class="login-screen">
+      <div class="login-card">
+        <div class="login-brand"><div class="login-brand-copy"><span class="login-brand-label">BUSINESS PORTAL</span><strong id="login-company-name">Arafat Chemical</strong><span class="login-brand-product"><i class="login-brand-dot" aria-hidden="true"></i><span id="login-software-name">DEPO ERP</span></span></div><img id="login-company-logo" class="login-company-logo is-hidden" alt="Arafat Chemical logo"></div>
+        <div id="login-message" class="message is-hidden"></div>
+        <div id="sign-in-panel">
+          <p class="eyebrow">Welcome</p><h1>Sign In ERP</h1><p class="subtle">Sign in to continue to your business workspace.</p>
+          <form id="login-form"><div class="field"><label>Mobile number / Username</label><input id="login-username" type="text" inputmode="tel" maxlength="40" required autocomplete="username" placeholder="01XXXXXXXXX"></div><div class="field"><label>Password</label><input id="login-password" type="password" required autocomplete="current-password"></div><button class="primary-button full-button" type="submit">Sign in</button></form>
+        </div>
+      </div>
+    </section>
+    <div id="app-shell" class="app-shell is-hidden">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand-block">
+          <span class="brand-mark" id="app-brand-mark">DC</span>
+          <img id="app-company-logo" class="brand-logo-image is-hidden" alt="Company logo">
+          <div class="brand-copy"><strong id="app-company-name">Distribution ERP</strong><span id="app-software-name" class="brand-subtitle">Distribution ERP</span><small id="app-company-address" class="brand-address is-hidden"></small></div>
+          <button class="mobile-toggle sidebar-corner-toggle" id="mobile-toggle" type="button" aria-label="Collapse navigation" title="Collapse navigation">‹</button>
+        </div>
+        <nav class="main-nav">
+          <button class="nav-item is-active" data-view="dashboard"><span>⌂</span>Dashboard</button>
+          <div class="nav-group"><div class="nav-label">Operations</div>
+            <button class="nav-item" data-view="agreements"><span>▣</span>Supplier</button>
+            <button class="nav-item" data-view="purchases"><span>⇩</span>Purchase</button>
+            <button class="nav-item" data-view="product-config"><span>⚙</span>Product Configuration</button>
+            <button class="nav-item nav-subitem" data-view="goods-receipts"><span>↳</span>Goods Receipt (GRN)<b class="nav-badge is-hidden" id="goods-receipt-badge" aria-label="Pending Goods Receipts">0</b></button>
+            <button class="nav-item" data-view="products"><span>▦</span>Inventory</button>
+            <button type="button" class="nav-item dealer-nav-toggle" id="dealer-nav-toggle" aria-expanded="false" aria-controls="dealer-submenu"><span>♙</span>Customer<b aria-hidden="true">⌄</b></button>
+            <div id="dealer-submenu" class="dealer-submenu is-hidden">
+              <button class="nav-item nav-subitem" data-view="dealers"><span>↳</span>Dealer Register</button>
+              <button class="nav-item nav-subitem" data-view="dealer-incentive"><span>↳</span>Dealer Incentive</button>
+
+              <button class="nav-item nav-subitem dealer-portal-nav" data-view="dealer-portal"><span>↳</span>My Orders &amp; Invoices</button>
+            </div>
+            <button class="nav-item" data-view="sales"><span>▤</span>Sales</button>
+            <button class="nav-item" data-view="returns"><span>↩</span>Returns</button>
+            <button class="nav-item" data-view="expenses"><span>−</span>Expenses</button>
+            <button class="nav-item" data-view="hr"><span>♙</span>Human Resources</button>
+          </div>
+          <div class="nav-group"><div class="nav-label">Reports</div>
+            <button class="nav-item" data-view="reports"><span>▥</span>Reports</button>
+          </div>
+          <div class="nav-group"><div class="nav-label">Accounting</div>
+            <button class="nav-item" data-view="easy-accounts"><span>☷</span>Easy Accounts</button>
+            <button class="nav-item" data-view="accounting"><span>▤</span>Accounting</button>
+          </div>
+        </nav>
+      </aside>
+      <main class="main-content">
+        <header class="topbar">
+          <section class="dashboard-topbar-context is-hidden" id="dashboard-topbar-context" aria-label="Business overview">
+            <div class="dashboard-topbar-copy"><p>Business overview</p><h2 id="dashboard-welcome-title">Welcome to Distribution ERP</h2><span>Sales, purchases, dealer collections and live inventory in one view.</span></div>
+            <div class="dashboard-product-search is-hidden" id="dashboard-product-search">
+              <div class="dashboard-product-search-control"><span class="dashboard-product-search-icon" aria-hidden="true"></span><input id="dashboard-product-search-input" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="dashboard-product-search-results" placeholder="Search product, SKU, price or mobile" autocomplete="off"><button type="button" id="dashboard-product-search-button" aria-label="Search products" title="Search">Search</button></div>
+              <div id="dashboard-product-search-results" class="dashboard-product-search-results is-hidden" role="listbox" aria-label="Product search results"></div>
+            </div>
+            <div class="dashboard-date-box"><label for="dashboard-date">Activity date</label><input id="dashboard-date" type="date"><small>Updates sales, purchase and collection totals</small></div>
+          </section>
+          <div class="topbar-user"><button type="button" id="online-user-indicator" class="online-user-indicator admin-profile-item is-hidden" title="Show active sessions">0 online</button><span class="version" id="app-version"></span><div class="profile-menu-wrap"><button class="profile-chip" id="profile-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profile-menu"><span id="current-user-avatar" class="profile-avatar" aria-hidden="true">A</span><span class="profile-copy"><span id="current-user" class="current-user"></span><small id="current-user-role" class="profile-role"></small></span><span class="profile-caret" aria-hidden="true">⌄</span></button><div class="profile-menu is-hidden" id="profile-menu" role="menu"><div class="profile-menu-summary"><span id="profile-menu-avatar" class="profile-menu-avatar" aria-hidden="true">A</span><div><strong id="profile-menu-name"></strong><span id="profile-menu-phone"></span><small id="profile-menu-id"></small></div></div><button type="button" class="profile-menu-item" data-profile-action="account" role="menuitem"><span>♙</span><span>My account</span></button><button type="button" class="profile-menu-item" data-profile-action="change-password" role="menuitem"><span>♙</span><span>Change password</span></button><button type="button" class="profile-menu-item" data-profile-action="login-history" role="menuitem"><span>◷</span><span>Login history</span></button><button type="button" class="profile-menu-item admin-profile-item is-hidden" data-profile-view="user-management" role="menuitem"><span>☷</span><span>User management</span></button><button type="button" class="profile-menu-item admin-profile-item is-hidden" data-profile-view="settings" role="menuitem"><span>⚙</span><span>Company settings</span></button><div class="profile-menu-divider"></div><button type="button" class="profile-menu-item profile-signout" id="logout-button" role="menuitem"><span>↪</span><span>Sign out</span></button></div></div></div>
+        </header>
+        <div id="message" class="message is-hidden"></div>
+        <div id="app-view"></div>
+      </main>
+    </div>
+    <?!= include('DealerTargets'); ?>
+    <?!= include('Accounting'); ?>
+    <?!= include('HR'); ?>
+    <?!= include('JavaScript'); ?>
+  </body>
+</html>
