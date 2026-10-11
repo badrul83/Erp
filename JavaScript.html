@@ -143,7 +143,8 @@
   function applyBranding(settings) {
     settings=settings||{};
     var company=txt(settings.CompanyName||'Arafat Chemical'),software=txt(settings.SoftwareName||'DEPO ERP'),address=txt(settings.Address||''),logo=txt(settings.LogoDataUrl||'');
-    [['app-company-name',company],['login-software-name',software],['app-software-name',software],['app-company-address',address]].forEach(function(item){var node=$(item[0]);if(node){node.textContent=item[1];}});
+    [['app-company-name',company],['login-software-name',software],['app-software-name',software],['app-company-address',address],['workspace-company-name',company],['workspace-software-name',software]].forEach(function(item){var node=$(item[0]);if(node){node.textContent=item[1];}});
+    var workspaceMark=$('workspace-topbar-mark');if(workspaceMark){workspaceMark.textContent=(company.trim().split(/\s+/).slice(0,2).map(function(part){return Array.from(part)[0]||'';}).join('')||'B').toUpperCase();}
     document.title=software;var dashboardWelcome=$('dashboard-welcome-title');if(dashboardWelcome)dashboardWelcome.textContent='Welcome to '+software;
     var loginImage=$('login-company-logo');
     if(loginImage){loginImage.alt=company+' logo';if(logo){loginImage.src=logo;loginImage.classList.remove('is-hidden');loginImage.onerror=function(){loginImage.classList.add('is-hidden');};}else{loginImage.removeAttribute('src');loginImage.classList.add('is-hidden');}}
@@ -156,7 +157,7 @@
   function refresh(view, done) { loadLookups(function () { showView(view || state.view); if(done)done(); }); }
   function showView(view) {
     if (!canView(view)) { showMessage('You do not have permission to access this module.', 'error'); return; }
-    state.view = view;$('dashboard-topbar-context').classList.toggle('is-hidden',view!=='dashboard'); try{sessionStorage.setItem('depo.erp.currentView',view);}catch(ignore){}var routeHash='#'+encodeURIComponent(view);if(window.location.hash!==routeHash)window.history.replaceState(window.history.state,'',window.location.pathname+window.location.search+routeHash); clearMessage();
+    state.view = view;$('dashboard-topbar-context').classList.toggle('is-hidden',view!=='dashboard');$('workspace-topbar-brand').classList.toggle('is-hidden',view==='dashboard');$('workspace-topbar-route').classList.toggle('is-hidden',view==='dashboard');$('workspace-current-view').textContent=titles[view]||view; try{sessionStorage.setItem('depo.erp.currentView',view);}catch(ignore){}var routeHash='#'+encodeURIComponent(view);if(window.location.hash!==routeHash)window.history.replaceState(window.history.state,'',window.location.pathname+window.location.search+routeHash); clearMessage();
     var activeNavView=view==='payments'?'easy-accounts':view;document.querySelectorAll('.nav-item').forEach(function (button) { button.classList.toggle('is-active', button.dataset.view === activeNavView || (view==='dealer-sales-management'&&button.dataset.view==='hr')); });
     var dealerView=view==='dealers'||view==='dealer-incentive'||view==='dealer-portal';$('dealer-nav-toggle').classList.toggle('has-active-child',dealerView);if(dealerView){$('dealer-nav-toggle').setAttribute('aria-expanded','true');$('dealer-submenu').classList.remove('is-hidden');}
     refreshGoodsReceiptBadge();
