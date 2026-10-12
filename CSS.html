@@ -249,7 +249,7 @@
 .product-modal .modal-card-header>div,.product-modal .modal-card-header>.modal-close{position:relative;z-index:1}
 .product-modal .modal-card-header .eyebrow{margin:0 0 3px;font-size:9px;letter-spacing:.15em}
 .product-modal .modal-card-header h2{font-size:22px;line-height:1.15}
-.product-modal #product-modal-form>.form-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px 11px}
+.product-modal #product-modal-form>.form-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:9px 8px}
 .product-modal #product-modal-form>.form-grid>.field:has(#product-modal-variants){grid-column:1/-1}
 .product-modal #product-modal-form>.form-grid>#product-modal-new-category-field{grid-column:2/-1}
 .product-modal #product-modal-form .field{gap:4px}
@@ -257,6 +257,7 @@
 .product-modal #product-modal-form .field input,.product-modal #product-modal-form .field select{min-height:35px;padding:7px 9px;font-size:12px}
 .product-modal #product-modal-form .field small.subtle{font-size:10px;line-height:1.35}
 .product-modal .product-pack-size-picker{margin-top:7px;padding:8px 9px}
+.product-modal .product-pack-size-picker{grid-column:1/-1}
 .product-modal .product-pack-size-heading{gap:2px;margin-bottom:6px}
 .product-modal .product-pack-size-heading strong{font-size:11px}
 .product-modal .product-pack-size-heading small,.product-modal .product-pack-size-selected,.product-modal .product-pack-size-empty{font-size:9px}
@@ -322,6 +323,12 @@
  .product-modal .product-pack-size-custom-controls{grid-template-columns:minmax(130px,1fr) 58px auto;gap:5px}
  .product-modal .product-pack-size-custom-controls button{padding:5px 7px;font-size:9px}
  .product-modal .product-pack-size-custom-controls input,.product-modal .product-pack-size-custom-controls select{padding:4px 7px}
+ .product-modal #product-pack-size-options .product-pack-size-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.85fr);align-items:start;gap:7px 12px}
+ .product-modal #product-pack-size-options .product-pack-size-group-common{grid-column:1;margin:0}
+ .product-modal #product-pack-size-options .product-pack-size-custom{grid-column:2;align-self:center;width:100%;margin:0}
+ .product-modal #product-pack-size-options .product-pack-size-group-existing{grid-column:1/-1;margin:0}
+ .product-modal #product-pack-size-options .product-pack-size-empty{grid-column:1;align-self:center}
+ .product-modal #product-pack-size-options .product-pack-size-custom>label{margin:0}
 .product-modal .product-pack-carton-equation,.product-modal .product-pack-prices-note{font-size:8px}
 .product-modal .product-promotion-field{padding:7px 9px}
 .product-modal .product-promotion-heading{margin-bottom:5px}
@@ -357,6 +364,7 @@
 .product-modal .product-promotion-other{grid-column:auto;flex:0 1 230px;width:min(230px,100%);min-width:150px;min-height:27px;padding:4px 7px;font-size:10px}
 @media(max-width:680px){.product-modal .product-pack-size-options{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:420px){.product-modal .product-pack-size-options{grid-template-columns:repeat(2,minmax(0,1fr))}.product-modal .product-promotion-offers{grid-template-columns:1fr}.product-modal .product-promotion-other{flex-basis:100%;width:100%;min-width:0}}
+@media(max-width:680px){.product-modal #product-pack-size-options .product-pack-size-layout{grid-template-columns:1fr}.product-modal #product-pack-size-options .product-pack-size-group-common,.product-modal #product-pack-size-options .product-pack-size-custom,.product-modal #product-pack-size-options .product-pack-size-group-existing,.product-modal #product-pack-size-options .product-pack-size-empty{grid-column:1}.product-modal #product-pack-size-options .product-pack-size-custom{align-self:stretch;width:min(440px,100%)}}
 /* Fixed navigation frame and a compact, polished workspace header. */
 @media(min-width:801px){
   html,body{height:100%;overflow:hidden}
