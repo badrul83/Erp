@@ -783,7 +783,7 @@
 @media(max-width:650px){.grn-modal .modal-card-header{flex-wrap:wrap}.grn-modal .modal-card-header>div:first-child{flex:1 1 100%}.grn-invoice-value{margin-left:0;margin-right:auto}.grn-modal .modal-card-header>.grn-form-close{margin-left:auto}}
 /* Mobile dashboard density and drawer backdrop. */
 @media(max-width:800px){
-  .app-shell.sidebar-menu-open::before{position:fixed;z-index:27;inset:0;background:rgba(13,42,34,.42);content:"";backdrop-filter:blur(1px)}
+  .app-shell.sidebar-menu-open::before{position:fixed;z-index:27;inset:0;background:rgba(13,42,34,.26);content:"";backdrop-filter:blur(1px)}
   .sidebar{z-index:32;box-shadow:8px 0 28px rgba(0,45,33,.2)}
   .topbar-menu-toggle{touch-action:manipulation}
 }
@@ -820,19 +820,19 @@
   .dashboard-daily-copy>span{font-size:8px}
 }
 @media(max-width:800px){
-  .sidebar{width:min(264px,84vw);padding:12px 10px 10px}
-  .sidebar .brand-block{gap:8px;margin:0 2px 6px;padding:0 4px 8px}
+  .sidebar{top:8px;left:8px;width:min(210px,calc(100vw - 88px));height:calc(100dvh - 16px);max-height:calc(100dvh - 16px);padding:12px 9px 10px;border-radius:16px}
+  .sidebar .brand-block{gap:7px;margin:0 2px 6px;padding:0 4px 8px}
   .sidebar .brand-mark,.sidebar .brand-logo-image{width:32px;height:32px;flex-basis:32px;border-radius:9px}
-  .sidebar .brand-block strong{font-size:13px}
-  .sidebar .main-nav{gap:2px;padding:2px 0 6px}
-  .sidebar .nav-group{margin-top:7px;padding-top:7px}
-  .sidebar .nav-label{padding:0 9px 4px;font-size:9px;letter-spacing:.09em}
-  .sidebar .nav-item,.sidebar .nav-subitem{min-height:34px;padding:5px 9px!important;border-radius:8px;font-size:12px!important;line-height:1.2}
-  .sidebar .nav-item>span:first-child{width:22px!important;height:22px!important;margin-right:6px!important;border-radius:7px;font-size:12px!important}
+  .sidebar .brand-block strong{font-size:12px}
+  .sidebar .main-nav{gap:1px;padding:1px 0 5px}
+  .sidebar .nav-group{margin-top:5px;padding-top:5px}
+  .sidebar .nav-label{padding:0 8px 3px;font-size:8px;letter-spacing:.09em}
+  .sidebar .nav-item,.sidebar .nav-subitem{min-height:31px;padding:4px 8px!important;border-radius:8px;font-size:11px!important;line-height:1.15}
+  .sidebar .nav-item>span:first-child{width:20px!important;height:20px!important;margin-right:5px!important;border-radius:6px;font-size:11px!important}
   .sidebar .nav-item .nav-badge{min-width:16px;height:16px;font-size:9px;line-height:16px}
   .sidebar-signout{min-height:34px;margin-top:6px;padding:6px 9px;font-size:11px}
   .sidebar-signout span{font-size:14px}
-  .app-shell.sidebar-compact .sidebar{width:min(264px,84vw);padding:12px 10px 10px}
+  .app-shell.sidebar-compact .sidebar{width:min(210px,calc(100vw - 88px));padding:12px 9px 10px}
 }
 .purchase-receipt-lock-note{margin:-2px 0 12px}
 #purchase-form-modal .purchase-receipt-lock-note~#purchase-items input:disabled,#purchase-form-modal .purchase-receipt-lock-note~#purchase-items select:disabled{background:#f3f8f6;color:#67867c;cursor:not-allowed}
