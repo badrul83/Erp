@@ -779,4 +779,57 @@
 .grn-invoice-value span{color:#668d83;font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .grn-invoice-value strong{color:#123d32;font-size:17px;white-space:nowrap}
 @media(max-width:650px){.grn-modal .modal-card-header{flex-wrap:wrap}.grn-modal .modal-card-header>div:first-child{flex:1 1 100%}.grn-invoice-value{margin-left:0;margin-right:auto}.grn-modal .modal-card-header>.grn-form-close{margin-left:auto}}
+/* Mobile dashboard density and drawer backdrop. */
+@media(max-width:800px){
+  .app-shell.sidebar-menu-open::before{position:fixed;z-index:27;inset:0;background:rgba(13,42,34,.42);content:"";backdrop-filter:blur(1px)}
+  .sidebar{z-index:32;box-shadow:8px 0 28px rgba(0,45,33,.2)}
+  .topbar-menu-toggle{touch-action:manipulation}
+}
+@media(max-width:600px){
+  .dashboard-page{gap:12px}
+  .dashboard-section-heading{align-items:flex-start;flex-direction:row;gap:8px;padding:2px 0 4px}
+  .dashboard-section-heading h3{font-size:15px;line-height:1.3}
+  .dashboard-section-heading>span{padding:4px 7px;font-size:9px}
+  .dashboard-daily-grid,.dashboard-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .dashboard-daily-card.dashboard-action-card{min-height:92px;padding:10px;gap:8px;border-radius:11px}
+  .dashboard-daily-card .dashboard-icon{width:28px;height:28px;flex-basis:28px;border-radius:8px;font-size:13px}
+  .dashboard-daily-copy>small{font-size:9px;line-height:1.25}
+  .dashboard-daily-copy>strong{margin-top:4px;font-size:15px;line-height:1.15}
+  .dashboard-daily-copy>span{align-items:flex-start;flex-direction:column;gap:2px;margin-top:4px;font-size:9px;line-height:1.2}
+  .dashboard-daily-copy i{font-size:9px}
+  .dashboard-daily-card[data-dashboard-collection="true"]{grid-column:1/-1;min-height:66px}
+  .dashboard-daily-card[data-dashboard-collection="true"] .dashboard-daily-copy>span{align-items:center;flex-direction:row}
+  .dashboard-kpi.dashboard-action-card{min-height:106px;padding:10px;border-radius:11px}
+  .dashboard-kpi .dashboard-icon{width:27px;height:27px;flex-basis:27px;margin-bottom:7px;border-radius:8px;font-size:12px}
+  .dashboard-kpi strong{margin-bottom:5px;font-size:15px;line-height:1.15}
+  .dashboard-kpi small{font-size:9px;line-height:1.25;letter-spacing:.02em}
+  .dashboard-kpi-note{margin-top:4px;font-size:9px;line-height:1.2}
+  .dashboard-section-heading>span{white-space:normal;text-align:right}
+  .dashboard-stock-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dashboard-stock-card{min-height:118px}
+  .dashboard-panel header{gap:8px;padding:13px 12px 11px}
+  .dashboard-panel h3{font-size:14px}
+  .dashboard-panel header p{font-size:10px}
+  .dashboard-link{padding:7px 8px;font-size:9px}
+}
+@media(max-width:360px){
+  .dashboard-kpi.dashboard-action-card{padding:8px}
+  .dashboard-daily-card.dashboard-action-card{padding:8px}
+  .dashboard-daily-copy>span{font-size:8px}
+}
+@media(max-width:800px){
+  .sidebar{width:min(264px,84vw);padding:12px 10px 10px}
+  .sidebar .brand-block{gap:8px;margin:0 2px 6px;padding:0 4px 8px}
+  .sidebar .brand-mark,.sidebar .brand-logo-image{width:32px;height:32px;flex-basis:32px;border-radius:9px}
+  .sidebar .brand-block strong{font-size:13px}
+  .sidebar .main-nav{gap:2px;padding:2px 0 6px}
+  .sidebar .nav-group{margin-top:7px;padding-top:7px}
+  .sidebar .nav-label{padding:0 9px 4px;font-size:9px;letter-spacing:.09em}
+  .sidebar .nav-item,.sidebar .nav-subitem{min-height:34px;padding:5px 9px!important;border-radius:8px;font-size:12px!important;line-height:1.2}
+  .sidebar .nav-item>span:first-child{width:22px!important;height:22px!important;margin-right:6px!important;border-radius:7px;font-size:12px!important}
+  .sidebar .nav-item .nav-badge{min-width:16px;height:16px;font-size:9px;line-height:16px}
+  .sidebar-signout{min-height:34px;margin-top:6px;padding:6px 9px;font-size:11px}
+  .sidebar-signout span{font-size:14px}
+  .app-shell.sidebar-compact .sidebar{width:min(264px,84vw);padding:12px 10px 10px}
+}
 </style>
