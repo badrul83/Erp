@@ -906,6 +906,7 @@ final class DepoApp
                 if(abs($quantity-round($quantity))>0.000001)throw new InvalidArgumentException('Sealed package or CTN quantity must be a whole number.');
             }            $default=$type==='PURCHASE'?(float)$unit['PurchasePrice']:(float)$unit['SalePrice'];
             $price=$forceConfiguredSalePrice&&$type==='SALE'?$default:($this->text($line['UnitPrice']??'')===''?$default:$this->num($line['UnitPrice'],'Unit Price',true));
+            if($type==='PURCHASE'&&$price<=0)throw new InvalidArgumentException('Enter a purchase price greater than zero for '.$product['ProductName'].'.');
             $gift=$price==0 || !empty($line['IsGift']) || strtoupper($product['ProductType'])==='GIFT';if($gift)$price=0;
             $items[]=['ProductID'=>$product['ProductID'],'Variant'=>$variant,'UnitName'=>$unit['UnitName'],'Quantity'=>$quantity,'ConversionToBase'=>(float)$unit['ConversionToBase'],'BaseQuantity'=>$quantity*(float)$unit['ConversionToBase'],'UnitPrice'=>$price,'LineTotal'=>$quantity*$price,'IsGift'=>$gift?1:0];
         }
@@ -958,7 +959,6 @@ final class DepoApp
             $packConversion=(float)$units[$packIndex]['ConversionToBase'];$cartonConversion=(float)($units[$cartonIndex]['ConversionToBase']??0);$pieces=$packConversion>0?$cartonConversion/$packConversion:0;
             if($packConversion<=0||$cartonConversion<=0||$pieces<1||abs($pieces-round($pieces))>0.00001)throw new InvalidArgumentException('Each CTN must contain a whole number of sealed packs.');
             $packPurchase=(float)($units[$packIndex]['PurchasePrice']??$units[$packIndex]['UnitPrice']??0);$packSale=(float)($units[$packIndex]['SalePrice']??$units[$packIndex]['UnitPrice']??0);
-            if($packPurchase<=0||$packSale<=0)throw new InvalidArgumentException('Enter both purchase and sale prices for each sealed pack before configuring its CTN.');
             $units[$cartonIndex]['UnitName']=$cartonName;$units[$cartonIndex]['ConversionToBase']=$packConversion*(int)round($pieces);$units[$cartonIndex]['PurchaseAllowed']=true;$units[$cartonIndex]['SaleAllowed']=true;$units[$cartonIndex]['PurchasePrice']=$packPurchase*(int)round($pieces);$units[$cartonIndex]['SalePrice']=$packSale*(int)round($pieces);$units[$cartonIndex]['UnitPrice']=$units[$cartonIndex]['SalePrice'];
         }
         return $units;
