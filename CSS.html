@@ -251,7 +251,7 @@
 .product-modal .modal-card-header h2{font-size:22px;line-height:1.15}
 .product-modal #product-modal-form>.form-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px 11px}
 .product-modal #product-modal-form>.form-grid>.field:has(#product-modal-variants){grid-column:1/-1}
-.product-modal #product-modal-form>.form-grid>#product-modal-new-category-field{grid-column:1/-1}
+.product-modal #product-modal-form>.form-grid>#product-modal-new-category-field{grid-column:2/-1}
 .product-modal #product-modal-form .field{gap:4px}
 .product-modal #product-modal-form .field label{font-size:10px}
 .product-modal #product-modal-form .field input,.product-modal #product-modal-form .field select{min-height:35px;padding:7px 9px;font-size:12px}
@@ -774,6 +774,8 @@
 @media(max-width:480px){.topbar-tools{gap:4px}.topbar-tools .profile-copy{max-width:62px}.topbar-language button{padding:0 5px}.topbar .version{display:none}}
 .required-date-invalid{border-color:#dc2626!important;box-shadow:0 0 0 3px rgba(220,38,38,.18)!important;background:#fff8f7!important}
 .required-date-field-invalid>label{color:#b42318!important}
+.required-field-invalid{border-color:#dc2626!important;box-shadow:0 0 0 3px rgba(220,38,38,.16)!important;background:#fff8f7!important}
+.required-field-invalid-wrap>label{color:#b42318!important}
 .grn-modal .modal-card-header{align-items:center;gap:12px}
 .grn-invoice-value{display:flex;flex:0 0 auto;flex-direction:column;gap:4px;min-width:190px;margin-left:auto;padding:10px 13px;border:1px solid #cfe8df;border-radius:9px;background:#f1faf6}
 .grn-invoice-value span{color:#668d83;font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
@@ -834,4 +836,15 @@
 }
 .purchase-receipt-lock-note{margin:-2px 0 12px}
 #purchase-form-modal .purchase-receipt-lock-note~#purchase-items input:disabled,#purchase-form-modal .purchase-receipt-lock-note~#purchase-items select:disabled{background:#f3f8f6;color:#67867c;cursor:not-allowed}
+.grn-modal .grn-form-grid{grid-template-columns:minmax(118px,.62fr) minmax(230px,1.35fr) minmax(180px,1fr);gap:9px 12px}
+.grn-modal .grn-form-grid .field{min-width:0}
+.grn-modal .grn-form-grid .field label{display:flex;align-items:center;gap:6px;min-height:17px;font-size:11px}
+.grn-number-block{display:flex;min-height:36px;flex-direction:column;justify-content:center;gap:1px;padding:5px 10px;border:1px solid #cfe8df;border-radius:8px;background:#f1faf6;color:#174c3d;overflow:hidden}
+.grn-number-block strong{overflow:hidden;color:#123d32;font-size:12px;text-overflow:ellipsis;white-space:nowrap}
+.grn-number-block span{color:#668d83;font-size:9px;line-height:1.1}
+.grn-supplier-chip{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;min-width:26px;height:19px;padding:0 6px;border:1px solid #cfe8df;border-radius:999px;background:#eaf7f2;color:#087b60;font-size:9px;font-weight:800;letter-spacing:.04em;line-height:1}
+.grn-header-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.grn-modal .grn-po-field input{font-size:12px}
+@media(max-width:800px){.grn-modal .grn-form-grid{grid-template-columns:minmax(100px,.65fr) minmax(0,1fr);gap:9px}.grn-modal .grn-number-field{grid-column:1}.grn-modal .grn-date-field{grid-column:2;grid-row:1}.grn-modal .grn-po-field{grid-column:1/-1;grid-row:2}.grn-modal .grn-gate-field{grid-column:1}.grn-modal .grn-challan-field{grid-column:2}.grn-modal .grn-notes-field{grid-column:1/-1}}
+@media(max-width:480px){.grn-modal .grn-form-grid{gap:8px}.grn-modal .grn-form-grid .field label{font-size:10px}.grn-number-block{padding:5px 7px}.grn-modal .grn-form-grid .field input{min-width:0;padding:7px 8px;font-size:12px}.grn-modal .grn-po-field input{font-size:11px}.grn-modal .grn-invoice-value{min-width:0;padding:7px 9px}.grn-modal .grn-invoice-value strong{font-size:14px}}
 </style>

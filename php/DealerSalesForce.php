@@ -239,9 +239,11 @@ trait DealerSalesForce
         $sales = $this->num($input['SalesAmount'] ?? 0, 'Sales amount');
         $collection = $this->num($input['CollectionAmount'] ?? 0, 'Collection amount', true);
         $visits = (int) ($input['VisitCount'] ?? 1); if ($visits < 1 || $visits > 99) throw new InvalidArgumentException('Outlet visits must be between 1 and 99.');
+        $saleDate = $this->text($input['SaleDate'] ?? '');
+        if (!preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/', $saleDate, $dateParts) || !checkdate((int)$dateParts[2], (int)$dateParts[3], (int)$dateParts[1])) throw new InvalidArgumentException('Sale date is required and must be a valid date.');
         $mobile = $this->text($input['OutletMobile'] ?? ''); if ($mobile !== '') $mobile = $this->cleanSrMobile($mobile);
         $id = $this->id('DealerSRSales', 'SRSaleID', 'SRS'); $now = $this->now();
-        $this->insert('DealerSRSales', ['SRSaleID'=>$id,'DealerID'=>$dealerId,'SRID'=>$sr['SRID'],'SaleDate'=>$this->today($input['SaleDate'] ?? ''),'OutletName'=>$outlet,'OutletMobile'=>$mobile ?: null,'InvoiceRef'=>$this->text($input['InvoiceRef'] ?? '') ?: null,'SalesAmount'=>$sales,'CollectionAmount'=>$collection,'VisitCount'=>$visits,'Notes'=>$this->text($input['Notes'] ?? '') ?: null,'Status'=>'POSTED','CreatedAt'=>$now,'CreatedBy'=>$this->current()]);
+        $this->insert('DealerSRSales', ['SRSaleID'=>$id,'DealerID'=>$dealerId,'SRID'=>$sr['SRID'],'SaleDate'=>$saleDate,'OutletName'=>$outlet,'OutletMobile'=>$mobile ?: null,'InvoiceRef'=>$this->text($input['InvoiceRef'] ?? '') ?: null,'SalesAmount'=>$sales,'CollectionAmount'=>$collection,'VisitCount'=>$visits,'Notes'=>$this->text($input['Notes'] ?? '') ?: null,'Status'=>'POSTED','CreatedAt'=>$now,'CreatedBy'=>$this->current()]);
         $this->audit('CREATE', 'DealerSRSales', $id, 'SR daily sales activity recorded for '.$sr['SRCode'].'.');
         return $this->one('DealerSRSales', 'SRSaleID', $id) ?? [];
     }
