@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS CompanySupplyItems (
   Quantity DECIMAL(16,4) NOT NULL, ConversionToBase DECIMAL(16,6) NOT NULL, BaseQuantity DECIMAL(16,4) NOT NULL,
   UnitPrice DECIMAL(16,2) NOT NULL, LineTotal DECIMAL(16,2) NOT NULL, CreatedAt DATETIME NOT NULL, CreatedBy VARCHAR(120) NOT NULL,
   IsGift TINYINT(1) NOT NULL DEFAULT 0, Variant VARCHAR(160) NULL, PromotionType VARCHAR(20) NULL DEFAULT NULL, PromotionGifts TEXT NULL,
-  OfferProductID VARCHAR(20) NULL, OfferVariant VARCHAR(160) NULL, OfferUnitName VARCHAR(60) NULL, OfferQuantity DECIMAL(16,4) NULL,
+  OfferProductID VARCHAR(20) NULL, OfferProductName VARCHAR(160) NULL, OfferVariant VARCHAR(160) NULL, OfferUnitName VARCHAR(60) NULL, OfferQuantity DECIMAL(16,4) NULL,
   OfferUnitPrice DECIMAL(16,2) NULL, OfferConversionToBase DECIMAL(16,6) NULL, OfferBaseQuantity DECIMAL(16,4) NULL,
   INDEX (SupplyID), INDEX (ProductID), INDEX (OfferProductID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -1176,4 +1176,14 @@
 #purchase-form-modal .purchase-form-grand-total>div{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;max-width:100%;min-width:0;padding:9px 13px}
 #purchase-form-modal .purchase-form-grand-total span{display:inline-block;margin:0;white-space:nowrap}
 #purchase-form-modal .purchase-form-grand-total strong{font-size:16px;white-space:nowrap}
+.product-modal .product-promotion-offers{grid-template-columns:1fr;align-items:stretch}
+.product-modal .product-promotion-offers-title{display:block}
+.product-modal .product-promotion-mappings{display:grid;gap:6px;width:100%}
+.product-modal .product-promotion-map-row{display:grid;grid-template-columns:minmax(110px,.55fr) minmax(0,1.45fr);align-items:center;gap:10px;padding:6px 8px;border:1px solid #e1eee9;border-radius:7px;background:#fbfefd}
+.product-modal .product-promotion-map-size{color:#285f50;font-size:11px;font-weight:700}
+.product-modal .product-promotion-map-input{width:100%;min-width:0;min-height:32px;padding:6px 8px;border:1px solid #c8e1d9;border-radius:6px;background:#fff;color:#173b32;font-size:11px}
+@media(max-width:560px){.product-modal .product-promotion-map-row{grid-template-columns:1fr;gap:4px}}
+.purchase-modal #purchase-items .purchase-cp-offer-fields{grid-template-columns:minmax(220px,420px)}
+.purchase-modal #purchase-items .purchase-cp-offer-fields .offer-product-name{background:#fff;color:#173b32}
+@media(max-width:720px){.purchase-modal #purchase-items .purchase-cp-offer-fields{grid-template-columns:minmax(0,1fr)}}
 </style>
