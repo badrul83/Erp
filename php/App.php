@@ -1072,7 +1072,8 @@ final class DepoApp
         $this->user();
         $receiptDetailsByProduct=[];
         $receiptCostByProduct=[];
-        foreach($this->grnRegister()['Receipts']as$receipt){
+        $grnRegister=$this->grnRegister();
+        foreach($grnRegister['Receipts']as$receipt){
             if(strtoupper((string)($receipt['Status']??''))!=='POSTED')continue;
             foreach((array)($receipt['Items']??[])as$item){
                 $receiptKey=(string)($item['ProductID']??'').'|'.(string)($item['Variant']??'');
@@ -1082,6 +1083,16 @@ final class DepoApp
                     if($accepted>0){$receiptCostByProduct[$receiptKey]['Quantity']=($receiptCostByProduct[$receiptKey]['Quantity']??0)+$accepted;$receiptCostByProduct[$receiptKey]['Value']=($receiptCostByProduct[$receiptKey]['Value']??0)+$accepted*(float)($item['UnitCost']??0);}
                 }
             }
+        }
+        $incomingForecastByProduct=[];
+        foreach((array)($grnRegister['PendingOrders']??[])as$order)foreach((array)($order['Items']??[])as$item){
+            $receiptKey=(string)($item['ProductID']??'').'|'.(string)($item['Variant']??'');
+            $incomingForecastByProduct[$receiptKey]=($incomingForecastByProduct[$receiptKey]??0)+(float)($item['RemainingQuantity']??0)*(float)($item['ConversionToBase']??0);
+        }
+        $outgoingForecastByProduct=[];
+        foreach($this->rows('DealerSales','Status=?',['CONFIRMED'])as$sale)foreach($this->rows('DealerSaleItems','SaleID=?',[$sale['SaleID']])as$item){
+            $receiptKey=(string)($item['ProductID']??'').'|'.(string)($item['Variant']??'');
+            $outgoingForecastByProduct[$receiptKey]=($outgoingForecastByProduct[$receiptKey]??0)+(float)($item['BaseQuantity']??0);
         }
         $out=[];
         foreach($this->products()as$p){
@@ -1100,10 +1111,26 @@ final class DepoApp
                 $packageCount=$packageSizeBase&&$packageSizeBase>0?max(0,$onHand/$packageSizeBase):null;
                 $availableOnHand=max(0,$onHand-$reserved);
                 $availablePackageCount=$packageSizeBase&&$packageSizeBase>0?max(0,$availableOnHand/$packageSizeBase):null;
+                $incoming=(float)($incomingForecastByProduct[$key]??0);$outgoing=(float)($outgoingForecastByProduct[$key]??0);$forecastedOnHand=$onHand+$incoming-$outgoing;
+                $cartonUnit=null;$pieceUnit=null;$packUnit=null;
+                foreach($units as$unit){$unitName=trim((string)($unit['UnitName']??''));$conversion=(float)($unit['ConversionToBase']??0);if($conversion<=0)continue;
+                    if($optionType==='PACKAGING'){
+                        if(strcasecmp($unitName,'CTN ('.$variant.')')===0)$cartonUnit=$unit;
+                        if(strcasecmp($unitName,'Pack ('.$variant.')')===0)$packUnit=$unit;
+                    }
+                    $normalized=preg_replace('/\s*\([^)]*\)\s*$/','',$unitName);$normalized=strtolower(trim((string)$normalized));
+                    if(!$cartonUnit&&in_array($normalized,['carton','cartons','ctn'],true))$cartonUnit=$unit;
+                    if(!$pieceUnit&&in_array($normalized,['piece','pieces','pc','pcs'],true))$pieceUnit=$unit;
+                }
+                if($optionType==='PACKAGING'&&$packUnit)$pieceUnit=$packUnit;
+                $cartonConversion=(float)($cartonUnit['ConversionToBase']??0);$pieceConversion=(float)($pieceUnit['ConversionToBase']??0);
+                $priceUnit=$optionType==='PACKAGING'&&$packUnit?$packUnit:$base;
+                $priceUnitConversion=(float)($priceUnit['ConversionToBase']??1);if($priceUnitConversion<=0)$priceUnitConversion=1;
+                $onHandDisplayConversion=$cartonConversion>0?$cartonConversion:1;$onHandDisplayUnit=$cartonUnit['UnitName']??($base['UnitName']??$p['BaseUnit']);
                 $supplier=$this->agreement($p['SupplierID']);
                 $cost=$receiptCostByProduct[$key]??[];
                 $averagePurchaseCost=(float)($cost['Quantity']??0)>0?(float)$cost['Value']/(float)$cost['Quantity']:(float)($base['PurchasePrice']??0);
-                $out[]=['ProductID'=>$p['ProductID'],'InventoryReceipts'=>$receiptDetailsByProduct[$key]??[],'SupplierID'=>$p['SupplierID'],'SupplierName'=>$supplier['Company']??'','SKU'=>$this->sku($supplier['Company']??'SUP',$p['ProductName'],$variant,$p['ProductID']),'ProductName'=>$p['ProductName'],'Category'=>$p['Category'],'Variant'=>$variant,'OptionType'=>$optionType,'PackagingSize'=>$optionType==='PACKAGING'?$variant:'','PackageConversionToBase'=>$packageSizeBase,'PackageCount'=>$packageCount,'AvailablePackageCount'=>$availablePackageCount,'PackageUnitName'=>$optionType==='PACKAGING'?'Pack ('.$variant.')':'','PurchasedPackSizes'=>$this->purchasedPackSizesInGrams($p['ProductID'],$variant),'AllVariants'=>$p['Variant'],'UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'OnHandByUnit'=>$unitRows,'OnHandGiftByUnit'=>array_map(fn($u)=>['UnitName'=>$u['UnitName'],'Quantity'=>(float)$u['ConversionToBase']?$gift/(float)$u['ConversionToBase']:0],$units),'OnHandGift'=>$gift,'ProductType'=>$p['ProductType'],'Status'=>$p['Status'],'BaseUnit'=>$p['BaseUnit'],'OnHand'=>$onHand,'AvailableOnHand'=>$availableOnHand,'ReservedForSale'=>$reserved,'PurchaseForecast'=>max(0,ceil($reserved-$onHand)),'StockValue'=>max(0,$onHand-$gift)*$averagePurchaseCost];
+                $out[]=['ProductID'=>$p['ProductID'],'InventoryReceipts'=>$receiptDetailsByProduct[$key]??[],'SupplierID'=>$p['SupplierID'],'SupplierName'=>$supplier['Company']??'','SKU'=>$this->sku($supplier['Company']??'SUP',$p['ProductName'],$variant,$p['ProductID']),'ProductName'=>$p['ProductName'],'Category'=>$p['Category'],'Tag'=>strtoupper((string)($p['ProductType']??''))==='GIFT'?'GIFT':(strtoupper((string)($p['PromotionType']??'NON_CP'))==='WITH_CP'?'CP':'NON-CP'),'PromotionType'=>$p['PromotionType']??'NON_CP','PromotionGifts'=>$p['PromotionGifts']??'[]','Variant'=>$variant,'OptionType'=>$optionType,'PackagingSize'=>$optionType==='PACKAGING'?$variant:'','PackageConversionToBase'=>$packageSizeBase,'PackageCount'=>$packageCount,'AvailablePackageCount'=>$availablePackageCount,'PackageUnitName'=>$optionType==='PACKAGING'?'Pack ('.$variant.')':'','PurchasedPackSizes'=>$this->purchasedPackSizesInGrams($p['ProductID'],$variant),'AllVariants'=>$p['Variant'],'UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'OnHandByUnit'=>$unitRows,'OnHandGiftByUnit'=>array_map(fn($u)=>['UnitName'=>$u['UnitName'],'Quantity'=>(float)$u['ConversionToBase']?$gift/(float)$u['ConversionToBase']:0],$units),'OnHandGift'=>$gift,'ProductType'=>$p['ProductType'],'Status'=>$p['Status'],'BaseUnit'=>$p['BaseUnit'],'OnHand'=>$onHand,'OnHandDisplayQuantity'=>$onHand/$onHandDisplayConversion,'OnHandDisplayUnit'=>$onHandDisplayUnit,'AvailableOnHand'=>$availableOnHand,'ReservedForSale'=>$reserved,'IncomingForecast'=>$incoming,'OutgoingForecast'=>$outgoing,'ForecastedOnHand'=>$forecastedOnHand,'ForecastedDisplayQuantity'=>$forecastedOnHand/$onHandDisplayConversion,'ForecastedDisplayUnit'=>$onHandDisplayUnit,'CartonConversionToBase'=>$cartonConversion?:null,'PieceConversionToBase'=>$pieceConversion?:null,'OnHandCartons'=>$cartonConversion>0?$onHand/$cartonConversion:null,'OnHandPieces'=>$pieceConversion>0?$onHand/$pieceConversion:null,'ForecastedCartons'=>$cartonConversion>0?$forecastedOnHand/$cartonConversion:null,'ForecastedPieces'=>$pieceConversion>0?$forecastedOnHand/$pieceConversion:null,'CartonUnitName'=>$cartonUnit['UnitName']??'','PieceUnitName'=>$pieceUnit['UnitName']??'','PriceUnitName'=>$priceUnit['UnitName']??($p['BaseUnit']??''),'SalePrice'=>(float)($priceUnit['SalePrice']??$priceUnit['UnitPrice']??0),'Cost'=>$averagePurchaseCost*$priceUnitConversion,'StockValue'=>max(0,$onHand-$gift)*$averagePurchaseCost];
             }
         }
         return$out;
