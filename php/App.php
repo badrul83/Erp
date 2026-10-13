@@ -40,6 +40,7 @@ final class DepoApp
         $this->ensureDealerSalesFinanceSchema();
         $this->ensureProductOptionTypeSchema();
         $this->ensureProductPromotionSchema();
+        $this->ensureProductImageSchema();
         $this->ensureSupplierProfileSchema();
         $this->ensureUserAccessSchema();
         $this->ensureDealerSalesForceSchema();
@@ -154,6 +155,11 @@ final class DepoApp
             $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME=?', [$name]);
             if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN `' . $name . '` ' . $definition);
         }
+    }
+    private function ensureProductImageSchema(): void
+    {
+        $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME="ProductImageDataUrl"');
+        if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN ProductImageDataUrl MEDIUMTEXT NULL AFTER ProductName');
     }
     public function dispatch(string $method, array $args): mixed
     {
@@ -819,6 +825,7 @@ final class DepoApp
     private function products(): array { $this->user(); return $this->rows('Products','Status<>?', ['ARCHIVED']); }
     private function units(string $productId = ''): array { return $productId ? $this->rows('ProductUnits','ProductID=?',[$productId]) : $this->rows('ProductUnits'); }
     private function product(string $id): ?array { $this->user(); $row=$this->one('Products','ProductID',$id); if($row)$row['Units']=$this->units($id); return $row; }
+    private function productImage(mixed $value): ?string { $image=$this->text($value);if(!$image)return null;if(!preg_match('#^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$#i',$image)||strlen($image)>200000)throw new InvalidArgumentException('Product image must be a valid JPG, PNG or WebP image below 200 KB.');return $image; }
     private function variants(array $product): array { $raw=$this->text($product['Variant']??$product['Variants']??'');$out=[];foreach(explode(',',$raw) as $value){$value=$this->text($value);if($value&&!in_array(strtolower($value),array_map('strtolower',$out),true))$out[]=$value;}return $out; }
     private function massUnitKgFactor(string $unitName):?float
     {
@@ -995,7 +1002,7 @@ final class DepoApp
             $optionType=strtoupper((string)($product['OptionType']??'VARIANT'));
             $options=$this->variants($product)?:[''];
             foreach ($options as $option) {
-                $out[]=['ProductID'=>$product['ProductID'],'SKU'=>$this->sku((string)($supplier['Company']??'SUP'),(string)$product['ProductName'],$option,(string)$product['ProductID']),'SupplierID'=>$product['SupplierID'],'SupplierName'=>$supplier['Company']??'','ProductName'=>$product['ProductName'],'Category'=>$product['Category']??'','OptionType'=>$optionType,'PromotionType'=>$product['PromotionType']??'NON_CP','PromotionGifts'=>$product['PromotionGifts']??'[]','Variant'=>$option,'PackagingSize'=>$optionType==='PACKAGING'?$option:'','PackageConversionToBase'=>$optionType==='PACKAGING'?($this->packVariantToBase($product,$option)??0):0,'BaseUnit'=>$product['BaseUnit']??$product['UnitOfMeasure']??'','UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'Status'=>$product['Status']];
+                $out[]=['ProductID'=>$product['ProductID'],'SKU'=>$this->sku((string)($supplier['Company']??'SUP'),(string)$product['ProductName'],$option,(string)$product['ProductID']),'SupplierID'=>$product['SupplierID'],'SupplierName'=>$supplier['Company']??'','ProductName'=>$product['ProductName'],'ProductImageDataUrl'=>$product['ProductImageDataUrl']??'','Category'=>$product['Category']??'','OptionType'=>$optionType,'PromotionType'=>$product['PromotionType']??'NON_CP','PromotionGifts'=>$product['PromotionGifts']??'[]','Variant'=>$option,'PackagingSize'=>$optionType==='PACKAGING'?$option:'','PackageConversionToBase'=>$optionType==='PACKAGING'?($this->packVariantToBase($product,$option)??0):0,'BaseUnit'=>$product['BaseUnit']??$product['UnitOfMeasure']??'','UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'Status'=>$product['Status']];
             }
         }
         return $out;
@@ -1004,6 +1011,7 @@ final class DepoApp
     {
         $this->user();
         $name=$this->text($input['ProductName']??'');
+        $image=$this->productImage($input['ProductImageDataUrl']??'');
         $promotion=$this->normalizeProductPromotion($input);
         $supplier=$this->agreement($this->text($input['SupplierID']??$input['AgreementID']??''));
         if(!$name)throw new InvalidArgumentException('Product Name is required.');
@@ -1023,7 +1031,7 @@ final class DepoApp
         try{
             $this->assertUniqueProductConfiguration((string)$supplier['AgreementID'],$name);
             $id=$this->id('Products','ProductID','PRD');$now=$this->now();$sku=$this->sku($supplier['Company'],$name,'',$id);
-            $this->insert('Products',['ProductID'=>$id,'SKU'=>$sku,'ProductName'=>$name,'Category'=>$category,'BaseUnit'=>$base,'Status'=>'ACTIVE','CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR','Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID']]);
+            $this->insert('Products',['ProductID'=>$id,'SKU'=>$sku,'ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'BaseUnit'=>$base,'Status'=>'ACTIVE','CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR','Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID']]);
             $this->writeUnits($id,$units);$this->audit('CREATE','Products',$id,'Product created.');$this->db->commit();return $this->product($id);
         }catch(Throwable $e){$this->db->rollBack();throw $e;}
     }
@@ -1044,7 +1052,8 @@ final class DepoApp
         $variants=$this->variants(['Variant'=>$input['Variants']??$input['Variant']??$old['Variant']]);
         $this->validateProductOptionType($optionType,$base,$variants);
         $category=$this->assertProductCategory($this->text($input['Category']??$old['Category']??''),$this->text($old['Category']??''));
-        $row=['ProductName'=>$name,'Category'=>$category,'BaseUnit'=>$base,'ProductType'=>strtoupper($this->text($input['ProductType']??$old['ProductType'])),'Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID'],'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()];
+        $image=array_key_exists('ProductImageDataUrl',$input)?$this->productImage($input['ProductImageDataUrl']):($old['ProductImageDataUrl']??null);
+        $row=['ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'BaseUnit'=>$base,'ProductType'=>strtoupper($this->text($input['ProductType']??$old['ProductType'])),'Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID'],'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()];
         $units=array_key_exists('Units',$input)?(array)$input['Units']:$this->units($id);
         if($optionType==='PACKAGING')$units=$this->packagingUnits($base,$variants,$units,$optionType);
         $this->db->beginTransaction();

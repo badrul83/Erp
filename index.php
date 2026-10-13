@@ -14,4 +14,6 @@ $page = preg_replace_callback("/<\?!=\s*include\('([A-Za-z]+)'\);\s*\?>/", stati
 }, $template);
 header('Content-Type: text/html; charset=UTF-8');
 header('X-Content-Type-Options: nosniff');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 echo $page;
