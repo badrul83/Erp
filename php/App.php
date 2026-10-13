@@ -40,6 +40,7 @@ final class DepoApp
         $this->ensureDealerSalesFinanceSchema();
         $this->ensureProductOptionTypeSchema();
         $this->ensureProductPromotionSchema();
+        $this->ensureTransactionPromotionSchema();
         $this->ensureProductImageSchema();
         $this->ensureSupplierProfileSchema();
         $this->ensureUserAccessSchema();
@@ -154,6 +155,23 @@ final class DepoApp
         foreach ($columns as $name => $definition) {
             $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME=?', [$name]);
             if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN `' . $name . '` ' . $definition);
+        }
+    }
+    private function ensureTransactionPromotionSchema(): void
+    {
+        foreach (['CompanySupplyItems', 'DealerSaleItems'] as $table) {
+            $promotionTypeAdded = false;
+            foreach ([
+                'PromotionType' => 'VARCHAR(20) NULL DEFAULT NULL AFTER Variant',
+                'PromotionGifts' => 'TEXT NULL AFTER PromotionType',
+            ] as $name => $definition) {
+                $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=? AND COLUMN_NAME=?', [$table, $name]);
+                if (!$exists) {
+                    $this->db->exec('ALTER TABLE `' . $table . '` ADD COLUMN `' . $name . '` ' . $definition);
+                    if ($name === 'PromotionType') $promotionTypeAdded = true;
+                }
+            }
+            if ($promotionTypeAdded) $this->db->exec('UPDATE `' . $table . '` i LEFT JOIN Products p ON p.ProductID=i.ProductID SET i.PromotionType=CASE WHEN UPPER(COALESCE(p.PromotionType,"NON_CP"))="WITH_CP" THEN "WITH_CP" ELSE "NON_CP" END, i.PromotionGifts=CASE WHEN UPPER(COALESCE(p.PromotionType,"NON_CP"))="WITH_CP" THEN COALESCE(p.PromotionGifts,"[]") ELSE "[]" END WHERE i.PromotionType IS NULL');
         }
     }
     private function ensureProductImageSchema(): void
@@ -915,9 +933,28 @@ final class DepoApp
             $price=$forceConfiguredSalePrice&&$type==='SALE'?$default:($this->text($line['UnitPrice']??'')===''?$default:$this->num($line['UnitPrice'],'Unit Price',true));
             if($type==='PURCHASE'&&$price<=0)throw new InvalidArgumentException('Enter a purchase price greater than zero for '.$product['ProductName'].'.');
             $gift=$price==0 || !empty($line['IsGift']) || strtoupper($product['ProductType'])==='GIFT';if($gift)$price=0;
-            $items[]=['ProductID'=>$product['ProductID'],'Variant'=>$variant,'UnitName'=>$unit['UnitName'],'Quantity'=>$quantity,'ConversionToBase'=>(float)$unit['ConversionToBase'],'BaseQuantity'=>$quantity*(float)$unit['ConversionToBase'],'UnitPrice'=>$price,'LineTotal'=>$quantity*$price,'IsGift'=>$gift?1:0];
+            $promotionType=strtoupper((string)($product['PromotionType']??'NON_CP'))==='WITH_CP'?'WITH_CP':'NON_CP';
+            $promotionGifts=$promotionType==='WITH_CP'?(string)($product['PromotionGifts']??'[]'):'[]';
+            $items[]=['ProductID'=>$product['ProductID'],'Variant'=>$variant,'UnitName'=>$unit['UnitName'],'Quantity'=>$quantity,'ConversionToBase'=>(float)$unit['ConversionToBase'],'BaseQuantity'=>$quantity*(float)$unit['ConversionToBase'],'UnitPrice'=>$price,'LineTotal'=>$quantity*$price,'IsGift'=>$gift?1:0,'PromotionType'=>$promotionType,'PromotionGifts'=>$promotionGifts];
         }
         if($type==='SALE')$this->assertSaleAmounts($items);
+        return $items;
+    }
+    private function inheritPromotionSnapshots(array $items,array $previous):array
+    {
+        $byLine=[];
+        foreach($previous as $line){
+            $key=strtolower(implode('|',[(string)($line['ProductID']??''),(string)($line['Variant']??''),(string)($line['UnitName']??'')]));
+            $byLine[$key]=$line;
+        }
+        foreach($items as &$line){
+            $key=strtolower(implode('|',[(string)($line['ProductID']??''),(string)($line['Variant']??''),(string)($line['UnitName']??'')]));
+            if(!isset($byLine[$key]))continue;
+            $old=$byLine[$key];$type=strtoupper((string)($old['PromotionType']??''));
+            if(in_array($type,['WITH_CP','NON_CP'],true))$line['PromotionType']=$type;
+            if(array_key_exists('PromotionGifts',$old)&&$old['PromotionGifts']!==null)$line['PromotionGifts']=$old['PromotionGifts'];
+        }
+        unset($line);
         return $items;
     }
     private function assertSaleAmounts(array$items):float{$total=0.0;if(!$items)throw new InvalidArgumentException('Add at least one product to the Sale.');foreach($items as$item){$product=$this->product($this->text($item['ProductID']??''));$name=$product['ProductName']??$this->text($item['ProductID']??'Product');$quantity=(float)($item['Quantity']??0);$price=(float)($item['UnitPrice']??0);$lineTotal=(float)($item['LineTotal']??($quantity*$price));if($quantity<=0)throw new InvalidArgumentException('Enter a quantity greater than zero for '.$name.'.');if($price<=0)throw new InvalidArgumentException('Enter a unit price greater than zero for '.$name.'.');if($lineTotal<=0)throw new InvalidArgumentException('The total value must be greater than zero for '.$name.'.');$total+=$lineTotal;}if($total<=0)throw new InvalidArgumentException('Sale total value must be greater than zero.');return$total;}
@@ -1200,7 +1237,7 @@ final class DepoApp
     private function supplyPaid(string $id):float{return(float)$this->value('SELECT COALESCE(SUM(Amount),0) FROM Payments WHERE SupplyID=? AND Status="POSTED"',[$id]);}
     private function paymentStatus(float $total,float $paid):string{return$total<=0||$paid>=$total?'PAID':($paid>0?'PARTIAL':'UNPAID');}
     private function assertSupplyItems(array $items,string $supplier):void{foreach($items as $line){$p=$this->product($this->text($line['ProductID']??''));if(!$p)throw new RuntimeException('Product was not found.');if($p['SupplierID']!==$supplier)throw new RuntimeException('Product "'.$p['ProductName'].'" belongs to another Supplier.');}}
-    private function writeSupplyItems(string $id,array $items):void{$before=$this->rows('CompanySupplyItems','SupplyID=? ORDER BY SupplyItemID',[$id]);$this->db->prepare('DELETE FROM CompanySupplyItems WHERE SupplyID=?')->execute([$id]);$now=$this->now();foreach($items as $item)$this->insert('CompanySupplyItems',['SupplyItemID'=>$this->id('CompanySupplyItems','SupplyItemID','SPI'),'SupplyID'=>$id,'ProductID'=>$item['ProductID'],'UnitName'=>$item['UnitName'],'Quantity'=>$item['Quantity'],'ConversionToBase'=>$item['ConversionToBase'],'BaseQuantity'=>$item['BaseQuantity'],'UnitPrice'=>$item['UnitPrice'],'LineTotal'=>$item['LineTotal'],'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'IsGift'=>$item['IsGift'],'Variant'=>$item['Variant']]);$this->recordDetailHistory('CompanySupplies',$id,'Items',$before,$this->rows('CompanySupplyItems','SupplyID=? ORDER BY SupplyItemID',[$id]));}
+    private function writeSupplyItems(string $id,array $items):void{$before=$this->rows('CompanySupplyItems','SupplyID=? ORDER BY SupplyItemID',[$id]);$this->db->prepare('DELETE FROM CompanySupplyItems WHERE SupplyID=?')->execute([$id]);$now=$this->now();foreach($items as $item)$this->insert('CompanySupplyItems',['SupplyItemID'=>$this->id('CompanySupplyItems','SupplyItemID','SPI'),'SupplyID'=>$id,'ProductID'=>$item['ProductID'],'UnitName'=>$item['UnitName'],'Quantity'=>$item['Quantity'],'ConversionToBase'=>$item['ConversionToBase'],'BaseQuantity'=>$item['BaseQuantity'],'UnitPrice'=>$item['UnitPrice'],'LineTotal'=>$item['LineTotal'],'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'IsGift'=>$item['IsGift'],'Variant'=>$item['Variant'],'PromotionType'=>$item['PromotionType'],'PromotionGifts'=>$item['PromotionGifts']]);$this->recordDetailHistory('CompanySupplies',$id,'Items',$before,$this->rows('CompanySupplyItems','SupplyID=? ORDER BY SupplyItemID',[$id]));}
     private function createSupply(array $input):array
     {
         $this->user();$key=$this->text($input['IdempotencyKey']??'');if($key&&($prior=$this->value('SELECT SupplyID FROM CompanySupplies WHERE IdempotencyKey=?',[$key])))return$this->supply((string)$prior);$supplier=$this->agreement($this->text($input['AgreementID']??''));if(!$supplier||$supplier['Status']!=='APPROVED')throw new InvalidArgumentException('Select an approved Supplier.');$this->assertSupplyItems((array)($input['Items']??[]),$supplier['AgreementID']);$items=$this->normalizeItems((array)($input['Items']??[]),'PURCHASE',(float)$supplier['CommissionRate']);if(!$items)throw new InvalidArgumentException('Add at least one product.');$total=array_sum(array_column($items,'LineTotal'));$this->db->beginTransaction();try{$id=$this->id('CompanySupplies','SupplyID','PO');$now=$this->now();$this->insert('CompanySupplies',['SupplyID'=>$id,'AgreementID'=>$supplier['AgreementID'],'SupplyDate'=>$this->requiredDate($input['SupplyDate']??'','Purchase date'),'ReferenceNo'=>$this->text($input['ReferenceNo']??''),'TotalAmount'=>$total,'Status'=>'DRAFT','Notes'=>$this->text($input['Notes']??''),'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'PaymentStatus'=>$total>0?'UNPAID':'PAID','IdempotencyKey'=>$key?:null]);$this->writeSupplyItems($id,$items);$this->audit('CREATE','CompanySupplies',$id,'Purchase Order created.');$this->db->commit();return$this->supply($id);}catch(Throwable$e){$this->db->rollBack();throw$e;}
@@ -1217,7 +1254,7 @@ final class DepoApp
         }
         if(!in_array($old['Status'],['DRAFT','CONFIRMED'],true))throw new RuntimeException('This Purchase Order can no longer be edited.');
         $supplier=$this->agreement($agreementId);if(!$supplier||$supplier['Status']!=='APPROVED')throw new InvalidArgumentException('Select an approved Supplier.');
-        $this->assertSupplyItems((array)($input['Items']??[]),$supplier['AgreementID']);$items=$this->normalizeItems((array)($input['Items']??[]),'PURCHASE',(float)$supplier['CommissionRate']);if(!$items)throw new InvalidArgumentException('Add at least one product.');
+        $this->assertSupplyItems((array)($input['Items']??[]),$supplier['AgreementID']);$items=$this->inheritPromotionSnapshots($this->normalizeItems((array)($input['Items']??[]),'PURCHASE',(float)$supplier['CommissionRate']),(array)($old['Items']??[]));if(!$items)throw new InvalidArgumentException('Add at least one product.');
         $this->db->beginTransaction();try{$total=array_sum(array_column($items,'LineTotal'));$this->update('CompanySupplies','SupplyID',$id,['AgreementID'=>$supplier['AgreementID'],'SupplyDate'=>$this->requiredDate($input['SupplyDate']??'','Purchase date'),'ReferenceNo'=>$this->text($input['ReferenceNo']??''),'TotalAmount'=>$total,'Notes'=>$this->text($input['Notes']??''),'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->writeSupplyItems($id,$items);$this->audit('UPDATE','CompanySupplies',$id,'Purchase Order updated.');$this->db->commit();return$this->supply($id);}catch(Throwable$e){if($this->db->inTransaction())$this->db->rollBack();throw$e;}
     }
     private function supplyStatus(string $id,string $status):array{$old=$this->supply($id);if(!$old)throw new RuntimeException('Purchase Order was not found.');if($status==='CONFIRMED'&&$old['Status']!=='DRAFT')throw new RuntimeException('Only a Draft Purchase Order can be confirmed.');if($status==='CANCELLED'&&$old['Status']!=='CONFIRMED')throw new RuntimeException('Only a Confirmed Purchase Order can be cancelled.');if($status==='CANCELLED'&&$this->value('SELECT COUNT(*) FROM GoodsReceipts WHERE SupplyID=?',[$id]))throw new RuntimeException('This Purchase Order has a Goods Receipt record and cannot be cancelled.');$this->update('CompanySupplies','SupplyID',$id,['Status'=>$status,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit($status,'CompanySupplies',$id,'Purchase Order status changed.');return$this->supply($id);}
@@ -1287,13 +1324,13 @@ private function createSale(array $input): array
         $customerMobile=$type==='OUTSIDE'?$this->normalizeUserPhone((string)($input['CustomerMobile']??'')):'';
         if($type==='OUTSIDE'&&$customerMobile==='')throw new InvalidArgumentException('Outside customers need an 11-digit Bangladesh mobile number starting with 01.');
         $commissionRate=$dealer&&strtoupper((string)($dealer['DealerClass']??'REGISTERED'))==='COMMISSION'?(float)($dealer['CommissionRate']??0):null;
-        $items=$this->normalizeItems((array)($input['Items']??[]),'SALE',0,(bool)$dealerUserId);if(!$items)throw new InvalidArgumentException('Add at least one product.');$requested=[];
+        $items=$this->inheritPromotionSnapshots($this->normalizeItems((array)($input['Items']??[]),'SALE',0,(bool)$dealerUserId),(array)($old['Items']??[]));if(!$items)throw new InvalidArgumentException('Add at least one product.');$requested=[];
         foreach($items as$item){$key=$item['ProductID'].'|'.$item['Variant'];$requested[$key]=($requested[$key]??0)+$item['BaseQuantity'];}
         foreach($requested as$key=>$qty){[$pid,$variant]=explode('|',$key,2);$this->assertAvailableSaleStock($pid,$variant,$qty);}
         $total=array_sum(array_column($items,'LineTotal'));$commissionAmount=$commissionRate!==null?round($total*$commissionRate/100,2):0.0;
         $this->db->beginTransaction();try{$id=$this->id('DealerSales','SaleID','SAL');$now=$this->now();
             $this->insert('DealerSales',['SaleID'=>$id,'AgreementID'=>'','DealerID'=>$dealer['DealerID']??'','SaleDate'=>$this->requiredDate($input['SaleDate']??'','Sale date'),'InvoiceNo'=>$this->text($input['InvoiceNo']??'')?:$id,'TotalAmount'=>$total,'Status'=>'DRAFT','Notes'=>$this->text($input['Notes']??''),'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'CustomerType'=>$type,'CustomerID'=>$dealer['DealerID']??'','CustomerName'=>$name,'CustomerMobile'=>$customerMobile,'PaymentMode'=>$paymentMode,'CommissionRate'=>$commissionRate,'CommissionAmount'=>$commissionAmount]);
-            foreach($items as$item)$this->insert('DealerSaleItems',['SaleItemID'=>$this->id('DealerSaleItems','SaleItemID','SLI'),'SaleID'=>$id,'ProductID'=>$item['ProductID'],'UnitName'=>$item['UnitName'],'Quantity'=>$item['Quantity'],'ConversionToBase'=>$item['ConversionToBase'],'BaseQuantity'=>$item['BaseQuantity'],'UnitPrice'=>$item['UnitPrice'],'LineTotal'=>$item['LineTotal'],'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'IsGift'=>$item['IsGift'],'Variant'=>$item['Variant']]);
+            foreach($items as$item)$this->insert('DealerSaleItems',['SaleItemID'=>$this->id('DealerSaleItems','SaleItemID','SLI'),'SaleID'=>$id,'ProductID'=>$item['ProductID'],'UnitName'=>$item['UnitName'],'Quantity'=>$item['Quantity'],'ConversionToBase'=>$item['ConversionToBase'],'BaseQuantity'=>$item['BaseQuantity'],'UnitPrice'=>$item['UnitPrice'],'LineTotal'=>$item['LineTotal'],'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'IsGift'=>$item['IsGift'],'Variant'=>$item['Variant'],'PromotionType'=>$item['PromotionType'],'PromotionGifts'=>$item['PromotionGifts']]);
             $this->audit('CREATE','DealerSales',$id,$dealerUserId?'Dealer order created as Draft.':'Sale draft created.');$this->db->commit();return$this->sale($id);
         }catch(Throwable$error){$this->db->rollBack();throw$error;}
     }
@@ -1313,7 +1350,7 @@ private function createSale(array $input): array
         foreach($requested as$key=>$qty){[$pid,$variant]=explode('|',$key,2);$this->assertAvailableSaleStock($pid,$variant,$qty,$id);}
         $total=array_sum(array_column($items,'LineTotal'));$commissionAmount=$commissionRate!==null?round($total*$commissionRate/100,2):0.0;$now=$this->now();$saleDate=$this->requiredDate($input['SaleDate']??$old['SaleDate'],'Sale date');$invoice=$this->text($input['InvoiceNo']??$old['InvoiceNo'])?:$id;
         $this->db->beginTransaction();try{$this->update('DealerSales','SaleID',$id,['AgreementID'=>'','DealerID'=>$dealer['DealerID']??'','SaleDate'=>$saleDate,'InvoiceNo'=>$invoice,'TotalAmount'=>$total,'Notes'=>$this->text($input['Notes']??''),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'CustomerType'=>$type,'CustomerID'=>$dealer['DealerID']??'','CustomerName'=>$name,'CustomerMobile'=>$customerMobile,'PaymentMode'=>$paymentMode,'CommissionRate'=>$commissionRate,'CommissionAmount'=>$commissionAmount]);
-            $beforeItems=$this->rows('DealerSaleItems','SaleID=? ORDER BY SaleItemID',[$id]);$this->db->prepare('DELETE FROM DealerSaleItems WHERE SaleID=?')->execute([$id]);foreach($items as$item)$this->insert('DealerSaleItems',['SaleItemID'=>$this->id('DealerSaleItems','SaleItemID','SLI'),'SaleID'=>$id,'ProductID'=>$item['ProductID'],'UnitName'=>$item['UnitName'],'Quantity'=>$item['Quantity'],'ConversionToBase'=>$item['ConversionToBase'],'BaseQuantity'=>$item['BaseQuantity'],'UnitPrice'=>$item['UnitPrice'],'LineTotal'=>$item['LineTotal'],'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'IsGift'=>$item['IsGift'],'Variant'=>$item['Variant']]);$this->recordDetailHistory('DealerSales',$id,'Items',$beforeItems,$this->rows('DealerSaleItems','SaleID=? ORDER BY SaleItemID',[$id]));
+            $beforeItems=$this->rows('DealerSaleItems','SaleID=? ORDER BY SaleItemID',[$id]);$this->db->prepare('DELETE FROM DealerSaleItems WHERE SaleID=?')->execute([$id]);foreach($items as$item)$this->insert('DealerSaleItems',['SaleItemID'=>$this->id('DealerSaleItems','SaleItemID','SLI'),'SaleID'=>$id,'ProductID'=>$item['ProductID'],'UnitName'=>$item['UnitName'],'Quantity'=>$item['Quantity'],'ConversionToBase'=>$item['ConversionToBase'],'BaseQuantity'=>$item['BaseQuantity'],'UnitPrice'=>$item['UnitPrice'],'LineTotal'=>$item['LineTotal'],'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'IsGift'=>$item['IsGift'],'Variant'=>$item['Variant'],'PromotionType'=>$item['PromotionType'],'PromotionGifts'=>$item['PromotionGifts']]);$this->recordDetailHistory('DealerSales',$id,'Items',$beforeItems,$this->rows('DealerSaleItems','SaleID=? ORDER BY SaleItemID',[$id]));
             $this->audit('UPDATE','DealerSales',$id,'Sale updated; payment due recalculated from posted payments.');$this->db->commit();return$this->sale($id);
         }catch(Throwable$error){$this->db->rollBack();throw$error;}
     }
