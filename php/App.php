@@ -161,10 +161,20 @@ final class DepoApp
     {
         foreach (['CompanySupplyItems', 'DealerSaleItems'] as $table) {
             $promotionTypeAdded = false;
-            foreach ([
+            $columns = [
                 'PromotionType' => 'VARCHAR(20) NULL DEFAULT NULL AFTER Variant',
                 'PromotionGifts' => 'TEXT NULL AFTER PromotionType',
-            ] as $name => $definition) {
+            ];
+            if ($table === 'CompanySupplyItems') $columns += [
+                'OfferProductID' => 'VARCHAR(20) NULL AFTER PromotionGifts',
+                'OfferVariant' => 'VARCHAR(160) NULL AFTER OfferProductID',
+                'OfferUnitName' => 'VARCHAR(60) NULL AFTER OfferVariant',
+                'OfferQuantity' => 'DECIMAL(16,4) NULL AFTER OfferUnitName',
+                'OfferUnitPrice' => 'DECIMAL(16,2) NULL AFTER OfferQuantity',
+                'OfferConversionToBase' => 'DECIMAL(16,6) NULL AFTER OfferUnitPrice',
+                'OfferBaseQuantity' => 'DECIMAL(16,4) NULL AFTER OfferConversionToBase',
+            ];
+            foreach ($columns as $name => $definition) {
                 $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=? AND COLUMN_NAME=?', [$table, $name]);
                 if (!$exists) {
                     $this->db->exec('ALTER TABLE `' . $table . '` ADD COLUMN `' . $name . '` ' . $definition);
@@ -910,6 +920,33 @@ final class DepoApp
         if($product){$conversion=$this->massUnitToBase($product,$unitName);if($conversion!==null&&$conversion>0){$baseUnit=$this->text($product['BaseUnit']??'');$basePriceUnit=null;foreach($product['Units']??[] as $configured)if(strcasecmp((string)$configured['UnitName'],$baseUnit)===0&&strtoupper((string)$configured['Status'])!=='ARCHIVED'){$basePriceUnit=$configured;break;}$baseUnitPrice=(float)($basePriceUnit['UnitPrice']??0);$purchasePrice=(float)($basePriceUnit['PurchasePrice']??$baseUnitPrice)*$conversion;$salePrice=(float)($basePriceUnit['SalePrice']??$baseUnitPrice)*$conversion;return['ProductID'=>$productId,'UnitName'=>$unitName,'ConversionToBase'=>$conversion,'PurchaseAllowed'=>1,'SaleAllowed'=>1,'PurchasePrice'=>$purchasePrice,'SalePrice'=>$salePrice,'UnitPrice'=>$baseUnitPrice*$conversion,'Status'=>'ACTIVE'];}}
         throw new RuntimeException('Select a valid active product unit.');
     }
+    private function normalizePurchaseOffer(array $line,array $mainProduct):array
+    {
+        $offerProductId=$this->text($line['OfferProductID']??'');
+        $offerVariant=$this->text($line['OfferVariant']??'');
+        $offerUnitName=$this->text($line['OfferUnitName']??'');
+        $quantityText=$this->text($line['OfferQuantity']??'');
+        $priceText=$this->text($line['OfferUnitPrice']??'');
+        if($offerProductId===''||$offerUnitName===''||$quantityText===''||$priceText==='')throw new InvalidArgumentException('With CP requires the offer product, quantity, unit, and price.');
+        $product=$this->product($offerProductId);
+        if(!$product||strtoupper((string)$product['Status'])==='ARCHIVED')throw new InvalidArgumentException('Choose an active offer product.');
+        if((string)($product['SupplierID']??'')!==(string)($mainProduct['SupplierID']??''))throw new InvalidArgumentException('The offer product must belong to the same Supplier as the purchased product.');
+        $variants=$this->variants($product);
+        if($variants){$matched=null;foreach($variants as$candidate)if(strcasecmp($candidate,$offerVariant)===0)$matched=$candidate;if($matched===null)throw new InvalidArgumentException('Select a valid variant for the offer product '.$product['ProductName'].'.');$offerVariant=$matched;}
+        elseif($offerVariant!=='')throw new InvalidArgumentException('The selected offer product has no configured variants.');
+        $unit=$this->productUnit($product['ProductID'],$offerUnitName,true,$offerVariant);
+        $quantity=$this->num($quantityText,'Offer Quantity');
+        if($quantity<=0)throw new InvalidArgumentException('Offer quantity must be greater than zero.');
+        $price=$this->num($priceText,'Offer Unit Price',true);
+        if(strtoupper((string)($product['OptionType']??'VARIANT'))==='PACKAGING'){
+            $packUnit='Pack ('.$offerVariant.')';$cartonUnit='CTN ('.$offerVariant.')';$packConversion=$this->packVariantToBase($product,$offerVariant);$selectedUnit=(string)$unit['UnitName'];$isPack=strcasecmp($selectedUnit,$packUnit)===0;$isCarton=strcasecmp($selectedUnit,$cartonUnit)===0;$expectedConversion=$isPack?$packConversion:($isCarton?(float)$unit['ConversionToBase']:null);
+            if($packConversion===null||(!$isPack&&!$isCarton)||$expectedConversion===null||abs((float)$unit['ConversionToBase']-(float)$expectedConversion)>0.000001)throw new InvalidArgumentException('Select the matching pack or CTN unit for offer size '.$offerVariant.'.');
+            if($isCarton){$packs=(float)$unit['ConversionToBase']/(float)$packConversion;if($packs<1||abs($packs-round($packs))>0.00001)throw new InvalidArgumentException('The offer product CTN conversion must contain a whole number of sealed packs.');}
+            if(abs($quantity-round($quantity))>0.000001)throw new InvalidArgumentException('Offer pack or CTN quantity must be a whole number.');
+        }
+        $conversion=(float)$unit['ConversionToBase'];
+        return ['OfferProductID'=>$product['ProductID'],'OfferVariant'=>$offerVariant,'OfferUnitName'=>$unit['UnitName'],'OfferQuantity'=>$quantity,'OfferUnitPrice'=>$price,'OfferConversionToBase'=>$conversion,'OfferBaseQuantity'=>$quantity*$conversion];
+    }
     private function normalizeItems(array $raw,string $type,float $discount=0,bool $forceConfiguredSalePrice=false): array
     {
         $items=[];
@@ -937,7 +974,8 @@ final class DepoApp
             if($requestedPromotionType!==''&&!in_array($requestedPromotionType,['WITH_CP','NON_CP'],true))throw new InvalidArgumentException('Choose With CP or Non-CP for '.$product['ProductName'].'.');
             $promotionType=$requestedPromotionType?:((strtoupper((string)($product['PromotionType']??'NON_CP'))==='WITH_CP')?'WITH_CP':'NON_CP');
             $promotionGifts=$promotionType==='WITH_CP'?(string)($product['PromotionGifts']??'[]'):'[]';
-            $items[]=['ProductID'=>$product['ProductID'],'Variant'=>$variant,'UnitName'=>$unit['UnitName'],'Quantity'=>$quantity,'ConversionToBase'=>(float)$unit['ConversionToBase'],'BaseQuantity'=>$quantity*(float)$unit['ConversionToBase'],'UnitPrice'=>$price,'LineTotal'=>$quantity*$price,'IsGift'=>$gift?1:0,'PromotionType'=>$promotionType,'PromotionGifts'=>$promotionGifts,'_PromotionTypeExplicit'=>$requestedPromotionType!== ''];
+            $offer=$type==='PURCHASE'?($promotionType==='WITH_CP'?$this->normalizePurchaseOffer($line,$product):['OfferProductID'=>null,'OfferVariant'=>null,'OfferUnitName'=>null,'OfferQuantity'=>null,'OfferUnitPrice'=>null,'OfferConversionToBase'=>null,'OfferBaseQuantity'=>null]):[];
+            $items[]=array_merge(['ProductID'=>$product['ProductID'],'Variant'=>$variant,'UnitName'=>$unit['UnitName'],'Quantity'=>$quantity,'ConversionToBase'=>(float)$unit['ConversionToBase'],'BaseQuantity'=>$quantity*(float)$unit['ConversionToBase'],'UnitPrice'=>$price,'LineTotal'=>$quantity*$price,'IsGift'=>$gift?1:0,'PromotionType'=>$promotionType,'PromotionGifts'=>$promotionGifts,'_PromotionTypeExplicit'=>$requestedPromotionType!== ''],$offer);
         }
         if($type==='SALE')$this->assertSaleAmounts($items);
         return $items;
@@ -1240,7 +1278,7 @@ final class DepoApp
     private function supplyPaid(string $id):float{return(float)$this->value('SELECT COALESCE(SUM(Amount),0) FROM Payments WHERE SupplyID=? AND Status="POSTED"',[$id]);}
     private function paymentStatus(float $total,float $paid):string{return$total<=0||$paid>=$total?'PAID':($paid>0?'PARTIAL':'UNPAID');}
     private function assertSupplyItems(array $items,string $supplier):void{foreach($items as $line){$p=$this->product($this->text($line['ProductID']??''));if(!$p)throw new RuntimeException('Product was not found.');if($p['SupplierID']!==$supplier)throw new RuntimeException('Product "'.$p['ProductName'].'" belongs to another Supplier.');}}
-    private function writeSupplyItems(string $id,array $items):void{$before=$this->rows('CompanySupplyItems','SupplyID=? ORDER BY SupplyItemID',[$id]);$this->db->prepare('DELETE FROM CompanySupplyItems WHERE SupplyID=?')->execute([$id]);$now=$this->now();foreach($items as $item)$this->insert('CompanySupplyItems',['SupplyItemID'=>$this->id('CompanySupplyItems','SupplyItemID','SPI'),'SupplyID'=>$id,'ProductID'=>$item['ProductID'],'UnitName'=>$item['UnitName'],'Quantity'=>$item['Quantity'],'ConversionToBase'=>$item['ConversionToBase'],'BaseQuantity'=>$item['BaseQuantity'],'UnitPrice'=>$item['UnitPrice'],'LineTotal'=>$item['LineTotal'],'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'IsGift'=>$item['IsGift'],'Variant'=>$item['Variant'],'PromotionType'=>$item['PromotionType'],'PromotionGifts'=>$item['PromotionGifts']]);$this->recordDetailHistory('CompanySupplies',$id,'Items',$before,$this->rows('CompanySupplyItems','SupplyID=? ORDER BY SupplyItemID',[$id]));}
+    private function writeSupplyItems(string $id,array $items):void{$before=$this->rows('CompanySupplyItems','SupplyID=? ORDER BY SupplyItemID',[$id]);$this->db->prepare('DELETE FROM CompanySupplyItems WHERE SupplyID=?')->execute([$id]);$now=$this->now();foreach($items as $item)$this->insert('CompanySupplyItems',['SupplyItemID'=>$this->id('CompanySupplyItems','SupplyItemID','SPI'),'SupplyID'=>$id,'ProductID'=>$item['ProductID'],'UnitName'=>$item['UnitName'],'Quantity'=>$item['Quantity'],'ConversionToBase'=>$item['ConversionToBase'],'BaseQuantity'=>$item['BaseQuantity'],'UnitPrice'=>$item['UnitPrice'],'LineTotal'=>$item['LineTotal'],'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'IsGift'=>$item['IsGift'],'Variant'=>$item['Variant'],'PromotionType'=>$item['PromotionType'],'PromotionGifts'=>$item['PromotionGifts'],'OfferProductID'=>$item['OfferProductID']??null,'OfferVariant'=>$item['OfferVariant']??null,'OfferUnitName'=>$item['OfferUnitName']??null,'OfferQuantity'=>$item['OfferQuantity']??null,'OfferUnitPrice'=>$item['OfferUnitPrice']??null,'OfferConversionToBase'=>$item['OfferConversionToBase']??null,'OfferBaseQuantity'=>$item['OfferBaseQuantity']??null]);$this->recordDetailHistory('CompanySupplies',$id,'Items',$before,$this->rows('CompanySupplyItems','SupplyID=? ORDER BY SupplyItemID',[$id]));}
     private function createSupply(array $input):array
     {
         $this->user();$key=$this->text($input['IdempotencyKey']??'');if($key&&($prior=$this->value('SELECT SupplyID FROM CompanySupplies WHERE IdempotencyKey=?',[$key])))return$this->supply((string)$prior);$supplier=$this->agreement($this->text($input['AgreementID']??''));if(!$supplier||$supplier['Status']!=='APPROVED')throw new InvalidArgumentException('Select an approved Supplier.');$this->assertSupplyItems((array)($input['Items']??[]),$supplier['AgreementID']);$items=$this->normalizeItems((array)($input['Items']??[]),'PURCHASE',(float)$supplier['CommissionRate']);if(!$items)throw new InvalidArgumentException('Add at least one product.');$total=array_sum(array_column($items,'LineTotal'));$this->db->beginTransaction();try{$id=$this->id('CompanySupplies','SupplyID','PO');$now=$this->now();$this->insert('CompanySupplies',['SupplyID'=>$id,'AgreementID'=>$supplier['AgreementID'],'SupplyDate'=>$this->requiredDate($input['SupplyDate']??'','Purchase date'),'ReferenceNo'=>$this->text($input['ReferenceNo']??''),'TotalAmount'=>$total,'Status'=>'DRAFT','Notes'=>$this->text($input['Notes']??''),'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'PaymentStatus'=>$total>0?'UNPAID':'PAID','IdempotencyKey'=>$key?:null]);$this->writeSupplyItems($id,$items);$this->audit('CREATE','CompanySupplies',$id,'Purchase Order created.');$this->db->commit();return$this->supply($id);}catch(Throwable$e){$this->db->rollBack();throw$e;}
