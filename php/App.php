@@ -933,9 +933,11 @@ final class DepoApp
             $price=$forceConfiguredSalePrice&&$type==='SALE'?$default:($this->text($line['UnitPrice']??'')===''?$default:$this->num($line['UnitPrice'],'Unit Price',true));
             if($type==='PURCHASE'&&$price<=0)throw new InvalidArgumentException('Enter a purchase price greater than zero for '.$product['ProductName'].'.');
             $gift=$price==0 || !empty($line['IsGift']) || strtoupper($product['ProductType'])==='GIFT';if($gift)$price=0;
-            $promotionType=strtoupper((string)($product['PromotionType']??'NON_CP'))==='WITH_CP'?'WITH_CP':'NON_CP';
+            $requestedPromotionType=strtoupper($this->text($line['PromotionType']??''));
+            if($requestedPromotionType!==''&&!in_array($requestedPromotionType,['WITH_CP','NON_CP'],true))throw new InvalidArgumentException('Choose With CP or Non-CP for '.$product['ProductName'].'.');
+            $promotionType=$requestedPromotionType?:((strtoupper((string)($product['PromotionType']??'NON_CP'))==='WITH_CP')?'WITH_CP':'NON_CP');
             $promotionGifts=$promotionType==='WITH_CP'?(string)($product['PromotionGifts']??'[]'):'[]';
-            $items[]=['ProductID'=>$product['ProductID'],'Variant'=>$variant,'UnitName'=>$unit['UnitName'],'Quantity'=>$quantity,'ConversionToBase'=>(float)$unit['ConversionToBase'],'BaseQuantity'=>$quantity*(float)$unit['ConversionToBase'],'UnitPrice'=>$price,'LineTotal'=>$quantity*$price,'IsGift'=>$gift?1:0,'PromotionType'=>$promotionType,'PromotionGifts'=>$promotionGifts];
+            $items[]=['ProductID'=>$product['ProductID'],'Variant'=>$variant,'UnitName'=>$unit['UnitName'],'Quantity'=>$quantity,'ConversionToBase'=>(float)$unit['ConversionToBase'],'BaseQuantity'=>$quantity*(float)$unit['ConversionToBase'],'UnitPrice'=>$price,'LineTotal'=>$quantity*$price,'IsGift'=>$gift?1:0,'PromotionType'=>$promotionType,'PromotionGifts'=>$promotionGifts,'_PromotionTypeExplicit'=>$requestedPromotionType!== ''];
         }
         if($type==='SALE')$this->assertSaleAmounts($items);
         return $items;
@@ -949,12 +951,13 @@ final class DepoApp
         }
         foreach($items as &$line){
             $key=strtolower(implode('|',[(string)($line['ProductID']??''),(string)($line['Variant']??''),(string)($line['UnitName']??'')]));
-            if(!isset($byLine[$key]))continue;
+            if(!isset($byLine[$key])){unset($line['_PromotionTypeExplicit']);continue;}
             $old=$byLine[$key];$type=strtoupper((string)($old['PromotionType']??''));
-            if(in_array($type,['WITH_CP','NON_CP'],true))$line['PromotionType']=$type;
-            if(array_key_exists('PromotionGifts',$old)&&$old['PromotionGifts']!==null)$line['PromotionGifts']=$old['PromotionGifts'];
+            $explicit=!empty($line['_PromotionTypeExplicit']);
+            if(!$explicit&&in_array($type,['WITH_CP','NON_CP'],true))$line['PromotionType']=$type;
+            if(in_array($type,['WITH_CP','NON_CP'],true)&&(!$explicit||strtoupper((string)($line['PromotionType']??''))===$type)&&array_key_exists('PromotionGifts',$old)&&$old['PromotionGifts']!==null)$line['PromotionGifts']=$old['PromotionGifts'];
         }
-        unset($line);
+        unset($line);foreach($items as &$line)unset($line['_PromotionTypeExplicit']);unset($line);
         return $items;
     }
     private function assertSaleAmounts(array$items):float{$total=0.0;if(!$items)throw new InvalidArgumentException('Add at least one product to the Sale.');foreach($items as$item){$product=$this->product($this->text($item['ProductID']??''));$name=$product['ProductName']??$this->text($item['ProductID']??'Product');$quantity=(float)($item['Quantity']??0);$price=(float)($item['UnitPrice']??0);$lineTotal=(float)($item['LineTotal']??($quantity*$price));if($quantity<=0)throw new InvalidArgumentException('Enter a quantity greater than zero for '.$name.'.');if($price<=0)throw new InvalidArgumentException('Enter a unit price greater than zero for '.$name.'.');if($lineTotal<=0)throw new InvalidArgumentException('The total value must be greater than zero for '.$name.'.');$total+=$lineTotal;}if($total<=0)throw new InvalidArgumentException('Sale total value must be greater than zero.');return$total;}
