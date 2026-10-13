@@ -906,9 +906,9 @@ final class DepoApp
         if(!is_array($raw))throw new InvalidArgumentException('Choose valid consumer promotion gift items.');
         if($type==='NON_CP')return ['PromotionType'=>$type,'PromotionGifts'=>'[]'];
         $isVariantMap=count($raw)>0;foreach($raw as $value)if(!is_array($value)||!array_key_exists('Variant',$value)||(!array_key_exists('Gift',$value)&&!array_key_exists('Offer',$value)&&!array_key_exists('Name',$value))){$isVariantMap=false;break;}
-        if($isVariantMap){$gifts=[];$seen=[];foreach($raw as$value){$variant=trim($this->text($value['Variant']??''));$gift=trim($this->text($value['Gift']??$value['Offer']??$value['Name']??''));if($gift==='')continue;$giftLength=function_exists('mb_strlen')?mb_strlen($gift,'UTF-8'):strlen($gift);if($giftLength>160)throw new InvalidArgumentException('Offer / gift names must be 160 characters or fewer.');$key=strtolower($variant);if(isset($seen[$key]))throw new InvalidArgumentException('Each package size or variant can have only one CP offer.');$seen[$key]=true;$gifts[]=['Variant'=>$variant,'Gift'=>$gift];}if(!$gifts)throw new InvalidArgumentException('With CP requires an offer / gift on at least one package size or variant.');return ['PromotionType'=>$type,'PromotionGifts'=>json_encode($gifts,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)];}
+        if($isVariantMap){$gifts=[];$seen=[];foreach($raw as$value){$variant=trim($this->text($value['Variant']??''));$gift=trim($this->text($value['Gift']??$value['Offer']??$value['Name']??''));if($gift==='')continue;$giftLength=function_exists('mb_strlen')?mb_strlen($gift,'UTF-8'):strlen($gift);if($giftLength>160)throw new InvalidArgumentException('Offer / gift names must be 160 characters or fewer.');$key=strtolower($variant);if(isset($seen[$key]))throw new InvalidArgumentException('Each package size or variant can have only one CP offer.');$seen[$key]=true;$gifts[]=['Variant'=>$variant,'Gift'=>$gift];}return ['PromotionType'=>$type,'PromotionGifts'=>json_encode($gifts,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)];}
         $gifts=[];$seen=[];foreach($raw as$value){if(is_array($value)||is_object($value))throw new InvalidArgumentException('Choose a valid offer / gift for each package size or variant.');$value=trim($this->text($value));if($value==='')continue;if(strcasecmp($value,'Mug')===0)$value='Mug';elseif(strcasecmp($value,'Bucket')===0)$value='Bucket';elseif(preg_match('/^Other:\s*(.{1,80})$/iu',$value,$match))$value='Other: '.trim($match[1]);else throw new InvalidArgumentException('Enter an offer / gift name for each package size or variant.');$key=function_exists('mb_strtolower')?mb_strtolower($value,'UTF-8'):strtolower($value);if(!isset($seen[$key])){$seen[$key]=true;$gifts[]=$value;}}
-        if(!$gifts)throw new InvalidArgumentException('With CP requires at least one selected offer or gift item.');
+        
         return ['PromotionType'=>$type,'PromotionGifts'=>json_encode($gifts,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)];
     }
     private function assertProductPromotionVariants(array $promotion,array $variants):void
@@ -947,10 +947,10 @@ final class DepoApp
         $configuredGift=$this->productPromotionGiftForVariant($mainProduct,$variant);
         $submittedGift=trim($this->text($line['OfferProductName']??''));
         $gift=$submittedGift!==''?$submittedGift:$configuredGift;
-        if($gift==='')throw new InvalidArgumentException('Enter the free gift description for this With CP purchase line.');
+        
         $giftLength=function_exists('mb_strlen')?mb_strlen($gift,'UTF-8'):strlen($gift);
         if($giftLength>160)throw new InvalidArgumentException('Free gift descriptions must be 160 characters or fewer.');
-        return ['OfferProductID'=>null,'OfferProductName'=>$gift,'OfferVariant'=>null,'OfferUnitName'=>null,'OfferQuantity'=>null,'OfferUnitPrice'=>0,'OfferConversionToBase'=>null,'OfferBaseQuantity'=>null];
+        return ['OfferProductID'=>null,'OfferProductName'=>$gift!==''?$gift:null,'OfferVariant'=>null,'OfferUnitName'=>null,'OfferQuantity'=>null,'OfferUnitPrice'=>0,'OfferConversionToBase'=>null,'OfferBaseQuantity'=>null];
     }
     private function normalizeItems(array $raw,string $type,float $discount=0,bool $forceConfiguredSalePrice=false): array
     {
@@ -977,8 +977,8 @@ final class DepoApp
             $gift=$price==0 || !empty($line['IsGift']) || strtoupper($product['ProductType'])==='GIFT';if($gift)$price=0;
             $requestedPromotionType=strtoupper($this->text($line['PromotionType']??''));
             if($requestedPromotionType!==''&&!in_array($requestedPromotionType,['WITH_CP','NON_CP'],true))throw new InvalidArgumentException('Choose With CP or Non-CP for '.$product['ProductName'].'.');
-            $promotionType=$requestedPromotionType?:((strtoupper((string)($product['PromotionType']??'NON_CP'))==='WITH_CP')?'WITH_CP':'NON_CP');
-            if($promotionType==='WITH_CP'&&strtoupper((string)($product['PromotionType']??'NON_CP'))!=='WITH_CP')throw new InvalidArgumentException('With CP is available only for products configured with a consumer promotion.');
+            $promotionType=$requestedPromotionType?:($type==='PURCHASE'?'NON_CP':((strtoupper((string)($product['PromotionType']??'NON_CP'))==='WITH_CP')?'WITH_CP':'NON_CP'));
+            if($promotionType==='WITH_CP'&&$type!=='PURCHASE'&&strtoupper((string)($product['PromotionType']??'NON_CP'))!=='WITH_CP')throw new InvalidArgumentException('With CP is available only for products configured with a consumer promotion.');
             $promotionGifts=$promotionType==='WITH_CP'?(string)($product['PromotionGifts']??'[]'):'[]';
             $offer=$type==='PURCHASE'?($promotionType==='WITH_CP'?$this->normalizePurchaseOffer($line,$product,$variant):['OfferProductID'=>null,'OfferProductName'=>null,'OfferVariant'=>null,'OfferUnitName'=>null,'OfferQuantity'=>null,'OfferUnitPrice'=>null,'OfferConversionToBase'=>null,'OfferBaseQuantity'=>null]):[];
             $items[]=array_merge(['ProductID'=>$product['ProductID'],'Variant'=>$variant,'UnitName'=>$unit['UnitName'],'Quantity'=>$quantity,'ConversionToBase'=>(float)$unit['ConversionToBase'],'BaseQuantity'=>$quantity*(float)$unit['ConversionToBase'],'UnitPrice'=>$price,'LineTotal'=>$quantity*$price,'IsGift'=>$gift?1:0,'PromotionType'=>$promotionType,'PromotionGifts'=>$promotionGifts,'_PromotionTypeExplicit'=>$requestedPromotionType!== ''],$offer);
