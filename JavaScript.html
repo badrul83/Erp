@@ -594,7 +594,15 @@
     }
     function draw(){
       var query=search.value.trim().toLowerCase(),selected=category.value;
-      var visibleRows=allRows.filter(function(row){return (archivedOnly?String(row.Status).toUpperCase()==='ARCHIVED':String(row.Status).toUpperCase()!=='ARCHIVED')&&(!selected||((txt(row.Category).trim()||'Uncategorized')===selected))&&(!query||[row.SKU,row.ProductName,row.SupplierName,row.Category,row.Variant].join(' ').toLowerCase().indexOf(query)>=0);}),visibleProductIds={};visibleRows.forEach(function(row){visibleProductIds[row.ProductID]=true;});if(!visibleProductIds[selectedProductId])selectedProductId=visibleRows.length?String(visibleRows[0].ProductID):'';$('product-config-result-count').textContent=Object.keys(visibleProductIds).length+' product(s) · '+visibleRows.length+' variant(s)';
+      var visibleRows=allRows.filter(function(row){return (archivedOnly?String(row.Status).toUpperCase()==='ARCHIVED':String(row.Status).toUpperCase()!=='ARCHIVED')&&(!selected||((txt(row.Category).trim()||'Uncategorized')===selected))&&(!query||[row.SKU,row.ProductName,row.SupplierName,row.Category,row.Variant].join(' ').toLowerCase().indexOf(query)>=0);});
+      visibleRows.sort(function(a,b){
+        var byName=String(a.ProductName||'').localeCompare(String(b.ProductName||''),'en',{sensitivity:'base',numeric:true});
+        if(byName)return byName;
+        var aVariant=a.OptionType==='PACKAGING'?(a.PackagingSize||a.Variant||''):(a.Variant||''),bVariant=b.OptionType==='PACKAGING'?(b.PackagingSize||b.Variant||''):(b.Variant||'');
+        var byVariant=String(aVariant).localeCompare(String(bVariant),'en',{sensitivity:'base',numeric:true});
+        return byVariant||String(a.SKU||'').localeCompare(String(b.SKU||''),'en',{sensitivity:'base',numeric:true});
+      });
+      var visibleProductIds={};visibleRows.forEach(function(row){visibleProductIds[row.ProductID]=true;});if(!visibleProductIds[selectedProductId])selectedProductId=visibleRows.length?String(visibleRows[0].ProductID):'';$('product-config-result-count').textContent=Object.keys(visibleProductIds).length+' product(s) · '+visibleRows.length+' variant(s)';
       var isAdmin=!!(state.user&&state.user.Role==='ADMIN');
       $('product-configuration-register').innerHTML=table(['Sl.#','Product Name','Category','Supplier','SKU','Packaging Size / Variant','Base Unit','Packaging Unit','Status','Actions'],visibleRows,function(r,index){
         var archived=String(r.Status).toUpperCase()==='ARCHIVED';
