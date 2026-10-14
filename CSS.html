@@ -1214,4 +1214,48 @@
 #purchase-form-modal .modal-actions .secondary-button{border:1px solid #d8eae3;background:#f4faf7}
 @media(max-width:900px){#purchase-form-modal .purchase-order-meta-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){#purchase-form-modal{align-items:flex-start;padding:8px}#purchase-form-modal .purchase-modal{width:100%;max-width:none;max-height:calc(100dvh - 16px);border-radius:12px}#purchase-form-modal .modal-card-header{padding:11px 13px;border-radius:11px 11px 0 0}#purchase-form-modal .modal-card-header h2{font-size:19px}#purchase-form-modal .modal-card-header h2:after{max-width:330px;font-size:10px}#purchase-form-modal #purchase-form{padding:12px 11px 16px}#purchase-form-modal .purchase-order-meta-grid{grid-template-columns:1fr;gap:10px;margin-bottom:16px;padding:12px}#purchase-form-modal .transaction-items-header{align-items:flex-start;flex-direction:column}#purchase-form-modal .purchase-supplier-hint{text-align:left}#purchase-form-modal .modal-actions{bottom:0;gap:8px;margin:16px 0 0;padding:10px 12px calc(10px + env(safe-area-inset-bottom))}#purchase-form-modal .modal-actions button{min-width:0;flex:1}}
+/* Keep the editor controls compact and reserve the next sticky row for item labels. */
+#purchase-form-modal{--purchase-sticky-top:46px}
+#purchase-form-modal .modal-card-header{height:46px;min-height:46px;box-sizing:border-box;padding:5px 16px}
+#purchase-form-modal .modal-card-header h2{font-size:17px;line-height:1.2}
+#purchase-form-modal .modal-card-header h2:before,#purchase-form-modal .modal-card-header h2:after{display:none;content:none}
+#purchase-form-modal .purchase-form-close{width:30px;height:30px;flex-basis:30px;font-size:18px}
+#purchase-form-modal #purchase-items{overflow:visible}
+#purchase-form-modal #purchase-items .purchase-line-item-header{position:sticky;top:var(--purchase-sticky-top);z-index:4;background:#edf7f3;box-shadow:0 2px 5px rgba(18,69,53,.08)}
+@media(max-width:1050px){
+  #purchase-form-modal #purchase-items .purchase-line-item-header{display:none}
+  #purchase-form-modal #purchase-items .purchase-item-row,#purchase-form-modal #purchase-items .purchase-item-row.has-variant,#purchase-form-modal #purchase-items .purchase-item-row.has-gram-pack,#purchase-form-modal #purchase-items .purchase-item-row.has-variant.has-gram-pack{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:end;gap:9px;min-width:0;width:auto;margin:8px;padding:12px;border:1px solid #dcebe5;border-radius:10px;background:#fff;box-shadow:0 2px 8px rgba(18,69,53,.04)}
+  #purchase-form-modal #purchase-items .purchase-item-row>.item-serial{position:absolute;top:16px;left:13px;z-index:1;display:flex;width:22px;height:30px;align-items:center;justify-content:center;color:#087454;font-size:11px;font-weight:700}
+  #purchase-form-modal #purchase-items .purchase-item-row>div:nth-child(2){grid-column:1/-1;padding-right:36px}
+  #purchase-form-modal #purchase-items .purchase-item-row .item-variant-field.is-hidden,#purchase-form-modal #purchase-items .purchase-item-row .item-pack-size-field.is-hidden{display:none!important;visibility:visible}
+  #purchase-form-modal #purchase-items .purchase-item-row .item-variant-field:not(.is-hidden),#purchase-form-modal #purchase-items .purchase-item-row .item-pack-size-field:not(.is-hidden){display:block!important;visibility:visible}
+  #purchase-form-modal #purchase-items .purchase-item-row .item-title{display:block!important;margin:0 0 4px;color:#5b8176;font-size:9px;font-weight:700;line-height:1.25;letter-spacing:.035em;text-transform:uppercase}
+  #purchase-form-modal #purchase-items .purchase-item-row input,#purchase-form-modal #purchase-items .purchase-item-row select{width:100%;min-width:0;min-height:40px;padding:8px;border-radius:7px;font-size:12px}
+  #purchase-form-modal #purchase-items .purchase-item-row>div:nth-child(8){grid-column:1/-1}
+  #purchase-form-modal #purchase-items .purchase-item-row .item-promotion-field{display:none!important}
+  #purchase-form-modal #purchase-items .purchase-item-row .remove-item{position:absolute;top:10px;right:10px;z-index:2;width:30px;min-height:30px}
+  #purchase-form-modal #purchase-items .purchase-cp-offer-row{min-width:0;margin:-8px 8px 10px;padding:10px;border-radius:8px}
+  #purchase-form-modal #purchase-items .purchase-cp-offer-fields{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:600px){
+  #purchase-form-modal{--purchase-sticky-top:42px;align-items:flex-start;padding:7px}
+  #purchase-form-modal .purchase-modal{max-height:calc(100dvh - 14px)}
+  #purchase-form-modal .modal-card-header{height:42px;min-height:42px;padding:4px 10px}
+  #purchase-form-modal .modal-card-header h2{font-size:15px}
+  #purchase-form-modal .purchase-form-close{width:28px;height:28px;flex-basis:28px}
+  #purchase-form-modal #purchase-form{padding:10px 8px 14px}
+  #purchase-form-modal .purchase-order-meta-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:13px;padding:10px}
+  #purchase-form-modal .purchase-order-meta-grid .field input,#purchase-form-modal .purchase-order-meta-grid .field select{min-height:40px;padding:7px;font-size:11px}
+  #purchase-form-modal .purchase-order-meta-grid .field:first-child,#purchase-form-modal .purchase-order-meta-grid .field:nth-child(2){grid-column:1/-1}
+  #purchase-form-modal .transaction-items-header{gap:4px;margin-bottom:7px;padding-bottom:7px}
+  #purchase-form-modal .transaction-items-header h3{font-size:15px}
+  #purchase-form-modal .purchase-supplier-hint,#purchase-form-modal .purchase-promotion-hint{font-size:9px;line-height:1.35;text-align:left}
+  #purchase-form-modal #purchase-items .purchase-item-row,#purchase-form-modal #purchase-items .purchase-item-row.has-variant,#purchase-form-modal #purchase-items .purchase-item-row.has-gram-pack,#purchase-form-modal #purchase-items .purchase-item-row.has-variant.has-gram-pack{gap:8px;margin:7px 4px;padding:10px}
+  #purchase-form-modal #purchase-items .purchase-item-row>.item-serial{top:13px;left:9px}
+  #purchase-form-modal #purchase-items .purchase-item-row>div:nth-child(2){padding-right:34px}
+  #purchase-form-modal .purchase-form-grand-total>div{padding:9px 10px}
+  #purchase-form-modal .purchase-notes-field textarea{min-height:58px}
+  #purchase-form-modal .modal-actions{gap:6px;margin:12px 0 0;padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+  #purchase-form-modal .modal-actions button{min-height:40px;padding:8px 6px;font-size:10px}
+}
 </style>
