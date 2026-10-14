@@ -959,7 +959,7 @@ final class DepoApp
             if(!is_array($line))continue;
             $product=$this->product($this->text($line['ProductID']??''));
             if(!$product)throw new RuntimeException('Product was not found.');
-            if(strtoupper($product['Status'])==='ARCHIVED')throw new RuntimeException('Archived products cannot be used.');
+            if(in_array(strtoupper((string)$product['Status']),['ARCHIVED','DISCONTINUED'],true))throw new RuntimeException(strtoupper((string)$product['Status'])==='DISCONTINUED'?'Discontinued products cannot be used in new transactions.':'Archived products cannot be used.');
             $configured=$this->variants($product);$variant=$this->text($line['Variant']??'');
             if($configured){$match=null;foreach($configured as $candidate)if(strcasecmp($candidate,$variant)===0)$match=$candidate;if($match===null)throw new InvalidArgumentException('Select a valid variant for '.$product['ProductName'].'.');$variant=$match;}
             elseif($variant)throw new InvalidArgumentException('Selected product has no configured variants.');
@@ -1081,7 +1081,7 @@ final class DepoApp
     private function productConfigurationRegister(): array
     {
         $this->user(); $out=[];
-        foreach ($this->products() as $product) {
+        foreach ($this->rows('Products','COALESCE(Status,"ACTIVE")<>?', ['ARCHIVED']) as $product) {
             $supplier=$this->agreement((string) ($product['SupplierID'] ?? ''));
             $units=array_values(array_filter($this->units((string) $product['ProductID']),fn(array $unit):bool=>strtoupper((string) ($unit['Status'] ?? 'ACTIVE'))!=='ARCHIVED'));
             $optionType=strtoupper((string)($product['OptionType']??'VARIANT'));
@@ -1146,7 +1146,7 @@ final class DepoApp
         $this->db->beginTransaction();
         try{$this->assertUniqueProductConfiguration((string)$supplier['AgreementID'],$name,$id);$this->update('Products','ProductID',$id,$row);if(array_key_exists('Units',$input)||$optionType==='PACKAGING')$this->writeUnits($id,$units);$this->audit('UPDATE','Products',$id,'Product updated.');$this->db->commit();return $this->product($id);}catch(Throwable $e){$this->db->rollBack();throw $e;}
     }
-    private function changeProductStatus(string $id,string $status):array{$this->user();$status=strtoupper($this->text($status));if(!in_array($status,['ACTIVE','ARCHIVED'],true))throw new InvalidArgumentException('Status must be Active or Archived.');$old=$this->one('Products','ProductID',$id);if(!$old)throw new RuntimeException('Product was not found.');if($status==='ARCHIVED')throw new RuntimeException('Use the Administrator impact review to archive a product.');if(strtoupper((string)$old['Status'])==='ARCHIVED'){$this->restoreLatestRecord('Products',$id);return$this->product($id);}$this->update('Products','ProductID',$id,['Status'=>$status,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit('STATUS','Products',$id,'Product status changed.');return $this->product($id);}
+    private function changeProductStatus(string $id,string $status):array{$this->user();$status=strtoupper($this->text($status));if(!in_array($status,['ACTIVE','DISCONTINUED','ARCHIVED'],true))throw new InvalidArgumentException('Status must be Active, Discontinued or Archived.');$old=$this->one('Products','ProductID',$id);if(!$old)throw new RuntimeException('Product was not found.');if($status==='ARCHIVED')throw new RuntimeException('Use the Administrator impact review to archive a product.');if(strtoupper((string)$old['Status'])==='ARCHIVED')throw new RuntimeException('Archived products must be restored through the Administrator recovery review.');$this->update('Products','ProductID',$id,['Status'=>$status,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit('STATUS','Products',$id,'Product status changed to '.$status.'.');return $this->product($id);}
 
     private function stockBalance(string $agreement,string $product,string $variant=''):float{return(float)$this->value('SELECT COALESCE(SUM(BaseQuantityIn-BaseQuantityOut),0) FROM StockLedger WHERE AgreementID=? AND ProductID=? AND COALESCE(Variant, "")=?',[$agreement,$product,$variant]);}
     private function recordStock(string $agreement,string $product,string $date,string $type,string $reference,string $unit,float $in,float $out,float $cost,string $note='',bool $gift=false,string $variant=''):void{$balance=$this->stockBalance($agreement,$product,$variant)+$in-$out;if($balance<-0.000001)throw new RuntimeException('Stock cannot become negative.');$this->insert('StockLedger',['LedgerID'=>$this->id('StockLedger','LedgerID','STK'),'AgreementID'=>$agreement,'ProductID'=>$product,'TransactionDate'=>$date,'TransactionType'=>$type,'ReferenceID'=>$reference,'UnitName'=>$unit,'Quantity'=>$in?:$out,'BaseQuantityIn'=>$in,'BaseQuantityOut'=>$out,'BalanceQuantity'=>$balance,'UnitCost'=>$cost,'Description'=>$note,'CreatedAt'=>$this->now(),'CreatedBy'=>$this->current(),'IsGift'=>$gift?1:0,'Variant'=>$variant]);}

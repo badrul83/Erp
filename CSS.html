@@ -252,12 +252,12 @@
 .inventory-page #product-configuration-register td:nth-child(2) strong{display:block;color:#123d32;font-size:13px;line-height:1.3}
 .inventory-page #product-configuration-register td:nth-child(3) strong{font-size:11px}
 .inventory-page #product-configuration-register .product-config-row:hover td{background:#f6fbf9}
-.inventory-page #product-configuration-register .product-config-actions{min-width:190px;flex-wrap:nowrap;gap:5px}
+.inventory-page #product-configuration-register .product-config-actions{min-width:225px;flex-wrap:nowrap;gap:5px}
 .inventory-page #product-configuration-register .product-config-actions button{min-height:31px;padding:7px 10px;font-size:11px;white-space:nowrap}
 .inventory-page #product-configuration-register .unit-chip{margin:2px 3px 2px 0;padding:4px 8px;font-size:10px}
 .inventory-page #product-configuration-register .unit-chip-more{background:#e4f3ee;color:#176351}
 @media(max-width:700px){.inventory-page #product-configuration-register .table-wrap{border-radius:9px}.inventory-page #product-configuration-register table{min-width:1180px}}
-.inventory-page .product-config-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,350px);gap:14px;align-items:start;margin-top:14px}
+.inventory-page .product-config-workspace{display:block;margin-top:14px}
 .inventory-page .product-config-list{min-width:0}
 .inventory-page .product-config-list-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px;color:#173b32}
 .inventory-page .product-config-list-heading strong{font-size:13px}
@@ -265,7 +265,7 @@
 .inventory-page #product-configuration-register .table-wrap{max-height:calc(100vh - 330px);overflow:auto;border:1px solid #d8ece5}
 .inventory-page #product-configuration-register table{min-width:1110px}
 .inventory-page #product-configuration-register th{position:sticky;top:0;z-index:2;background:#f1faf6}
-.inventory-page #product-configuration-register .product-config-row{cursor:pointer}
+.inventory-page #product-configuration-register .product-config-row{cursor:default}
 .inventory-page #product-configuration-register .product-config-row.is-selected td{background:#eaf7f1}
 .inventory-page #product-configuration-register .product-config-row.is-selected td:first-child{box-shadow:inset 3px 0 #008f69}
 .inventory-page #product-configuration-register td:nth-child(2){min-width:185px}
@@ -1229,7 +1229,7 @@
   #purchase-form-modal #purchase-items .purchase-item-row>div:nth-child(2){grid-column:1/-1;padding-right:36px}
   #purchase-form-modal #purchase-items .purchase-item-row .item-variant-field.is-hidden,#purchase-form-modal #purchase-items .purchase-item-row .item-pack-size-field.is-hidden{display:none!important;visibility:visible}
   #purchase-form-modal #purchase-items .purchase-item-row .item-variant-field:not(.is-hidden),#purchase-form-modal #purchase-items .purchase-item-row .item-pack-size-field:not(.is-hidden){display:block!important;visibility:visible}
-  #purchase-form-modal #purchase-items .purchase-item-row .item-title{display:block!important;margin:0 0 4px;color:#5b8176;font-size:9px;font-weight:700;line-height:1.25;letter-spacing:.035em;text-transform:uppercase}
+  #purchase-form-modal #purchase-items .purchase-item-row .item-title{display:block!important;margin:0 0 4px;color:#5b8176;font-size:11px;font-weight:700;line-height:1.3;letter-spacing:.035em;text-transform:uppercase}
   #purchase-form-modal #purchase-items .purchase-item-row input,#purchase-form-modal #purchase-items .purchase-item-row select{width:100%;min-width:0;min-height:40px;padding:8px;border-radius:7px;font-size:12px}
   #purchase-form-modal #purchase-items .purchase-item-row>div:nth-child(8){grid-column:1/-1}
   #purchase-form-modal #purchase-items .purchase-item-row .item-promotion-field{display:none!important}
@@ -1249,7 +1249,7 @@
   #purchase-form-modal .purchase-order-meta-grid .field:first-child,#purchase-form-modal .purchase-order-meta-grid .field:nth-child(2){grid-column:1/-1}
   #purchase-form-modal .transaction-items-header{gap:4px;margin-bottom:7px;padding-bottom:7px}
   #purchase-form-modal .transaction-items-header h3{font-size:15px}
-  #purchase-form-modal .purchase-supplier-hint,#purchase-form-modal .purchase-promotion-hint{font-size:9px;line-height:1.35;text-align:left}
+  #purchase-form-modal .purchase-supplier-hint,#purchase-form-modal .purchase-promotion-hint{font-size:10px;line-height:1.4;text-align:left}
   #purchase-form-modal #purchase-items .purchase-item-row,#purchase-form-modal #purchase-items .purchase-item-row.has-variant,#purchase-form-modal #purchase-items .purchase-item-row.has-gram-pack,#purchase-form-modal #purchase-items .purchase-item-row.has-variant.has-gram-pack{gap:8px;margin:7px 4px;padding:10px}
   #purchase-form-modal #purchase-items .purchase-item-row>.item-serial{top:13px;left:9px}
   #purchase-form-modal #purchase-items .purchase-item-row>div:nth-child(2){padding-right:34px}
@@ -1266,13 +1266,15 @@
   #purchase-form-modal #purchase-form{padding:12px clamp(14px,1.5vw,22px) 16px}
   #purchase-form-modal .purchase-order-meta-grid{gap:10px;margin-bottom:15px;padding:12px;border-radius:11px}
   #purchase-form-modal .transaction-items-header{margin-bottom:7px;padding-bottom:7px}
+  #purchase-form-modal .transaction-items-header h3{font-size:17px}
+  #purchase-form-modal .purchase-supplier-hint,#purchase-form-modal .purchase-promotion-hint{font-size:11px;line-height:1.4}
   #purchase-form-modal #purchase-items{max-width:100%;overflow-x:auto;overflow-y:hidden;border-radius:9px;scrollbar-color:#b7d9cd #f0f7f4;scrollbar-width:thin}
   #purchase-form-modal #purchase-items .purchase-line-item-header,
   #purchase-form-modal #purchase-items .purchase-item-row,
   #purchase-form-modal #purchase-items .purchase-item-row.has-variant,
   #purchase-form-modal #purchase-items .purchase-item-row.has-gram-pack,
   #purchase-form-modal #purchase-items .purchase-item-row.has-variant.has-gram-pack{grid-template-columns:42px minmax(190px,1.55fr) 140px minmax(125px,1fr) 110px 100px 125px 140px 150px 34px;column-gap:7px;min-width:1290px;width:100%;}
-  #purchase-form-modal #purchase-items .purchase-line-item-header{position:sticky;top:0;z-index:4;padding:8px 7px;background:linear-gradient(180deg,#eef8f4,#e8f5ef);}
+  #purchase-form-modal #purchase-items .purchase-line-item-header{position:sticky;top:0;z-index:4;padding:9px 7px;background:linear-gradient(180deg,#eef8f4,#e8f5ef);font-size:11px;}
   #purchase-form-modal #purchase-items .purchase-line-item-header>span:first-child,
   #purchase-form-modal #purchase-items .purchase-item-row>.item-serial{text-align:center;justify-content:center}
   #purchase-form-modal #purchase-items .purchase-line-item-header>span:nth-child(2),
@@ -1281,23 +1283,24 @@
   #purchase-form-modal #purchase-items .purchase-item-row:nth-of-type(odd){background:#fbfefd}
   #purchase-form-modal #purchase-items .purchase-item-row .item-product{text-align:center}
   #purchase-form-modal #purchase-items .purchase-item-row input,
-  #purchase-form-modal #purchase-items .purchase-item-row select{min-width:0;min-height:31px;padding:4px 6px;border-radius:6px;font-size:10px}
-  #purchase-form-modal #purchase-items .purchase-item-row .item-title{font-size:9px}
+  #purchase-form-modal #purchase-items .purchase-item-row select{min-width:0;min-height:34px;padding:5px 7px;border-radius:6px;font-size:12px}
+  #purchase-form-modal #purchase-items .purchase-item-row .item-title{font-size:11px}
+  #purchase-form-modal #purchase-items .purchase-item-row>.item-serial{font-size:12px}
   #purchase-form-modal #purchase-items .purchase-cp-offer-row{display:flex;align-items:center;gap:12px;width:100%;min-width:1290px;margin:0;padding:5px 12px 6px 49px;border-color:#d8ebe3;border-left-width:3px;border-radius:0;background:linear-gradient(90deg,#f1faf6,#f8fcfa)}
   #purchase-form-modal #purchase-items .purchase-cp-offer-heading{flex:0 0 270px;gap:8px;margin:0}
-  #purchase-form-modal #purchase-items .purchase-cp-offer-heading strong{color:#087454;font-size:9px}
-  #purchase-form-modal #purchase-items .purchase-cp-offer-heading span{font-size:8px}
+  #purchase-form-modal #purchase-items .purchase-cp-offer-heading strong{color:#087454;font-size:11px}
+  #purchase-form-modal #purchase-items .purchase-cp-offer-heading span{font-size:10px}
   #purchase-form-modal #purchase-items .purchase-cp-offer-fields{display:block;flex:1;min-width:0}
   #purchase-form-modal #purchase-items .purchase-cp-offer-fields .offer-product-field{display:flex;align-items:center;gap:8px;min-width:0}
-  #purchase-form-modal #purchase-items .purchase-cp-offer-fields label{flex:0 0 auto;margin:0;font-size:9px}
-  #purchase-form-modal #purchase-items .purchase-cp-offer-fields input{width:min(420px,100%);min-height:29px;padding:4px 8px;font-size:10px}
+  #purchase-form-modal #purchase-items .purchase-cp-offer-fields label{flex:0 0 auto;margin:0;font-size:11px}
+  #purchase-form-modal #purchase-items .purchase-cp-offer-fields input{width:min(420px,100%);min-height:32px;padding:5px 8px;font-size:12px}
   #purchase-form-modal #purchase-items .purchase-line-item-header>span{text-align:center}
   #purchase-form-modal #purchase-items .purchase-item-row>div:not(.item-serial){text-align:center}
   #purchase-form-modal #purchase-items .purchase-item-row input,
   #purchase-form-modal #purchase-items .purchase-item-row select{text-align:center;text-align-last:center;font-variant-numeric:tabular-nums}
   #purchase-form-modal #purchase-items .purchase-item-row .item-subtotal{text-align:center}
   #purchase-form-modal #purchase-items .item-promotion-options{gap:6px;padding:3px}
-  #purchase-form-modal #purchase-items .item-promotion-choice{gap:5px;padding-right:5px;padding-left:5px}
+  #purchase-form-modal #purchase-items .item-promotion-choice{gap:5px;min-height:32px;padding-right:5px;padding-left:5px;font-size:11px}
   #purchase-form-modal #purchase-items .purchase-cp-offer-fields input{text-align:center}
   #purchase-form-modal .purchase-form-grand-total{margin-top:10px}
   #purchase-form-modal .purchase-notes-field{margin-top:12px}
