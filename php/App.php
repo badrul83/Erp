@@ -1035,13 +1035,13 @@ final class DepoApp
                 $units[$existingIndex]['UnitName'] = $name;
                 $units[$existingIndex]['ConversionToBase'] = $conversion;
                 $units[$existingIndex]['PurchaseAllowed'] = true;
-                $units[$existingIndex]['SaleAllowed'] = true;
+                $units[$existingIndex]['SaleAllowed'] = array_key_exists('SaleAllowed', $units[$existingIndex]) ? (bool)$units[$existingIndex]['SaleAllowed'] : true;
                 $units[$existingIndex]['PurchasePrice'] = (float)($units[$existingIndex]['PurchasePrice'] ?? $units[$existingIndex]['UnitPrice'] ?? 0);
                 $units[$existingIndex]['SalePrice'] = (float)($units[$existingIndex]['SalePrice'] ?? $units[$existingIndex]['UnitPrice'] ?? 0);
                 $units[$existingIndex]['UnitPrice'] = (float)($units[$existingIndex]['UnitPrice'] ?? $units[$existingIndex]['SalePrice']);
                 continue;
             }
-            $units[] = ['UnitName'=>$name,'ConversionToBase'=>$conversion,'PurchaseAllowed'=>true,'SaleAllowed'=>true,'UnitPrice'=>(float)($base['UnitPrice']??0)*$conversion,'PurchasePrice'=>(float)($base['PurchasePrice']??$base['UnitPrice']??0)*$conversion,'SalePrice'=>(float)($base['SalePrice']??$base['UnitPrice']??0)*$conversion];
+            $units[] = ['UnitName'=>$name,'ConversionToBase'=>$conversion,'PurchaseAllowed'=>true,'SaleAllowed'=>array_key_exists('SaleAllowed', $base) ? (bool)$base['SaleAllowed'] : true,'UnitPrice'=>(float)($base['UnitPrice']??0)*$conversion,'PurchasePrice'=>(float)($base['PurchasePrice']??$base['UnitPrice']??0)*$conversion,'SalePrice'=>(float)($base['SalePrice']??$base['UnitPrice']??0)*$conversion];
         }
         foreach ($options as $label) {
             $packName='Pack ('.$label.')';$cartonName='CTN ('.$label.')';$packIndex=null;$cartonIndex=null;
