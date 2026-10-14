@@ -1046,7 +1046,8 @@ final class DepoApp
         foreach ($options as $label) {
             $packName='Pack ('.$label.')';$cartonName='CTN ('.$label.')';$packIndex=null;$cartonIndex=null;
             foreach($units as $index=>$unit){if(!is_array($unit))continue;$unitName=$this->text($unit['UnitName']??'');if(strcasecmp($unitName,$packName)===0)$packIndex=$index;if(strcasecmp($unitName,$cartonName)===0)$cartonIndex=$index;}
-            if($packIndex===null||$cartonIndex===null)throw new InvalidArgumentException('Enter the number of pieces in 1 CTN for every selected package size.');
+            if($packIndex===null)throw new InvalidArgumentException('A sealed pack unit is required for every selected package size.');
+            if($cartonIndex===null)continue;
             $packConversion=(float)$units[$packIndex]['ConversionToBase'];$cartonConversion=(float)($units[$cartonIndex]['ConversionToBase']??0);$pieces=$packConversion>0?$cartonConversion/$packConversion:0;
             if($packConversion<=0||$cartonConversion<=0||$pieces<1||abs($pieces-round($pieces))>0.00001)throw new InvalidArgumentException('Each CTN must contain a whole number of sealed packs.');
             $packPurchase=(float)($units[$packIndex]['PurchasePrice']??$units[$packIndex]['UnitPrice']??0);$packSale=(float)($units[$packIndex]['SalePrice']??$units[$packIndex]['UnitPrice']??0);
