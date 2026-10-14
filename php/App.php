@@ -963,7 +963,10 @@ final class DepoApp
             $configured=$this->variants($product);$variant=$this->text($line['Variant']??'');
             if($configured){$match=null;foreach($configured as $candidate)if(strcasecmp($candidate,$variant)===0)$match=$candidate;if($match===null)throw new InvalidArgumentException('Select a valid variant for '.$product['ProductName'].'.');$variant=$match;}
             elseif($variant)throw new InvalidArgumentException('Selected product has no configured variants.');
-            $unit=$this->productUnit($product['ProductID'],$this->text($line['UnitName']??''),$type==='PURCHASE',$variant);
+            $requestedUnit=$this->text($line['UnitName']??'');$baseName=$this->text($product['BaseUnit']??$product['UnitOfMeasure']??'');$isPieceBase=(bool)preg_match('/^(?:pc|pcs|piece|pieces)$/i',$baseName);$piecesPerCarton=0.0;$isPieceCarton=$type==='PURCHASE'&&$isPieceBase&&(bool)preg_match('/^(?:ctn|cartons?)$/i',$requestedUnit);
+            if($isPieceCarton){$postedPieces=$this->text($line['PiecesPerCarton']??'');$configuredCarton=null;foreach($this->units($product['ProductID'])as$configuredUnit)if(preg_match('/^(?:ctn|cartons?)$/i',(string)($configuredUnit['UnitName']??''))&&strtoupper((string)($configuredUnit['Status']??'ACTIVE'))!=='ARCHIVED'){$configuredCarton=$configuredUnit;break;}$piecesPerCarton=$postedPieces!==''?$this->num($postedPieces,'Pieces per CTN'):(float)($configuredCarton['ConversionToBase']??0);if($piecesPerCarton<1||abs($piecesPerCarton-round($piecesPerCarton))>0.000001)throw new InvalidArgumentException('Enter how many whole Pieces are in 1 CTN.');$piecesPerCarton=(float)round($piecesPerCarton);$requestedUnit=$configuredCarton['UnitName']??$requestedUnit;}
+            if($isPieceCarton){$unit=null;foreach($this->units($product['ProductID'])as$configuredUnit)if(strcasecmp((string)($configuredUnit['UnitName']??''),$requestedUnit)===0&&strtoupper((string)($configuredUnit['Status']??'ACTIVE'))!=='ARCHIVED'){$unit=$configuredUnit;break;}if(!$unit)$unit=['ProductID'=>$product['ProductID'],'UnitName'=>$requestedUnit,'ConversionToBase'=>$piecesPerCarton,'PurchaseAllowed'=>1,'SaleAllowed'=>1,'PurchasePrice'=>0,'SalePrice'=>0,'UnitPrice'=>0,'Status'=>'ACTIVE'];else{$unit['ConversionToBase']=$piecesPerCarton;if(!(bool)($unit['PurchaseAllowed']??false))throw new RuntimeException('This unit cannot be used in Purchase.');}}
+            else $unit=$this->productUnit($product['ProductID'],$requestedUnit,$type==='PURCHASE',$variant);
             $quantity=$this->num($line['Quantity']??'','Quantity');
             if(strtoupper((string)($product['OptionType']??'VARIANT'))==='PACKAGING'){
                 $packUnit='Pack ('.$variant.')';$cartonUnit='CTN ('.$variant.')';$packConversion=$this->packVariantToBase($product,$variant);$selectedUnit=(string)$unit['UnitName'];$isPack=strcasecmp($selectedUnit,$packUnit)===0;$isCarton=strcasecmp($selectedUnit,$cartonUnit)===0;$expectedConversion=$isPack?$packConversion:($isCarton?(float)$unit['ConversionToBase']:null);
@@ -981,7 +984,7 @@ final class DepoApp
             if($promotionType==='WITH_CP'&&$type!=='PURCHASE'&&strtoupper((string)($product['PromotionType']??'NON_CP'))!=='WITH_CP')throw new InvalidArgumentException('With CP is available only for products configured with a consumer promotion.');
             $promotionGifts=$promotionType==='WITH_CP'?(string)($product['PromotionGifts']??'[]'):'[]';
             $offer=$type==='PURCHASE'?($promotionType==='WITH_CP'?$this->normalizePurchaseOffer($line,$product,$variant):['OfferProductID'=>null,'OfferProductName'=>null,'OfferVariant'=>null,'OfferUnitName'=>null,'OfferQuantity'=>null,'OfferUnitPrice'=>null,'OfferConversionToBase'=>null,'OfferBaseQuantity'=>null]):[];
-            $items[]=array_merge(['ProductID'=>$product['ProductID'],'Variant'=>$variant,'UnitName'=>$unit['UnitName'],'Quantity'=>$quantity,'ConversionToBase'=>(float)$unit['ConversionToBase'],'BaseQuantity'=>$quantity*(float)$unit['ConversionToBase'],'UnitPrice'=>$price,'LineTotal'=>$quantity*$price,'IsGift'=>$gift?1:0,'PromotionType'=>$promotionType,'PromotionGifts'=>$promotionGifts,'_PromotionTypeExplicit'=>$requestedPromotionType!== ''],$offer);
+            $items[]=array_merge(['ProductID'=>$product['ProductID'],'Variant'=>$variant,'UnitName'=>$unit['UnitName'],'Quantity'=>$quantity,'ConversionToBase'=>(float)$unit['ConversionToBase'],'BaseQuantity'=>$quantity*(float)$unit['ConversionToBase'],'UnitPrice'=>$price,'LineTotal'=>$quantity*$price,'IsGift'=>$gift?1:0,'PromotionType'=>$promotionType,'PromotionGifts'=>$promotionGifts,'_PromotionTypeExplicit'=>$requestedPromotionType!== '','PiecesPerCarton'=>$isPieceCarton?$piecesPerCarton:null],$offer);
         }
         if($type==='SALE')$this->assertSaleAmounts($items);
         return $items;
@@ -1297,6 +1300,14 @@ final class DepoApp
             if($productId===''||$unitName===''||$price<=0)continue;
             $product=$this->product($productId);if(!$product)continue;
             $units=array_values(array_filter($product['Units']??[],static fn($unit)=>strtoupper((string)($unit['Status']??'ACTIVE'))!=='ARCHIVED'));
+            $piecesPerCarton=(float)($item['PiecesPerCarton']??0);$baseName=(string)($product['BaseUnit']??$product['UnitOfMeasure']??'');
+            if($piecesPerCarton>=1&&preg_match('/^(?:pc|pcs|piece|pieces)$/i',$baseName)&&preg_match('/^(?:ctn|cartons?)$/i',$unitName)){
+                $carton=null;$base=null;foreach($units as$candidate){if(strcasecmp((string)($candidate['UnitName']??''),$baseName)===0)$base=$candidate;if(preg_match('/^(?:ctn|cartons?)$/i',(string)($candidate['UnitName']??'')))$carton=$candidate;}
+                $cartonName=(string)($carton['UnitName']??$unitName);$salePerPiece=(float)($base['SalePrice']??$base['UnitPrice']??0);$cartonSale=$salePerPiece*$piecesPerCarton;$now=$this->now();
+                $cartonRow=['ProductID'=>$productId,'UnitName'=>$cartonName,'ConversionToBase'=>$piecesPerCarton,'PurchaseAllowed'=>1,'SaleAllowed'=>1,'UnitPrice'=>$cartonSale,'Status'=>'ACTIVE','UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'SalePrice'=>$cartonSale,'PurchasePrice'=>$price];
+                if($carton){$this->update('ProductUnits','ProductUnitID',(string)$carton['ProductUnitID'],$cartonRow);}else{$this->insert('ProductUnits',['ProductUnitID'=>$this->id('ProductUnits','ProductUnitID','UNT'),'CreatedAt'=>$now,'CreatedBy'=>$this->current()]+$cartonRow);}
+                $unitName=$cartonName;$product=$this->product($productId);$units=array_values(array_filter($product['Units']??[],static fn($unit)=>strtoupper((string)($unit['Status']??'ACTIVE'))!=='ARCHIVED'));
+            }
             $selected=null;foreach($units as $unit)if(strcasecmp((string)($unit['UnitName']??''),$unitName)===0){$selected=$unit;break;}
             if(!$selected)continue;
             $updates[$productId.'|'.strtolower($unitName)]=[$productId,$unitName,$price];
