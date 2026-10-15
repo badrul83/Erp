@@ -1469,7 +1469,21 @@
 .inventory-product-picker .inventory-sidebar-filters .field label{font-size:9px}
 .inventory-product-picker .inventory-sidebar-filters input{min-height:34px;padding:7px 9px;font-size:10px}
 .inventory-product-picker .inventory-all-option{margin-bottom:5px;padding:8px}
+.inventory-product-picker .inventory-all-option{display:flex;align-items:center;gap:9px;border:1px solid #dce8e3;border-radius:8px;background:#f5f8f7;cursor:pointer}
+.inventory-product-picker .inventory-all-option input,.inventory-product-picker .inventory-product-option input{width:16px;height:16px;flex:0 0 16px;margin:0;accent-color:#087b5e;cursor:pointer}
+.inventory-product-picker .inventory-all-option span{display:block;min-width:0}
+.inventory-product-picker .inventory-all-option strong,.inventory-product-picker .inventory-all-option small{display:block}
+.inventory-product-picker .inventory-all-option strong{font-size:11px}
+.inventory-product-picker .inventory-all-option small{margin-top:2px;color:#74837e;font-size:9px}
 .inventory-product-picker .inventory-product-options{max-height:min(52vh,440px);overflow:auto;border-top:1px solid #e3ebe8}
+.inventory-product-picker .inventory-product-option{display:grid;grid-template-columns:16px 22px minmax(0,1fr);align-items:center;gap:8px;min-height:43px;padding:7px 5px;border-bottom:1px solid #e5ece9;color:#33433d;cursor:pointer}
+.inventory-product-picker .inventory-product-option:hover{background:#f2f8f5}
+.inventory-product-picker .inventory-product-option.is-selected{background:#f0f8f4}
+.inventory-product-picker .inventory-product-option-number{display:grid;width:21px;height:21px;place-items:center;border-radius:6px;background:#edf4f1;color:#60776d;font-size:9px;font-weight:700}
+.inventory-product-picker .inventory-product-option-copy{display:block;min-width:0}
+.inventory-product-picker .inventory-product-option strong{display:block;overflow:hidden;color:#173b32;font-size:10px;font-weight:600;text-overflow:ellipsis;white-space:nowrap}
+.inventory-product-picker .inventory-product-option small{display:block;margin-top:2px;overflow:hidden;color:#71817b;font-size:9px;line-height:1.25;text-overflow:ellipsis;white-space:nowrap}
+.inventory-product-picker .inventory-product-empty{padding:16px 8px;color:#71817b;font-size:10px;text-align:center}
 #inventory-stock-panel .inventory-stock-workspace{display:block}
 #inventory-stock-panel .inventory-stock-main{width:100%}
 @media(max-width:1120px){.topbar .inventory-topbar-category-wrap select{width:125px}.topbar .inventory-view-tab{padding:7px 8px}.topbar .inventory-product-picker-toggle{max-width:145px;padding:6px 8px}}
