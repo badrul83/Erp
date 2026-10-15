@@ -1448,15 +1448,14 @@
       var modal=$('purchase-form-modal'),form=$('purchase-form'),actions=form&&form.querySelector('.purchase-form-footer');
       if(!modal||!form||!actions||actions.querySelector('.purchase-form-save-exit'))return;
       var saveButton=actions.querySelector('.purchase-form-save'),previewButton=actions.querySelector('.purchase-form-preview'),documentActions=actions.querySelector('.purchase-form-document-actions');
-      if(!saveButton||!previewButton||!documentActions)return;
+      if(!saveButton||!documentActions)return;
       var primaryActions=document.createElement('div');primaryActions.className='purchase-form-primary-actions';
       primaryActions.appendChild(saveButton);
       var saveExit=document.createElement('button');saveExit.type='button';saveExit.className='primary-button purchase-form-save-exit';saveExit.textContent='Save and Exit';
       primaryActions.appendChild(saveExit);
-      var closeButton=document.createElement('button');closeButton.type='button';closeButton.className='secondary-button purchase-form-close-action';closeButton.textContent='Close';
-      closeButton.addEventListener('click',function(){var headerClose=modal.querySelector('.purchase-form-close');if(headerClose)headerClose.click();else modal.remove();});
-      previewButton.replaceWith(closeButton);
-      actions.innerHTML='';actions.appendChild(primaryActions);actions.appendChild(closeButton);actions.appendChild(documentActions);
+      if(previewButton)previewButton.remove();
+      documentActions.querySelectorAll('button').forEach(function(button){button.classList.remove('secondary-button');button.classList.add('primary-button');});
+      actions.innerHTML='';actions.appendChild(primaryActions);actions.appendChild(documentActions);
       saveExit.addEventListener('click',function(){
         if(!form.reportValidity())return;
         var originalRun=run,intercepted=false;
