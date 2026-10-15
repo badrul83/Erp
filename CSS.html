@@ -1349,4 +1349,17 @@
 @media(max-width:760px){.product-modal #product-modal-form>.form-grid>.product-photo-field,.product-modal #product-modal-form>.form-grid>.product-pack-size-picker{grid-column:1/-1}.product-modal .product-pack-prices-header,.product-modal .product-pack-prices-row{grid-template-columns:minmax(48px,.5fr) minmax(50px,.55fr) minmax(50px,.55fr) minmax(62px,.65fr) minmax(80px,1fr) minmax(80px,1fr);gap:4px}.product-modal .product-pack-price-field{grid-template-columns:1fr;gap:3px}.product-modal .product-pack-prices-header{font-size:7px}}
 @media(max-width:760px){.product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-header,.product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:minmax(58px,.6fr) minmax(58px,.6fr) minmax(0,1fr) minmax(0,1fr)}}
 @media(max-width:560px){.product-modal .product-photo-editor{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center}.product-modal .product-photo-preview{width:60px;height:60px;flex-basis:60px}.product-modal .product-photo-controls input[type="file"]{font-size:10px}}
-.purchase-insight-kpi{text-align:center;padding:12px 10px}.purchase-insight-kpi strong{margin:7px 0 0}</style>
+.purchase-insight-kpi{text-align:center;padding:12px 10px}
+/* Purchase order footer: two save actions, a clear exit action, and document tools. */
+.purchase-form-footer{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;padding-top:12px;border-top:1px solid #e2eee9}
+.purchase-form-primary-actions,.purchase-form-document-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.purchase-form-primary-actions{justify-self:start}.purchase-form-document-actions{justify-self:end}
+.purchase-form-footer button{min-height:40px;padding:9px 15px;border-radius:9px;transition:background-color .16s ease,color .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease}
+.purchase-form-footer .purchase-form-close-action{justify-self:center;min-width:112px}
+.purchase-form-footer button:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 5px 13px rgba(0,90,65,.16)}
+.purchase-form-footer .secondary-button:hover:not(:disabled){background:#e1f4ec;border-color:#74bda3;color:#075a43}
+.purchase-form-footer .primary-button:hover:not(:disabled){background:#087454;border-color:#087454;box-shadow:0 6px 15px rgba(0,115,82,.24)}
+.purchase-form-footer button:focus-visible{outline:3px solid rgba(0,143,105,.25);outline-offset:2px}
+@media(max-width:760px){.purchase-form-footer{grid-template-columns:minmax(0,1fr) auto}.purchase-form-footer .purchase-form-document-actions{grid-column:1/-1;justify-self:stretch;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.purchase-form-footer .purchase-form-document-actions button{width:100%}}
+@media(max-width:520px){.purchase-form-footer{gap:8px}.purchase-form-primary-actions{display:grid;grid-template-columns:1fr 1fr;grid-column:1/-1;width:100%}.purchase-form-primary-actions button,.purchase-form-footer .purchase-form-close-action{width:100%;min-width:0}.purchase-form-footer .purchase-form-close-action{grid-column:1/-1}.purchase-form-footer .purchase-form-document-actions{grid-template-columns:1fr 1fr}.purchase-form-footer button{padding:8px 9px;font-size:11px}}
+</style>
