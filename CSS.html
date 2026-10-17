@@ -1539,4 +1539,162 @@
 .purchase-modal #purchase-items .item-pack-size-field .item-pack-size-note{display:block;margin-top:2px;color:#756349;font-size:9px;line-height:1.2;text-align:center;white-space:pre-line;overflow-wrap:anywhere}
 .purchase-modal #purchase-items .item-pack-size-field.has-configured-carton .item-pack-size{display:none!important}
 .purchase-modal #purchase-items .item-pack-size-field.has-configured-carton .item-pack-size-note{margin:0;color:#17634f;font-size:10px;font-weight:700}
+
+/* Selected stock summary: clearer hierarchy and more readable KPI cards */
+#inventory-stock-panel .inventory-selected-summary{
+  margin:0 0 12px;
+  padding:15px;
+  border:1px solid #cfe3da;
+  border-radius:12px;
+  background:linear-gradient(135deg,#f6fbf8 0%,#eef7f3 100%);
+  box-shadow:0 3px 12px rgba(25,74,58,.06)
+}
+#inventory-stock-panel .inventory-selected-summary-heading{
+  align-items:center;
+  gap:12px;
+  margin-bottom:12px
+}
+#inventory-stock-panel .inventory-selected-summary-heading strong{
+  color:#163f34;
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:.01em
+}
+#inventory-stock-panel .inventory-selected-summary-heading span{
+  color:#60776e;
+  font-size:12px;
+  line-height:1.4
+}
+#inventory-stock-panel .inventory-selected-summary-grid{
+  gap:10px
+}
+#inventory-stock-panel .inventory-selected-summary-grid>div{
+  min-height:76px;
+  padding:12px 13px;
+  border:1px solid #deebe5;
+  border-top:3px solid #198568;
+  border-radius:9px;
+  background:#fff;
+  box-shadow:0 2px 7px rgba(24,72,56,.045)
+}
+#inventory-stock-panel .inventory-selected-summary-grid>div:nth-child(2){border-top-color:#278c9b}
+#inventory-stock-panel .inventory-selected-summary-grid>div:nth-child(3){border-top-color:#70a842}
+#inventory-stock-panel .inventory-selected-summary-grid>div:nth-child(4){border-top-color:#5584c5}
+#inventory-stock-panel .inventory-selected-summary-grid>div:nth-child(5){border-top-color:#d28a45}
+#inventory-stock-panel .inventory-selected-summary-grid>div small{
+  margin-bottom:6px;
+  color:#657b72;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.055em;
+  line-height:1.35
+}
+#inventory-stock-panel .inventory-selected-summary-grid>div strong{
+  display:block;
+  max-width:100%;
+  color:#173b32;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.45;
+  font-variant-numeric:tabular-nums;
+  overflow-wrap:anywhere
+}
+#inventory-stock-panel .inventory-selected-summary-grid .inventory-value-highlight{
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  color:#173b32;
+  font-size:inherit!important;
+  font-weight:inherit!important
+}
+@media(max-width:1100px){
+  #inventory-stock-panel .inventory-selected-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  #inventory-stock-panel .inventory-selected-summary{padding:12px}
+  #inventory-stock-panel .inventory-selected-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #inventory-stock-panel .inventory-selected-summary-grid>div{min-height:70px;padding:10px 11px}
+  #inventory-stock-panel .inventory-selected-summary-grid>div strong{font-size:13px}
+}
+@media(max-width:420px){
+  #inventory-stock-panel .inventory-selected-summary-heading{align-items:flex-start;flex-direction:column;gap:3px}
+  #inventory-stock-panel .inventory-selected-summary-heading strong{font-size:15px}
+  #inventory-stock-panel .inventory-selected-summary-heading span{text-align:left}
+  #inventory-stock-panel .inventory-selected-summary-grid{grid-template-columns:1fr 1fr}
+  #inventory-stock-panel .inventory-selected-summary-grid>div small{font-size:10px}
+  #inventory-stock-panel .inventory-selected-summary-grid>div strong{font-size:12px}
+}
+
+/* Inventory toolbar, persistent table headings, and sidebar account controls */
+.app-shell.inventory-view-active .topbar{
+  position:sticky;
+  top:0;
+  z-index:40;
+  min-height:62px;
+  border:1px solid #d5e8df;
+  border-top:0;
+  border-radius:0 0 13px 13px;
+  background:linear-gradient(108deg,rgba(247,252,249,.98),rgba(239,248,244,.98));
+  box-shadow:0 5px 17px rgba(19,75,58,.09)
+}
+.inventory-view-active .inventory-topbar-module{
+  display:flex;
+  min-width:0;
+  flex:1 1 auto;
+  align-items:center;
+  gap:16px
+}
+.inventory-topbar-title{
+  flex:0 0 auto;
+  color:#174b3b;
+  font-size:17px;
+  font-weight:750;
+  letter-spacing:-.02em
+}
+.inventory-view-active .inventory-view-tabs{flex:0 1 auto;margin:0}
+.inventory-view-active .topbar-tools{gap:8px}
+.sidebar{overflow:visible}
+.sidebar-profile-wrap{position:relative;flex:0 0 auto;margin:8px 0 0}
+.sidebar-profile-wrap .profile-chip{
+  width:100%;
+  min-height:46px;
+  justify-content:flex-start;
+  border-color:rgba(228,255,246,.23);
+  background:rgba(0,67,50,.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+  color:#effff9
+}
+.sidebar-profile-wrap .profile-chip:hover,.sidebar-profile-wrap .profile-chip[aria-expanded="true"]{
+  border-color:rgba(228,255,246,.42);
+  background:rgba(255,255,255,.13)
+}
+.sidebar-profile-wrap .profile-avatar{background:#d4eee3;color:#17634f}
+.sidebar-profile-wrap .current-user{max-width:160px;color:#fff;font-size:11px}
+.sidebar-profile-wrap .profile-role{color:#bfeada;font-size:8px}
+.sidebar-profile-wrap .profile-caret{margin-left:auto;color:#d4f4e8}
+.sidebar-profile-wrap .profile-menu{
+  top:auto;
+  right:auto;
+  bottom:calc(100% + 9px);
+  left:0;
+  width:100%;
+  max-height:calc(100dvh - 100px);
+  overflow-y:auto
+}
+.sidebar #logout-button{color:#9f332d}
+.inventory-view-active #inventory-stock-panel .inventory-sticky-panel.is-fixed{z-index:35}
+@media(max-width:800px){
+  .app-shell.inventory-view-active .topbar{position:sticky;top:0;z-index:40;min-height:54px;margin:0 -15px 14px;padding:8px 15px;border-radius:0 0 12px 12px}
+  .inventory-view-active .inventory-topbar-module{flex:1 1 100%;gap:10px;overflow-x:auto}
+  .inventory-topbar-title{font-size:15px}
+  .inventory-view-active .inventory-view-tabs{flex:0 0 auto}
+  .inventory-view-active .topbar-tools{flex:1 1 auto;max-width:100%}
+  .sidebar{overflow:auto}
+  .sidebar-profile-wrap .profile-menu{position:fixed;top:auto;right:10px;bottom:10px;left:10px;width:auto;max-height:calc(100dvh - 20px)}
+}
+@media(max-width:480px){
+  .inventory-view-active .topbar{align-items:stretch;flex-wrap:wrap;gap:6px}
+  .inventory-view-active .inventory-topbar-module{flex:1 1 100%;min-height:31px}
+  .inventory-view-active .topbar-tools{justify-content:flex-start}
+}
 </style>
