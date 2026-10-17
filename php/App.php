@@ -1413,9 +1413,16 @@ final class DepoApp
         $this->user();
         $mode=strtolower(trim($mode));
         if($mode==='fast'){
-            $statement=$this->db->prepare('SELECT i.ProductID,COUNT(DISTINCT s.SaleID) AS OrderCount,COALESCE(SUM(i.BaseQuantity),0) AS SoldQuantity,MAX(s.SaleDate) AS LastSold FROM DealerSaleItems i JOIN DealerSales s ON s.SaleID=i.SaleID JOIN Products p ON p.ProductID=i.ProductID WHERE s.Status IN ("DELIVERED","POSTED") AND p.Status NOT IN ("ARCHIVED","DISCONTINUED") AND COALESCE(i.IsGift,0)=0 AND (?="" OR p.SupplierID=?) GROUP BY i.ProductID ORDER BY OrderCount DESC,SoldQuantity DESC,LastSold DESC,i.ProductID ASC LIMIT 5');
+            $statement=$this->db->prepare('SELECT i.ProductID,COUNT(DISTINCT s.SaleID) AS OrderCount,COALESCE(SUM(i.BaseQuantity),0) AS SoldQuantity,MAX(s.SaleDate) AS LastSold FROM DealerSaleItems i JOIN DealerSales s ON s.SaleID=i.SaleID JOIN Products p ON p.ProductID=i.ProductID WHERE s.Status IN ("CONFIRMED","DELIVERED","POSTED") AND p.Status NOT IN ("ARCHIVED","DISCONTINUED") AND COALESCE(i.IsGift,0)=0 AND (?="" OR p.SupplierID=?) GROUP BY i.ProductID ORDER BY OrderCount DESC,SoldQuantity DESC,LastSold DESC,i.ProductID ASC LIMIT 5');
             $statement->execute([$supplierId,$supplierId]);
-            return array_values(array_map(static fn(array $row):string=>(string)$row['ProductID'],$statement->fetchAll(PDO::FETCH_ASSOC)));
+            $ranked=$statement->fetchAll(PDO::FETCH_ASSOC);$priorityIds=[];$seen=[];
+            foreach($ranked as$row){$id=(string)$row['ProductID'];$priorityIds[]=$id;$seen[$id]=true;}
+            if(count($priorityIds)<5){
+                $statement=$this->db->prepare('SELECT i.ProductID,COUNT(DISTINCT s.SupplyID) AS OrderCount,COALESCE(SUM(i.BaseQuantity),0) AS OrderedQuantity,MAX(s.SupplyDate) AS LastOrdered FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID JOIN Products p ON p.ProductID=i.ProductID WHERE s.Status IN ("CONFIRMED","PARTIALLY_RECEIVED","RECEIVED") AND p.Status NOT IN ("ARCHIVED","DISCONTINUED") AND COALESCE(i.IsGift,0)=0 AND (?="" OR s.AgreementID=?) AND (?="" OR p.SupplierID=?) GROUP BY i.ProductID ORDER BY OrderCount DESC,OrderedQuantity DESC,LastOrdered DESC,i.ProductID ASC LIMIT 5');
+                $statement->execute([$supplierId,$supplierId,$supplierId,$supplierId]);
+                foreach($statement->fetchAll(PDO::FETCH_ASSOC)as$row){$id=(string)$row['ProductID'];if(isset($seen[$id]))continue;$priorityIds[]=$id;$seen[$id]=true;if(count($priorityIds)>=5)break;}
+            }
+            return $priorityIds;
         }
         if($mode!=='low')return[];
         $products=[];foreach($this->products()as$product)$products[(string)$product['ProductID']]=$product;
