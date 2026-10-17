@@ -307,6 +307,7 @@ final class DepoApp
             'getPurchases', 'getCompanySupplies' => $this->supplies(),
             'getPurchaseOrderRegister', 'getPurchaseOrdersReport' => $this->purchaseOrderRegister(),
             'getPurchase', 'getCompanySupply', 'getPurchaseOrderInvoiceReport' => $this->supply((string) ($args[0] ?? '')),
+            'getPurchaseProductPriority' => $this->purchaseProductPriority((string) ($args[0] ?? ''), (string) ($args[1] ?? '')),
             'createPurchase', 'createCompanySupply' => $this->createSupply((array) ($args[0] ?? [])),
             'updatePurchaseOrder', 'updateCompanySupply' => $this->updateSupply((string) ($args[0] ?? ''), (array) ($args[1] ?? [])),
             'confirmPurchaseOrder', 'confirmCompanySupply' => $this->supplyStatus((string) ($args[0] ?? ''), 'CONFIRMED'),
@@ -1407,6 +1408,30 @@ final class DepoApp
         $this->db->beginTransaction();try{$total=array_sum(array_column($items,'LineTotal'));$this->update('CompanySupplies','SupplyID',$id,['AgreementID'=>$supplier['AgreementID'],'SupplyDate'=>$this->requiredDate($input['SupplyDate']??'','Purchase date'),'ReferenceNo'=>$this->text($input['ReferenceNo']??''),'TotalAmount'=>$total,'Notes'=>$this->text($input['Notes']??''),'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->writeSupplyItems($id,$items);$this->syncPurchasePricesToProductUnits($items);$this->audit('UPDATE','CompanySupplies',$id,'Purchase Order updated.');$this->db->commit();return$this->supply($id);}catch(Throwable$e){if($this->db->inTransaction())$this->db->rollBack();throw$e;}
     }
     private function supplyStatus(string $id,string $status):array{$old=$this->supply($id);if(!$old)throw new RuntimeException('Purchase Order was not found.');if($status==='CONFIRMED'&&$old['Status']!=='DRAFT')throw new RuntimeException('Only a Draft Purchase Order can be confirmed.');if($status==='CANCELLED'&&$old['Status']!=='CONFIRMED')throw new RuntimeException('Only a Confirmed Purchase Order can be cancelled.');if($status==='CANCELLED'&&$this->value('SELECT COUNT(*) FROM GoodsReceipts WHERE SupplyID=?',[$id]))throw new RuntimeException('This Purchase Order has a Goods Receipt record and cannot be cancelled.');$this->update('CompanySupplies','SupplyID',$id,['Status'=>$status,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit($status,'CompanySupplies',$id,'Purchase Order status changed.');return$this->supply($id);}
+    private function purchaseProductPriority(string $mode,string $supplierId=''):array
+    {
+        $this->user();
+        $mode=strtolower(trim($mode));
+        if($mode==='fast'){
+            $statement=$this->db->prepare('SELECT i.ProductID,COUNT(DISTINCT s.SaleID) AS OrderCount,COALESCE(SUM(i.BaseQuantity),0) AS SoldQuantity,MAX(s.SaleDate) AS LastSold FROM DealerSaleItems i JOIN DealerSales s ON s.SaleID=i.SaleID JOIN Products p ON p.ProductID=i.ProductID WHERE s.Status IN ("DELIVERED","POSTED") AND p.Status NOT IN ("ARCHIVED","DISCONTINUED") AND COALESCE(i.IsGift,0)=0 AND (?="" OR p.SupplierID=?) GROUP BY i.ProductID ORDER BY OrderCount DESC,SoldQuantity DESC,LastSold DESC,i.ProductID ASC LIMIT 5');
+            $statement->execute([$supplierId,$supplierId]);
+            return array_values(array_map(static fn(array $row):string=>(string)$row['ProductID'],$statement->fetchAll(PDO::FETCH_ASSOC)));
+        }
+        if($mode!=='low')return[];
+        $products=[];foreach($this->products()as$product)$products[(string)$product['ProductID']]=$product;
+        $unitsByProduct=[];$priorities=[];
+        foreach($this->inventory()as$row){
+            $productId=(string)($row['ProductID']??'');if($productId===''||($supplierId!==''&&($products[$productId]['SupplierID']??'')!==$supplierId))continue;
+            if(!isset($unitsByProduct[$productId]))$unitsByProduct[$productId]=array_values(array_filter($this->units($productId),static fn(array $unit):bool=>strtoupper((string)($unit['Status']??'ACTIVE'))!=='ARCHIVED'&&!empty($unit['SaleAllowed'])&&(float)($unit['ConversionToBase']??0)>0));
+            $available=(float)($row['AvailableOnHand']??$row['OnHand']??0);$threshold=(float)($row['CartonConversionToBase']??0);
+            foreach($unitsByProduct[$productId]as$unit)$threshold=max($threshold,(float)$unit['ConversionToBase']);
+            $outOfStock=$available<=0.000001;$isLow=$outOfStock||($threshold>0&&$available<$threshold-0.000001);if(!$isLow)continue;
+            $ratio=$outOfStock?0.0:($threshold>0?$available/$threshold:1.0);$candidate=['Out'=>$outOfStock?0:1,'Ratio'=>$ratio,'Available'=>$available,'Name'=>(string)($products[$productId]['ProductName']??$productId)];
+            $current=$priorities[$productId]??null;if(!$current||$candidate['Out']<$current['Out']||($candidate['Out']===$current['Out']&&($candidate['Ratio']<$current['Ratio']||($candidate['Ratio']===$current['Ratio']&&$candidate['Available']<$current['Available']))))$priorities[$productId]=$candidate;
+        }
+        uasort($priorities,static function(array $a,array $b):int{return ($a['Out']<=>$b['Out'])?:($a['Ratio']<=>$b['Ratio'])?:($a['Available']<=>$b['Available'])?:strnatcasecmp($a['Name'],$b['Name']);});
+        return array_values(array_map('strval',array_keys($priorities)));
+    }
     private function deleteSupply(string $id):array{$this->user(true);throw new RuntimeException('Use the Administrator impact review to archive a Purchase Order.');}
 
     private function sales():array

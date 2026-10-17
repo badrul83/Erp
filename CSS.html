@@ -1698,4 +1698,95 @@
   .inventory-view-active .topbar-tools{justify-content:flex-start}
 }
 
+/* Refined sidebar navigation hierarchy and coordinated customer submenu */
+.sidebar .main-nav{gap:4px}
+.sidebar .nav-group:before{background:rgba(226,250,240,.18)}
+.sidebar .nav-item{
+  min-height:39px;
+  border:1px solid transparent;
+  border-radius:9px;
+  transition:background .16s ease,border-color .16s ease,box-shadow .16s ease,color .16s ease,transform .16s ease
+}
+.sidebar .nav-item:hover:not(.is-active):not(.has-active-child){
+  border-color:rgba(225,249,240,.1);
+  background:rgba(231,251,243,.1);
+  transform:translateX(2px)
+}
+.sidebar .nav-item.is-active{
+  border-color:rgba(214,247,233,.18);
+  background:rgba(219,247,235,.15);
+  color:#fff;
+  box-shadow:inset 3px 0 0 #b8f0dd;
+  font-weight:700
+}
+.sidebar .nav-item.is-active>span:first-child{
+  border-radius:6px;
+  background:rgba(184,240,221,.18);
+  color:#d8f7eb
+}
+.sidebar .nav-item:focus-visible{
+  position:relative;
+  z-index:1;
+  outline:1px solid rgba(220,249,237,.9);
+  outline-offset:1px
+}
+.sidebar .dealer-nav-toggle.has-active-child{
+  border-color:rgba(211,246,230,.16);
+  background:rgba(212,245,230,.11);
+  box-shadow:inset 3px 0 0 #8dd6bc
+}
+.sidebar .dealer-nav-toggle.has-active-child>span:first-child{
+  background:rgba(184,240,221,.17);
+  color:#d8f7eb
+}
+.sidebar .dealer-nav-toggle b{color:#d9f6eb;font-size:12px}
+.sidebar .dealer-submenu{
+  position:relative;
+  gap:3px;
+  margin:4px 0 9px 16px;
+  padding:5px 0 5px 11px;
+  border-left:1px solid rgba(212,246,230,.36)
+}
+.sidebar .dealer-submenu .nav-item{
+  min-height:36px;
+  border:1px solid transparent;
+  border-radius:8px;
+  color:#d9f5e9!important;
+  font-size:11px!important
+}
+.sidebar .dealer-submenu .nav-item:not(.is-active):hover{
+  border-color:rgba(220,249,237,.1);
+  background:rgba(220,249,237,.09)!important
+}
+.sidebar .dealer-submenu .nav-item.is-active{
+  border-color:#d7eee4;
+  background:#e8f5ef!important;
+  box-shadow:inset 3px 0 0 #5dbb98,0 2px 6px rgba(0,48,36,.12)!important;
+  color:#155642!important
+}
+.sidebar .dealer-submenu .nav-item.is-active>span:first-child{
+  background:transparent!important;
+  color:#238366!important
+}
+.sidebar .sidebar-profile-wrap .profile-chip{
+  border-color:rgba(223,250,239,.2);
+  background:rgba(0,61,46,.23)
+}
+.sidebar .sidebar-signout{
+  border-color:rgba(223,250,239,.2);
+  background:rgba(0,61,46,.2);
+  transition:background .16s ease,border-color .16s ease
+}
+.sidebar .sidebar-signout:hover{
+  border-color:rgba(223,250,239,.34);
+  background:rgba(231,251,243,.12)
+}
+#purchase-form-modal .purchase-product-priority{display:flex;align-items:center;gap:5px;flex:0 1 auto;padding:3px;border:1px solid #d8eae3;border-radius:9px;background:#f5faf8}
+#purchase-form-modal .purchase-product-priority label{display:inline-flex;align-items:center;gap:5px;min-height:29px;padding:5px 9px;border-radius:6px;color:#54766d;font-size:10px;font-weight:700;white-space:nowrap;cursor:pointer}
+#purchase-form-modal .purchase-product-priority label:has(input:checked){background:#087f62;color:#fff;box-shadow:0 2px 5px rgba(8,127,98,.18)}
+#purchase-form-modal .purchase-product-priority input{width:12px;height:12px;margin:0;accent-color:#00a27b}
+#purchase-form-modal .purchase-product-priority label:has(input:checked) input{accent-color:#fff}
+#purchase-form-modal .purchase-supplier-hint{flex:1;line-height:1.4}
+@media(max-width:900px){#purchase-form-modal .transaction-items-header{flex-wrap:wrap}#purchase-form-modal .purchase-product-priority{order:3;flex-wrap:wrap}#purchase-form-modal .purchase-supplier-hint{order:4;flex-basis:100%;text-align:left}}
+@media(max-width:600px){#purchase-form-modal .purchase-product-priority{width:100%;justify-content:space-between;gap:2px}#purchase-form-modal .purchase-product-priority label{padding:5px 6px;font-size:9px}#purchase-form-modal .purchase-supplier-hint{flex-basis:100%}}
 </style>
