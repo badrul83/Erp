@@ -1998,23 +1998,36 @@
 #product-modal .product-modal .product-pack-price-field{font-size:11px;font-weight:700}
 #product-modal .product-modal .product-pack-prices-header{font-size:10px;line-height:1.3}
 #product-modal .product-modal .product-photo-controls button,#product-modal .product-modal .product-photo-placeholder{font-size:11px;font-weight:700}
-/* Four aligned base-stock controls; CTN conversion actions stay inside their field. */
-#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-#product-modal .product-modal .carton-piece-settings{grid-column:3;grid-row:1;display:grid;min-width:0;gap:4px;align-self:stretch}
-#product-modal .product-modal .carton-piece-settings-heading{display:flex;min-width:0;min-height:28px;align-items:center;justify-content:space-between;gap:4px}
-#product-modal .product-modal .carton-piece-settings-heading label{min-width:0;margin:0;color:#174c3d;font-size:11px;font-weight:700;line-height:1.2}
-#product-modal .product-modal #toggle-carton-piece-setup{flex:0 0 auto;min-height:24px;height:24px;padding:3px 6px;border:1px solid #cfe7dd;border-radius:6px;background:#eaf6f1;color:#08775c;font-size:9px;font-weight:700;line-height:1.1;white-space:nowrap}
-#product-modal .product-modal .carton-piece-settings>.field{min-width:0;gap:4px}
+/* Align base-stock headings and controls to one consistent four-column grid. */
+#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:min-content;align-items:start;column-gap:10px;row-gap:8px}
+#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config:has(>#carton-piece-question.is-hidden){grid-template-columns:repeat(2,minmax(0,1fr))}
+#product-modal .product-modal .base-unit-config>.field{width:100%;min-width:0;align-self:start;gap:5px}
+#product-modal .product-modal .base-unit-config>.field>label{min-height:28px;margin:0;display:flex;align-items:flex-end;font-size:11px;font-weight:700;line-height:1.25}
+#product-modal .product-modal .base-unit-config>.field select,#product-modal .product-modal .base-unit-config>.field input:not([type="radio"]):not([type="checkbox"]){height:40px;min-height:40px}
+#product-modal .product-modal .base-unit-config .product-bdt-input{width:100%;max-width:100%;min-width:0}
+#product-modal .product-modal .base-unit-config .product-bdt-input input{flex:1 1 0;width:1%;min-width:0}
+#product-modal .product-modal .base-unit-config>.field input::placeholder{font-size:10px;font-weight:500;opacity:.85}
+#product-modal .product-modal .carton-piece-settings{display:grid;grid-column:3;grid-row:1;grid-template-rows:28px 40px auto;align-self:start;gap:5px;min-width:0}
+#product-modal .product-modal .carton-piece-settings-heading{min-height:28px;align-items:flex-end;justify-content:flex-start}
+#product-modal .product-modal .carton-piece-settings-heading label{display:flex;min-height:28px;align-items:flex-end;font-size:11px;font-weight:700;line-height:1.25}
+#product-modal .product-modal .carton-piece-settings>.field{grid-row:2;align-self:start;gap:0}
 #product-modal .product-modal .carton-piece-settings .product-quantity-input{height:40px;min-height:40px}
 #product-modal .product-modal .carton-piece-settings .product-quantity-input>strong{min-width:48px;padding:0 8px;font-size:11px}
 #product-modal .product-modal .carton-piece-settings .product-quantity-input input#carton-piece-count{width:100%;height:38px;min-height:38px;padding:7px 10px;border:0;border-left:1px solid #d5e8df;border-radius:0;background:#fff;color:#123d32;font-size:11px;font-weight:700;box-shadow:none}
-#product-modal .product-modal .carton-piece-settings>.subtle{margin:0;font-size:10px;line-height:1.25}
-#product-modal .product-modal .carton-piece-question>.carton-box-toggle{grid-column:4;grid-row:1;align-self:end;justify-content:flex-start;width:100%;min-width:0;height:40px;min-height:40px;padding:7px 9px;border-color:#cfe7dd;border-radius:8px;background:#fff;font-size:11px;line-height:1.2}
+#product-modal .product-modal .carton-piece-settings-footer{grid-row:3;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:5px;min-width:0}
+#product-modal .product-modal .carton-piece-settings-footer>#carton-piece-mode-note{grid-column:auto;grid-row:auto}
+#product-modal .product-modal .carton-piece-settings-footer .subtle{min-width:0;margin:0;font-size:10px;line-height:1.3}
+#product-modal .product-modal .carton-piece-settings-footer #toggle-carton-piece-setup{position:static;grid-column:auto;grid-row:auto;align-self:start;height:28px;min-height:28px;padding:4px 6px;font-size:11px}
+#product-modal .product-modal .carton-piece-settings:has(>.field.is-hidden){grid-template-rows:28px auto}
+#product-modal .product-modal .carton-piece-settings:has(>.field.is-hidden)>.carton-piece-settings-footer{grid-row:2}
+#product-modal .product-modal .carton-box-breakdown-config{grid-column:4;grid-row:1;display:grid;grid-template-rows:28px 40px;align-self:start;gap:5px;min-width:0}
+#product-modal .product-modal .carton-box-breakdown-title{display:flex;min-height:28px;align-items:flex-end;color:#174c3d;font-size:11px;font-weight:700;line-height:1.25}
+#product-modal .product-modal .carton-box-breakdown-config>.carton-box-toggle{grid-row:2;align-self:start;justify-content:flex-start;width:100%;height:40px;min-height:40px;padding:7px 9px;border-color:#cfe7dd;border-radius:8px;background:#fff;font-size:11px;font-weight:700;line-height:1.2}
 #product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count){grid-column:3;grid-row:2}
 #product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count){grid-column:4;grid-row:2}
-#product-modal .product-modal .carton-piece-question .carton-box-detail{min-width:0;gap:4px}
-#product-modal .product-modal .carton-piece-question .carton-box-detail label{min-height:28px;font-size:11px;font-weight:700;line-height:1.25}
-#product-modal .product-modal .carton-piece-question .carton-box-detail input{height:40px;min-height:40px;font-size:11px;font-weight:700}
-@media(max-width:760px){#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config{grid-template-columns:repeat(2,minmax(0,1fr))}#product-modal .product-modal .carton-piece-settings{grid-column:1;grid-row:2}#product-modal .product-modal .carton-piece-question>.carton-box-toggle{grid-column:2;grid-row:2;align-self:end}#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count){grid-column:1;grid-row:3}#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count){grid-column:2;grid-row:3}}
-@media(max-width:460px){#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config{grid-template-columns:1fr}#product-modal .product-modal .carton-piece-settings,#product-modal .product-modal .carton-piece-question>.carton-box-toggle,#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count),#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count){grid-column:1;grid-row:auto}}
+#product-modal .product-modal .carton-piece-question .carton-box-detail{align-self:start;gap:5px}
+#product-modal .product-modal .carton-piece-question .carton-box-detail>label{display:flex;min-height:28px;align-items:flex-end;font-size:11px;font-weight:700;line-height:1.25}
+#product-modal .product-modal .carton-piece-question .carton-box-detail input{height:40px;min-height:40px}
+@media(max-width:760px){#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config,#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config:has(>#carton-piece-question.is-hidden){grid-template-columns:repeat(2,minmax(0,1fr))}#product-modal .product-modal .carton-piece-settings{grid-column:1;grid-row:2}#product-modal .product-modal .carton-box-breakdown-config{grid-column:2;grid-row:2}#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count){grid-column:1;grid-row:3}#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count){grid-column:2;grid-row:3}}
+@media(max-width:460px){#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config,#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config:has(>#carton-piece-question.is-hidden){grid-template-columns:1fr}#product-modal .product-modal .carton-piece-settings,#product-modal .product-modal .carton-box-breakdown-config,#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count),#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count){grid-column:1;grid-row:auto}}
 </style>
