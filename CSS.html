@@ -2021,7 +2021,6 @@
 #product-modal .product-modal .carton-piece-settings:has(>.field.is-hidden){grid-template-rows:28px auto}
 #product-modal .product-modal .carton-piece-settings:has(>.field.is-hidden)>.carton-piece-settings-footer{grid-row:2}
 #product-modal .product-modal .carton-box-breakdown-config{grid-column:4;grid-row:1;display:grid;grid-template-rows:28px 40px;align-self:start;gap:5px;min-width:0}
-#product-modal .product-modal .carton-box-breakdown-title{display:flex;min-height:28px;align-items:flex-end;color:#174c3d;font-size:11px;font-weight:700;line-height:1.25}
 #product-modal .product-modal .carton-box-breakdown-config>.carton-box-toggle{grid-row:2;align-self:start;justify-content:flex-start;width:100%;height:40px;min-height:40px;padding:7px 9px;border-color:#cfe7dd;border-radius:8px;background:#fff;font-size:11px;font-weight:700;line-height:1.2}
 #product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count){grid-column:3;grid-row:2}
 #product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count){grid-column:4;grid-row:2}
@@ -2039,9 +2038,9 @@
 /* Center the configuration labels and keep the optional box control inside column four. */
 #product-modal .product-modal .base-unit-config>.field>label{justify-content:center;text-align:center}
 #product-modal .product-modal .carton-piece-settings-heading label{justify-content:center;text-align:center}
-#product-modal .product-modal .carton-box-breakdown-title{justify-content:center;text-align:center;white-space:normal;overflow-wrap:anywhere}
-#product-modal .product-modal .carton-box-breakdown-config>.carton-box-toggle{display:flex;box-sizing:border-box;min-width:0;max-width:100%;overflow:hidden;justify-content:center;gap:6px;white-space:normal;text-align:center}
-#product-modal .product-modal .carton-box-breakdown-config>.carton-box-toggle>input{flex:0 0 15px}
-#product-modal .product-modal .carton-box-breakdown-config>.carton-box-toggle>span{flex:1 1 auto;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;text-align:center}
+#product-modal .product-modal .carton-box-breakdown-config{grid-template-rows:28px 40px;align-content:start}
+#product-modal .product-modal .carton-box-breakdown-config>.carton-box-toggle{display:grid;grid-template-columns:15px minmax(0,1fr);box-sizing:border-box;min-width:0;max-width:100%;overflow:hidden;justify-content:stretch;align-items:center;gap:6px;white-space:normal;text-align:center;padding:4px 8px;line-height:1.1}
+#product-modal .product-modal .carton-box-breakdown-config>.carton-box-toggle>input{width:15px;height:15px;min-height:15px;margin:0}
+#product-modal .product-modal .carton-box-breakdown-config>.carton-box-toggle>span{display:block;min-width:0;max-width:100%;white-space:normal;overflow-wrap:break-word;text-align:center}
 #product-modal .product-modal .carton-piece-question .carton-box-detail>label{justify-content:center;text-align:center;white-space:normal}
 </style>
