@@ -1961,4 +1961,41 @@
 @media(max-width:760px){#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config{grid-template-columns:repeat(2,minmax(0,1fr))}#product-modal .product-modal .carton-piece-question>.field:first-child{grid-column:1;grid-row:2}#product-modal .product-modal .carton-piece-question>.carton-box-toggle{grid-column:1/-1;grid-row:3}#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count){grid-column:1;grid-row:4}#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count){grid-column:2;grid-row:4}#product-modal .product-modal .carton-piece-question #toggle-carton-piece-setup{grid-column:1/-1;grid-row:5}#product-modal .product-modal .carton-piece-question #carton-piece-mode-note{grid-column:1/-1;grid-row:6}#product-modal .product-modal .carton-piece-question:not(:has(.carton-box-detail:not(.is-hidden))) #toggle-carton-piece-setup{grid-row:4}#product-modal .product-modal .carton-piece-question:not(:has(.carton-box-detail:not(.is-hidden))) #carton-piece-mode-note{grid-row:5}#product-modal .product-modal .product-pack-prices-header,#product-modal .product-modal .product-pack-prices-row{grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}#product-modal .product-modal .product-pack-price-field{font-size:9px}#product-modal .product-modal .product-pack-price-field input{height:34px;min-height:34px;padding:5px 6px}}
 @media(max-width:600px){#product-modal .product-modal #product-pack-size-options .product-pack-size-layout{grid-template-columns:1fr}#product-modal .product-modal #product-pack-size-options .product-pack-size-empty,#product-modal .product-modal #product-pack-size-options .product-pack-size-custom,#product-modal .product-modal #product-pack-size-options .product-pack-size-selected{grid-column:1}#product-modal .product-modal #product-pack-size-options .product-pack-size-custom-controls{grid-template-columns:repeat(3,minmax(0,1fr))}#product-modal .product-modal .product-pack-prices-header{display:none}#product-modal .product-modal .product-pack-prices-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:8px}#product-modal .product-modal .product-pack-price-size{grid-column:1/-1;padding-bottom:5px;border-bottom:1px solid #e7f1ed}#product-modal .product-modal .product-pack-price-field{grid-template-columns:1fr;gap:4px;font-size:10px}}
 @media(max-width:460px){#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config{grid-template-columns:1fr}#product-modal .product-modal .carton-piece-question>.field:first-child,#product-modal .product-modal .carton-piece-question>.carton-box-toggle,#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count),#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count),#product-modal .product-modal .carton-piece-question #toggle-carton-piece-setup,#product-modal .product-modal .carton-piece-question #carton-piece-mode-note{grid-column:1;grid-row:auto}}
+/* Keep the initial photo action centered and make product form typography consistent. */
+#product-modal .product-modal .product-photo-preview{position:relative;display:grid;place-items:center;flex:0 0 76px;width:76px;height:76px;overflow:hidden;padding:0;border:1px dashed #7ebda5;border-radius:50%;background:radial-gradient(circle at 35% 25%,#fff,#e8f6ef);color:#087f62;cursor:pointer}
+#product-modal .product-modal .product-photo-preview img{display:block;width:100%;height:100%;object-fit:cover}
+#product-modal .product-modal .product-photo-placeholder{display:grid;place-items:center;width:100%;height:100%;min-height:0;padding:5px;border:0;border-radius:inherit;background:transparent;color:#087f62;font-size:11px;font-weight:700;line-height:1.15;text-align:center;white-space:normal}
+#product-modal .product-modal .product-photo-preview.has-image:after{position:absolute;right:0;bottom:0;left:0;padding:4px 2px;background:rgba(11,65,50,.78);color:#fff;content:"Change Photo";font-size:9px;font-weight:700;line-height:1.2;text-align:center;pointer-events:none}
+#product-modal .product-modal .product-photo-controls input[type="file"]{position:absolute!important;width:1px!important;height:1px!important;min-height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+#product-modal .product-modal #product-modal-form .field>label,
+#product-modal .product-modal .product-promotion-heading strong,
+#product-modal .product-modal .product-promotion-choice,
+#product-modal .product-modal .unit-section-header h3,
+#product-modal .product-modal .unit-config-labels,
+#product-modal .product-modal .product-pack-size-heading strong,
+#product-modal .product-modal .product-pack-size-group-title,
+#product-modal .product-modal .product-pack-prices-heading>label{font-size:11px!important;font-weight:700!important;line-height:1.3}
+#product-modal .product-modal #product-modal-form .field input:not([type="radio"]):not([type="checkbox"]),
+#product-modal .product-modal #product-modal-form .field select,
+#product-modal .product-modal #product-modal-form .field textarea,
+#product-modal .product-modal .unit-config-row input,
+#product-modal .product-modal .unit-config-row select,
+#product-modal .product-modal .product-pack-size-custom-controls input,
+#product-modal .product-modal .product-pack-size-custom-controls select{font-size:11px!important;font-weight:700!important}
+#product-modal .product-modal #product-modal-form select option{font-size:11px;font-weight:600}
+#product-modal .product-modal #product-modal-form .field .subtle,
+#product-modal .product-modal .product-photo-controls small,
+#product-modal .product-modal .product-promotion-heading small,
+#product-modal .product-modal .product-promotion-choice small,
+#product-modal .product-modal .carton-piece-question .subtle,
+#product-modal .product-modal .unit-conversion-hint,
+#product-modal .product-modal .product-pack-size-heading small,
+#product-modal .product-modal .product-pack-size-selected,
+#product-modal .product-modal .product-pack-size-empty,
+#product-modal .product-modal .product-pack-prices-note,
+#product-modal .product-modal .product-pack-carton-equation,
+#product-modal .product-modal .modal-scoped-message{font-size:11px!important;font-weight:700!important;line-height:1.35}
+#product-modal .product-modal .product-pack-price-field{font-size:11px;font-weight:700}
+#product-modal .product-modal .product-pack-prices-header{font-size:10px;line-height:1.3}
+#product-modal .product-modal .product-photo-controls button,#product-modal .product-modal .product-photo-placeholder{font-size:11px;font-weight:700}
 </style>
