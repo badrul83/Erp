@@ -1082,6 +1082,27 @@ final class DepoApp
             if ($existingKey === $key) throw new InvalidArgumentException('A product with this name is already configured for the selected Supplier. Edit the existing product instead of creating a duplicate.');
         }
     }
+    private function productConfigurationLockName(string $supplierId, string $name): string
+    {
+        $normalize = static function (string $value): string {
+            $value = preg_replace('/\\s+/', ' ', trim($value)) ?? trim($value);
+            return function_exists('mb_strtolower') ? mb_strtolower($value, 'UTF-8') : strtolower($value);
+        };
+        return 'product-config:' . sha1($supplierId . "\0" . $normalize($name));
+    }
+    private function acquireProductConfigurationLock(string $supplierId, string $name): string
+    {
+        $lockName = $this->productConfigurationLockName($supplierId, $name);
+        $statement = $this->db->prepare('SELECT GET_LOCK(?, 10)');
+        $statement->execute([$lockName]);
+        if ((int)$statement->fetchColumn() !== 1) throw new RuntimeException('This product is being configured by another request. Please try saving again.');
+        return $lockName;
+    }
+    private function releaseProductConfigurationLock(string $lockName): void
+    {
+        $statement = $this->db->prepare('SELECT RELEASE_LOCK(?)');
+        $statement->execute([$lockName]);
+    }
     private function productConfigurationRegister(): array
     {
         $this->user(); $out=[];
@@ -1117,13 +1138,15 @@ final class DepoApp
         $hasBase=false;foreach($units as $unit)if(strcasecmp($this->text($unit['UnitName']??''),$base)===0)$hasBase=true;
         if(!$hasBase)array_unshift($units,['UnitName'=>$base,'ConversionToBase'=>1,'PurchaseAllowed'=>true,'SaleAllowed'=>true,'UnitPrice'=>0,'PurchasePrice'=>0,'SalePrice'=>0]);
         $units=$this->packagingUnits($base,$variants,$units,$optionType);
-        $this->db->beginTransaction();
+        $lockName=$this->acquireProductConfigurationLock((string)$supplier['AgreementID'],$name);
+        try{$this->db->beginTransaction();
         try{
             $this->assertUniqueProductConfiguration((string)$supplier['AgreementID'],$name);
             $id=$this->id('Products','ProductID','PRD');$now=$this->now();$sku=$this->sku($supplier['Company'],$name,'',$id);
             $this->insert('Products',['ProductID'=>$id,'SKU'=>$sku,'ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'BaseUnit'=>$base,'Status'=>'ACTIVE','CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR','Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID']]);
             $this->writeUnits($id,$units);$this->audit('CREATE','Products',$id,'Product created.');$this->db->commit();return $this->product($id);
-        }catch(Throwable $e){$this->db->rollBack();throw $e;}
+        }catch(Throwable $e){if($this->db->inTransaction())$this->db->rollBack();throw $e;}
+        }finally{$this->releaseProductConfigurationLock($lockName);}
     }
     private function sku(string $supplier,string $name,string $variant,string $id):string{ $initials=function(string $value,string $fallback):string{$parts=preg_split('/[^A-Za-z0-9]+/',strtoupper($value),-1,PREG_SPLIT_NO_EMPTY);return $parts?implode('',array_map(fn($p)=>$p[0],$parts)):$fallback;};$parts=[$initials($supplier,'SUP'),$initials($name,'PRD')];if($variant)$parts[]=preg_replace('/[^A-Z0-9]+/','',strtoupper($variant));preg_match('/(\d+)$/',$id,$m);$parts[]=str_pad($m[1]??'1',5,'0',STR_PAD_LEFT);return implode('-',$parts);}
     private function writeUnits(string $productId,array $units):void
@@ -1147,8 +1170,8 @@ final class DepoApp
         $row=['ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'BaseUnit'=>$base,'ProductType'=>strtoupper($this->text($input['ProductType']??$old['ProductType'])),'Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID'],'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()];
         $units=array_key_exists('Units',$input)?(array)$input['Units']:$this->units($id);
         if($optionType==='PACKAGING')$units=$this->packagingUnits($base,$variants,$units,$optionType);
-        $this->db->beginTransaction();
-        try{$this->assertUniqueProductConfiguration((string)$supplier['AgreementID'],$name,$id);$this->update('Products','ProductID',$id,$row);if(array_key_exists('Units',$input)||$optionType==='PACKAGING')$this->writeUnits($id,$units);$this->audit('UPDATE','Products',$id,'Product updated.');$this->db->commit();return $this->product($id);}catch(Throwable $e){$this->db->rollBack();throw $e;}
+        $lockName=$this->acquireProductConfigurationLock((string)$supplier['AgreementID'],$name);
+        try{$this->db->beginTransaction();try{$this->assertUniqueProductConfiguration((string)$supplier['AgreementID'],$name,$id);$this->update('Products','ProductID',$id,$row);if(array_key_exists('Units',$input)||$optionType==='PACKAGING')$this->writeUnits($id,$units);$this->audit('UPDATE','Products',$id,'Product updated.');$this->db->commit();return $this->product($id);}catch(Throwable $e){if($this->db->inTransaction())$this->db->rollBack();throw $e;}}finally{$this->releaseProductConfigurationLock($lockName);}
     }
     private function changeProductStatus(string $id,string $status):array{$this->user();$status=strtoupper($this->text($status));if(!in_array($status,['ACTIVE','DISCONTINUED','ARCHIVED'],true))throw new InvalidArgumentException('Status must be Active, Discontinued or Archived.');$old=$this->one('Products','ProductID',$id);if(!$old)throw new RuntimeException('Product was not found.');if($status==='ARCHIVED')throw new RuntimeException('Use the Administrator impact review to archive a product.');if(strtoupper((string)$old['Status'])==='ARCHIVED')throw new RuntimeException('Archived products must be restored through the Administrator recovery review.');$this->update('Products','ProductID',$id,['Status'=>$status,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit('STATUS','Products',$id,'Product status changed to '.$status.'.');return $this->product($id);}
 
