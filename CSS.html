@@ -1998,4 +1998,23 @@
 #product-modal .product-modal .product-pack-price-field{font-size:11px;font-weight:700}
 #product-modal .product-modal .product-pack-prices-header{font-size:10px;line-height:1.3}
 #product-modal .product-modal .product-photo-controls button,#product-modal .product-modal .product-photo-placeholder{font-size:11px;font-weight:700}
+/* Four aligned base-stock controls; CTN conversion actions stay inside their field. */
+#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#product-modal .product-modal .carton-piece-settings{grid-column:3;grid-row:1;display:grid;min-width:0;gap:4px;align-self:stretch}
+#product-modal .product-modal .carton-piece-settings-heading{display:flex;min-width:0;min-height:28px;align-items:center;justify-content:space-between;gap:4px}
+#product-modal .product-modal .carton-piece-settings-heading label{min-width:0;margin:0;color:#174c3d;font-size:11px;font-weight:700;line-height:1.2}
+#product-modal .product-modal #toggle-carton-piece-setup{flex:0 0 auto;min-height:24px;height:24px;padding:3px 6px;border:1px solid #cfe7dd;border-radius:6px;background:#eaf6f1;color:#08775c;font-size:9px;font-weight:700;line-height:1.1;white-space:nowrap}
+#product-modal .product-modal .carton-piece-settings>.field{min-width:0;gap:4px}
+#product-modal .product-modal .carton-piece-settings .product-quantity-input{height:40px;min-height:40px}
+#product-modal .product-modal .carton-piece-settings .product-quantity-input>strong{min-width:48px;padding:0 8px;font-size:11px}
+#product-modal .product-modal .carton-piece-settings .product-quantity-input input#carton-piece-count{width:100%;height:38px;min-height:38px;padding:7px 10px;border:0;border-left:1px solid #d5e8df;border-radius:0;background:#fff;color:#123d32;font-size:11px;font-weight:700;box-shadow:none}
+#product-modal .product-modal .carton-piece-settings>.subtle{margin:0;font-size:10px;line-height:1.25}
+#product-modal .product-modal .carton-piece-question>.carton-box-toggle{grid-column:4;grid-row:1;align-self:end;justify-content:flex-start;width:100%;min-width:0;height:40px;min-height:40px;padding:7px 9px;border-color:#cfe7dd;border-radius:8px;background:#fff;font-size:11px;line-height:1.2}
+#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count){grid-column:3;grid-row:2}
+#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count){grid-column:4;grid-row:2}
+#product-modal .product-modal .carton-piece-question .carton-box-detail{min-width:0;gap:4px}
+#product-modal .product-modal .carton-piece-question .carton-box-detail label{min-height:28px;font-size:11px;font-weight:700;line-height:1.25}
+#product-modal .product-modal .carton-piece-question .carton-box-detail input{height:40px;min-height:40px;font-size:11px;font-weight:700}
+@media(max-width:760px){#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config{grid-template-columns:repeat(2,minmax(0,1fr))}#product-modal .product-modal .carton-piece-settings{grid-column:1;grid-row:2}#product-modal .product-modal .carton-piece-question>.carton-box-toggle{grid-column:2;grid-row:2;align-self:end}#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count){grid-column:1;grid-row:3}#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count){grid-column:2;grid-row:3}}
+@media(max-width:460px){#product-modal .product-modal #product-modal-form>.form-grid>.base-unit-config{grid-template-columns:1fr}#product-modal .product-modal .carton-piece-settings,#product-modal .product-modal .carton-piece-question>.carton-box-toggle,#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#carton-box-count),#product-modal .product-modal .carton-piece-question .carton-box-detail:has(#box-piece-count){grid-column:1;grid-row:auto}}
 </style>
