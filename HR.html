@@ -15,6 +15,8 @@
       var back=document.getElementById('hr-back-dealer');if(back&&openDealerDashboard)back.onclick=openDealerDashboard;
       var newEmployee=document.getElementById('hr-new-employee');if(newEmployee)newEmployee.onclick=function(){openEmployeeModal(null,null);};
       document.querySelectorAll('[data-hr-tab]').forEach(function(button){button.addEventListener('click',function(){activeTab=button.dataset.hrTab;render();});});
+      var tabBar=document.querySelector('#app-view .hr-page > .hr-tabs'),topbar=document.getElementById('workspace-topbar-navigation');
+      if(tabBar&&topbar){tabBar.classList.add('hr-topbar-tabs');topbar.replaceChildren(tabBar);}
     }
     function render(){if(isEmployee()){renderProfile();return;}if(isDealer()&&['employees','attendance','achievements'].indexOf(activeTab)>=0)activeTab='leave';if(activeTab==='employees')renderEmployees();else if(activeTab==='attendance')renderAttendance();else if(activeTab==='sales-reports')renderSalesReportCollection();else if(activeTab==='payroll')renderPayroll();else if(activeTab==='payslips')renderPayslips();else if(activeTab==='sr-management')renderSRManagementTab();else if(activeTab==='achievements')renderAchievements();else if(activeTab==='leave')renderLeave();else if(activeTab==='loans')renderLoans();else if(activeTab==='claims')renderClaims();else if(activeTab==='petty-cash')renderPettyCash();else renderEmployees();}
     function renderSRManagementTab(){shell('<section id="hr-sr-management-panel"></section>');if(renderSRManagement)renderSRManagement('hr-sr-management-panel');}

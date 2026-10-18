@@ -213,6 +213,9 @@
 .app-shell.workspace-view-active .topbar .version{color:#739a90}
 .workspace-topbar-navigation{display:flex;min-width:0;flex:1 1 auto;align-items:center;overflow:hidden}
 .workspace-topbar-current{overflow:hidden;color:#174b3b;font-size:15px;font-weight:700;text-overflow:ellipsis;white-space:nowrap}
+.workspace-topbar-navigation .hr-topbar-tabs{display:flex;min-width:0;max-width:100%;flex:1 1 auto;align-items:center;gap:5px;overflow-x:auto;overflow-y:hidden;margin:0;padding:4px 8px 5px 0;border:0;scrollbar-width:thin;scrollbar-color:#bddbd1 transparent}
+.workspace-topbar-navigation .hr-topbar-tabs .hr-tab,.workspace-topbar-navigation .hr-topbar-tabs .hr-new-employee-nav{flex:0 0 auto;min-height:36px;padding:8px 10px;border-color:#d8ece5;border-radius:8px;background:#fff;color:#176351;font-size:11px;font-weight:700;white-space:nowrap}
+.workspace-topbar-navigation .hr-topbar-tabs .hr-tab:hover,.workspace-topbar-navigation .hr-topbar-tabs .hr-new-employee-nav:hover,.workspace-topbar-navigation .hr-topbar-tabs .hr-tab.is-active{background:#008f69;border-color:#008f69;color:#fff;box-shadow:none;transform:none}
 .workspace-topbar-links{display:flex;min-width:0;max-width:100%;align-items:center;gap:5px;overflow-x:auto;padding:4px 8px 5px 0;scrollbar-width:thin;scrollbar-color:#bddbd1 transparent}
 .workspace-topbar-link{flex:0 0 auto;min-height:36px;padding:8px 10px;border:1px solid #d8ece5;border-radius:8px;background:#fff;color:#176351;font-size:11px;font-weight:700;white-space:nowrap;transition:background .15s ease,border-color .15s ease,color .15s ease}
 .workspace-topbar-link:hover,.workspace-topbar-link.is-active{background:#008f69;border-color:#008f69;color:#fff}
@@ -1135,6 +1138,11 @@
 /* Inventory product detail modal is appended to body, so its styling must not depend on the stock panel. */
 .inventory-stock-details-modal{z-index:30;padding:18px;background:rgba(9,55,44,.42)}
 .inventory-stock-details-modal .modal-card{width:min(900px,100%);max-height:calc(100vh - 36px);padding:24px;background:#fff;border:1px solid #cfe8df;border-radius:14px;box-shadow:0 18px 50px rgba(0,65,48,.24);font-family:Verdana,Arial,sans-serif}
+#purchase-details-modal{z-index:1000;align-items:center;overflow:auto;padding:clamp(8px,2vh,20px)}
+#purchase-details-modal .purchase-modal{box-sizing:border-box;width:min(980px,calc(100vw - 32px));max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+#purchase-details-modal .modal-card-header{position:sticky;top:-22px;z-index:4;margin:-22px -22px 14px;padding:22px 22px 10px;background:#fff}
+#purchase-details-modal .purchase-detail-topbar{position:sticky;top:56px;z-index:3;background:#fff}
+@media(max-width:700px){#purchase-details-modal{align-items:center;padding:8px}#purchase-details-modal .purchase-modal{width:calc(100vw - 16px);max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px);padding:14px}#purchase-details-modal .modal-card-header{top:-14px;margin:-14px -14px 12px;padding:14px 14px 9px}#purchase-details-modal .purchase-detail-topbar{top:47px;align-items:flex-start;flex-direction:column;gap:8px;padding:9px 0}#purchase-details-modal .purchase-detail-topbar .purchase-detail-stagebar{margin-left:0}}
 .inventory-stock-details-modal .modal-card-header{align-items:center;gap:16px;margin:0 0 18px;padding:0 0 16px;border-bottom:1px solid #d8ece5}
 .inventory-stock-details-modal .modal-card-header .eyebrow{margin:0 0 5px;color:#008f69;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
 .inventory-stock-details-modal .modal-card-header h2{margin:0;color:#173b32;font-size:22px;line-height:1.25}
