@@ -91,7 +91,7 @@ trait UserAccess
             ['Key'=>'sales', 'Label'=>'Sales', 'Group'=>'Operations', 'Note'=>'Sales order, invoice and delivery workflow.'],
             ['Key'=>'returns', 'Label'=>'Product Returns', 'Group'=>'Operations', 'Note'=>'Sales and product-return records.'],
             ['Key'=>'payments', 'Label'=>'Payment Register (history)', 'Group'=>'Accounting', 'Note'=>'Read-only operational payment history; all new financial entries are posted through Easy Accounts.'],
-            ['Key'=>'expenses', 'Label'=>'Expenses', 'Group'=>'Operations', 'Note'=>'Operating expense records.'],
+            ['Key'=>'expenses', 'Label'=>'Expenses', 'Group'=>'Accounting', 'Note'=>'Operating expense records within the Accounting module.'],
             ['Key'=>'product_config', 'Label'=>'Product Configuration', 'Group'=>'Configuration', 'Note'=>'Product, unit and price setup.'],
             ['Key'=>'reports', 'Label'=>'Reports', 'Group'=>'Reports', 'Note'=>'Operational reports and printable records.'],
             ['Key'=>'accounting', 'Label'=>'Accounting', 'Group'=>'Accounting', 'Note'=>'Accounting dashboard and ledgers.'],
