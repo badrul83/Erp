@@ -87,7 +87,7 @@ trait EasyAccounts
             'CommissionDealers'=>$commissionDealers,
             'Suppliers'=>$this->rows('Agreements', 'Status="APPROVED" ORDER BY Company'),
             'Sales'=>array_values(array_filter($this->sales(),fn(array $row):bool=>strtoupper((string)($row['CustomerType']??'DEALER'))==='DEALER'&&in_array(strtoupper((string)$row['Status']),['CONFIRMED','DELIVERED'],true)&&(float)$row['DueAmount']>0)),
-            'SupplierOrders'=>$this->rowsBySql('SELECT s.SupplyID,s.AgreementID,s.SupplyDate,s.TotalAmount,s.Status,a.Company,COALESCE((SELECT SUM(p.Amount) FROM Payments p WHERE p.SupplyID=s.SupplyID AND p.Status="POSTED"),0) AS PaidAmount FROM CompanySupplies s JOIN Agreements a ON a.AgreementID=s.AgreementID WHERE s.Status IN ("CONFIRMED","PARTIALLY_RECEIVED","RECEIVED") AND s.TotalAmount>COALESCE((SELECT SUM(p.Amount) FROM Payments p WHERE p.SupplyID=s.SupplyID AND p.Status="POSTED"),0) ORDER BY s.SupplyDate DESC,s.SupplyID'),
+            'SupplierOrders'=>$this->supplierOrdersWithPayable(),
             'EntryTypes'=>[
                 ['Key'=>'EXPENSE','Label'=>'Bill / Operating Expense'],
                 ['Key'=>'DEALER_RECEIPT','Label'=>'Receive Dealer Payment'],
@@ -100,6 +100,21 @@ trait EasyAccounts
                 ['Key'=>'OTHER_INCOME','Label'=>'Other Income Received'],
             ],
         ];
+    }
+
+    private function supplierOrdersWithPayable(): array
+    {
+        $orders=$this->rowsBySql('SELECT s.SupplyID,s.AgreementID,s.SupplyDate,s.TotalAmount,s.Status,a.Company FROM CompanySupplies s JOIN Agreements a ON a.AgreementID=s.AgreementID WHERE s.Status IN ("CONFIRMED","PARTIALLY_RECEIVED","RECEIVED") ORDER BY s.SupplyDate DESC,s.SupplyID');
+        $result=[];
+        foreach($orders as$order){
+            $id=(string)$order['SupplyID'];
+            $billed=(float)$this->value('SELECT COALESCE(SUM(i.BaseAcceptedQuantity*i.UnitCost),0) FROM GoodsReceiptItems i JOIN GoodsReceipts r ON r.GRNID=i.GRNID WHERE r.SupplyID=? AND r.Status="POSTED"',[$id]);
+            $returned=(float)$this->value('SELECT COALESCE(SUM(TotalAmount),0) FROM ProductReturns WHERE SupplyID=? AND ReturnType="PURCHASE" AND Status="POSTED"',[$id]);
+            $paid=$this->supplyPaid($id);$due=round(max(0,$billed-$returned-$paid),2);
+            if($due<=0)continue;
+            $order['BilledAmount']=round($billed,2);$order['ReturnedAmount']=round($returned,2);$order['PaidAmount']=round($paid,2);$order['DueAmount']=$due;$result[]=$order;
+        }
+        return$result;
     }
 
     private function easyParty(string $type, string $id): array
@@ -148,7 +163,7 @@ trait EasyAccounts
             $payment = $this->easyPaymentAccount($paymentId); $party = $this->easyParty('SUPPLIER', $partyId);
             $supplyId=$this->text($input['SupplyID']??'');$supply=$supplyId?$this->one('CompanySupplies','SupplyID',$supplyId):null;
             if(!$supply||$supply['AgreementID']!==$party['AgreementID']||!in_array(strtoupper((string)$supply['Status']),['CONFIRMED','PARTIALLY_RECEIVED','RECEIVED'],true))throw new InvalidArgumentException('Select an open purchase order for this supplier.');
-            $due=max(0,(float)$supply['TotalAmount']-$this->supplyPaid($supplyId));if($amount>$due+0.009)throw new InvalidArgumentException('Payment exceeds the selected purchase order due.');
+            $billed=(float)$this->value('SELECT COALESCE(SUM(i.BaseAcceptedQuantity*i.UnitCost),0) FROM GoodsReceiptItems i JOIN GoodsReceipts r ON r.GRNID=i.GRNID WHERE r.SupplyID=? AND r.Status="POSTED"',[$supplyId]);$returned=(float)$this->value('SELECT COALESCE(SUM(TotalAmount),0) FROM ProductReturns WHERE SupplyID=? AND ReturnType="PURCHASE" AND Status="POSTED"',[$supplyId]);$due=max(0,$billed-$returned-$this->supplyPaid($supplyId));if($amount>$due+0.009)throw new InvalidArgumentException('Payment exceeds the accepted goods payable for this purchase order.');
             return [$line('2010', $amount, 0, 'SUPPLIER', (string) $party['AgreementID']), $line((string) $payment['AccountID'], 0, $amount)];
         }
         if ($entryType === 'SUPPLIER_RECEIPT') {

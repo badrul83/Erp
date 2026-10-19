@@ -294,6 +294,7 @@ final class DepoApp
             'getAccountingTrialBalance' => $this->accountingTrialBalance((string) ($args[0] ?? '')),
             'getAccountingAccountLedger' => $this->accountingAccountLedger((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (string) ($args[2] ?? '')),
             'getAccountingPartyLedger' => $this->accountingPartyLedger((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (string) ($args[2] ?? ''), (string) ($args[3] ?? '')),
+            'getSupplierPayableLedger' => $this->supplierPayableLedger((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (string) ($args[2] ?? '')),
             'getEasyAccountSetup' => $this->easyAccountSetup(),
             'getEasyAccountsDashboard' => $this->easyAccountsDashboard((array) ($args[0] ?? [])),
             'getEasyAccountEntry' => $this->easyEntry((string) ($args[0] ?? '')),
