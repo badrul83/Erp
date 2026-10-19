@@ -2074,4 +2074,31 @@
 .settings-hub-tab:hover{background:#fff;color:#087454}
 .settings-hub-tab.is-active{border-color:#cfe8df;background:#fff;color:#087454;box-shadow:0 2px 7px rgba(0,104,77,.08)}
 @media(max-width:560px){.settings-hub-navigation{gap:4px}.settings-hub-tab{flex:1;gap:6px;padding:8px 7px;font-size:11px}}
+.invoice-issuer-selector{min-width:0;margin:0 0 16px;padding:14px;border:1px solid #cfe8df;border-radius:11px;background:#f5fcf9}
+.invoice-issuer-selector legend{padding:0 7px;color:#176351;font-size:12px;font-weight:700}
+.invoice-issuer-selector>p{margin:0 0 10px;font-size:11px}
+.invoice-issuer-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.invoice-issuer-choice{display:flex;align-items:center;gap:10px;min-height:58px;padding:10px 12px;border:1px solid #d8ece5;border-radius:9px;background:#fff;color:#397264;cursor:pointer}
+.invoice-issuer-choice input{width:17px;height:17px;min-height:17px;margin:0;accent-color:#008f69}
+.invoice-issuer-choice strong,.invoice-issuer-choice small{display:block}
+.invoice-issuer-choice strong{color:#173b32;font-size:12px}
+.invoice-issuer-choice small{margin-top:3px;color:#668d83;font-size:10px}
+.invoice-issuer-choice.is-selected{border-color:#46ac8c;background:#eef9f4;box-shadow:0 0 0 2px rgba(0,143,105,.08)}
+.company-issuer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.company-issuer-card{display:grid;align-content:start;gap:12px;min-width:0;padding:15px;border:1px solid #d8ece5;border-radius:11px;background:#fff}
+.company-issuer-card.is-selected{border-color:#69b99a;box-shadow:0 0 0 2px rgba(0,143,105,.08)}
+.company-issuer-card>header{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid #e6f1ed}
+.company-issuer-card>header h3{font-size:14px}
+.company-issuer-card>header p{margin:3px 0 0;color:#668d83;font-size:10px}
+.company-issuer-mark{display:grid;width:34px;height:34px;flex:0 0 34px;place-items:center;border-radius:9px;background:#def4e9;color:#087454;font-weight:700}
+.company-issuer-mark.depot{background:#e8f1fb;color:#37699a}
+.company-issuer-card textarea{min-height:78px;resize:vertical}
+.company-logo-preview{display:flex;align-items:center;gap:10px;min-height:48px;color:#668d83;font-size:10px}
+.company-logo-preview img{width:48px;height:48px;object-fit:contain;border:1px solid #d8ece5;border-radius:8px;background:#fff;padding:3px}
+.company-logo-remove{justify-self:start;padding:4px 0;font-size:10px}
+.software-name-field{max-width:50%;margin-top:15px}
+.invoice-issuer-note{display:flex;flex-direction:column;gap:4px;margin-top:15px;padding:11px 13px;border:1px solid #d8ece5;border-left:3px solid #008f69;border-radius:8px;background:#f7fcfa;color:#5b8075;font-size:11px;line-height:1.45}
+.invoice-issuer-note strong{color:#176351}
+@media(max-width:760px){.company-issuer-grid{grid-template-columns:1fr}.software-name-field{max-width:none}}
+@media(max-width:560px){.invoice-issuer-options{grid-template-columns:1fr}.invoice-issuer-selector{padding:11px}.company-issuer-card{padding:12px}}
 </style>

@@ -764,12 +764,49 @@ final class DepoApp
         $v = $this->value('SELECT SettingValue FROM settings WHERE SettingKey=?',[$key]);
         return $v === false ? $default : json_decode((string)$v,true);
     }
-    private function branding(): array { return $this->setting('branding',['CompanyName'=>'Distribution ERP','Address'=>'','SoftwareName'=>'Distribution ERP','LogoDataUrl'=>'']); }
+    private function branding(): array
+    {
+        $stored = $this->setting('branding', ['CompanyName'=>'Distribution ERP','Address'=>'','SoftwareName'=>'Distribution ERP','LogoDataUrl'=>'']);
+        if (!is_array($stored)) $stored = [];
+        $mainName = trim((string) ($stored['MainCompanyName'] ?? $stored['CompanyName'] ?? 'Distribution ERP'));
+        $mainAddress = (string) ($stored['MainAddress'] ?? $stored['Address'] ?? '');
+        $mainLogo = (string) ($stored['MainLogoDataUrl'] ?? $stored['LogoDataUrl'] ?? '');
+        $depotName = trim((string) ($stored['DepotCompanyName'] ?? ''));
+        $depotAddress = (string) ($stored['DepotAddress'] ?? '');
+        $depotLogo = (string) ($stored['DepotLogoDataUrl'] ?? '');
+        $issuer = strtoupper((string) ($stored['InvoiceCompanyType'] ?? 'MAIN')) === 'DEPOT' && $depotName !== '' ? 'DEPOT' : 'MAIN';
+        return array_merge($stored, [
+            'InvoiceCompanyType'=>$issuer,
+            'MainCompanyName'=>$mainName,'MainAddress'=>$mainAddress,'MainLogoDataUrl'=>$mainLogo,
+            'DepotCompanyName'=>$depotName,'DepotAddress'=>$depotAddress,'DepotLogoDataUrl'=>$depotLogo,
+            'CompanyName'=>$issuer === 'DEPOT' ? $depotName : $mainName,
+            'Address'=>$issuer === 'DEPOT' ? $depotAddress : $mainAddress,
+            'LogoDataUrl'=>$issuer === 'DEPOT' ? $depotLogo : $mainLogo,
+            'SoftwareName'=>(string) ($stored['SoftwareName'] ?? 'Distribution ERP'),
+        ]);
+    }
     private function saveBranding(array $input): array
     {
-        $this->user(true); $current=$this->branding(); $out=[]; foreach(['CompanyName','Address','SoftwareName','LogoDataUrl'] as $key) $out[$key]=$this->text($input[$key] ?? $current[$key] ?? '');
-        if (!$out['CompanyName'] || !$out['SoftwareName']) throw new InvalidArgumentException('Company Name and Software Name are required.');
-        if ($out['LogoDataUrl'] && (!preg_match('#^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/=\s]+$#i',$out['LogoDataUrl']) || strlen($out['LogoDataUrl']) > 48000)) throw new InvalidArgumentException('Logo must be a small PNG, JPG, or WebP image.');
+        $this->user(true); $current=$this->branding();
+        $issuer=strtoupper($this->text($input['InvoiceCompanyType'] ?? $current['InvoiceCompanyType']));
+        if (!in_array($issuer,['MAIN','DEPOT'],true)) throw new InvalidArgumentException('Select Main Company or Depot Management Company as the invoice issuer.');
+        $out=[
+            'MainCompanyName'=>$this->text($input['MainCompanyName'] ?? $current['MainCompanyName']),
+            'MainAddress'=>$this->text($input['MainAddress'] ?? $current['MainAddress']),
+            'MainLogoDataUrl'=>$this->text($input['MainLogoDataUrl'] ?? $current['MainLogoDataUrl']),
+            'DepotCompanyName'=>$this->text($input['DepotCompanyName'] ?? $current['DepotCompanyName']),
+            'DepotAddress'=>$this->text($input['DepotAddress'] ?? $current['DepotAddress']),
+            'DepotLogoDataUrl'=>$this->text($input['DepotLogoDataUrl'] ?? $current['DepotLogoDataUrl']),
+            'InvoiceCompanyType'=>$issuer,
+            'SoftwareName'=>$this->text($input['SoftwareName'] ?? $current['SoftwareName']),
+        ];
+        $issuerName=$issuer==='DEPOT'?$out['DepotCompanyName']:$out['MainCompanyName'];
+        $issuerAddress=$issuer==='DEPOT'?$out['DepotAddress']:$out['MainAddress'];
+        if (!$issuerName || !$issuerAddress || !$out['SoftwareName']) throw new InvalidArgumentException('Enter the selected invoice company name, address, and Software Name.');
+        foreach(['MainLogoDataUrl','DepotLogoDataUrl'] as $logoKey) if ($out[$logoKey] && (!preg_match('#^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/=\s]+$#i',$out[$logoKey]) || strlen($out[$logoKey]) > 48000)) throw new InvalidArgumentException('Each company logo must be a small PNG, JPG, or WebP image.');
+        $out['CompanyName']=$issuerName;
+        $out['Address']=$issuer==='DEPOT'?$out['DepotAddress']:$out['MainAddress'];
+        $out['LogoDataUrl']=$issuer==='DEPOT'?$out['DepotLogoDataUrl']:$out['MainLogoDataUrl'];
         $sql='INSERT INTO settings (SettingKey,SettingValue,UpdatedAt,UpdatedBy) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE SettingValue=VALUES(SettingValue),UpdatedAt=VALUES(UpdatedAt),UpdatedBy=VALUES(UpdatedBy)';
         $this->db->prepare($sql)->execute(['branding',json_encode($out,JSON_UNESCAPED_UNICODE),$this->now(),$this->current()]); $this->audit('UPDATE','Settings','branding','Company branding updated.'); return $out;
     }
