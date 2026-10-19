@@ -157,6 +157,13 @@ trait Accounting
     {
         $this->user();$this->ensureAccounting();$from=$from?:date('Y-m-01');$to=$to?:date('Y-m-d');AccountingRules::date($from);AccountingRules::date($to);$q=$this->db->prepare('SELECT * FROM AccountingVouchers WHERE VoucherDate BETWEEN ? AND ? ORDER BY VoucherDate DESC,VoucherID DESC');$q->execute([$from,$to]);return$q->fetchAll();
     }
+    private function accountingDaybook(string $from='',string $to=''):array
+    {
+        $this->user();$this->ensureAccounting();$from=$from?:date('Y-m-d');$to=$to?:date('Y-m-d');AccountingRules::date($from);AccountingRules::date($to);if($from>$to)throw new InvalidArgumentException('From date must be before To date.');
+        $query=$this->db->prepare('SELECT VoucherID,VoucherDate,VoucherType,SourceType,SourceID,SourceNo,PartyType,PartyID,Narration,TotalDebit,TotalCredit FROM AccountingVouchers WHERE Status="POSTED" AND VoucherDate BETWEEN ? AND ? ORDER BY VoucherDate DESC,VoucherID DESC');$query->execute([$from,$to]);$rows=$query->fetchAll();
+        foreach($rows as&$row){$row['TotalDebit']=(float)$row['TotalDebit'];$row['TotalCredit']=(float)$row['TotalCredit'];}unset($row);
+        return['From'=>$from,'To'=>$to,'Rows'=>$rows,'TransactionCount'=>count($rows),'TotalDebit'=>round(array_sum(array_column($rows,'TotalDebit')),2),'TotalCredit'=>round(array_sum(array_column($rows,'TotalCredit')),2)];
+    }
     private function accountingDashboard(): array
     {
         $this->user();$this->ensureAccounting();$setup=$this->accountingSetting('finance',[]);$tb=$this->accountingTrialBalance(date('Y-m-d'));$vouchers=(int)$this->value('SELECT COUNT(*) FROM AccountingVouchers WHERE Status="POSTED"');$debit=(float)$this->value('SELECT COALESCE(SUM(TotalDebit),0) FROM AccountingVouchers WHERE Status="POSTED"');$credit=(float)$this->value('SELECT COALESCE(SUM(TotalCredit),0) FROM AccountingVouchers WHERE Status="POSTED"');return['Setup'=>$setup,'VoucherCount'=>$vouchers,'TotalDebit'=>$debit,'TotalCredit'=>$credit,'IsBalanced'=>abs($debit-$credit)<0.005,'TrialBalance'=>$tb];

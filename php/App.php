@@ -288,6 +288,7 @@ final class DepoApp
             'getChartOfAccounts' => $this->chartAccounts(),
             'saveChartAccount' => $this->saveChartAccount((array) ($args[0] ?? [])),
             'getAccountingVouchers' => $this->accountingVouchers((string) ($args[0] ?? ''), (string) ($args[1] ?? '')),
+            'getAccountingDaybook' => $this->accountingDaybook((string) ($args[0] ?? ''), (string) ($args[1] ?? '')),
             'getAccountingVoucher' => $this->accountingVoucher((string) ($args[0] ?? '')),
             'createAccountingVoucher' => $this->createAccountingVoucher((array) ($args[0] ?? [])),
             'reverseAccountingVoucher' => $this->reverseAccountingVoucher((string) ($args[0] ?? ''), (string) ($args[1] ?? '')),
