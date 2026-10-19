@@ -2119,8 +2119,22 @@
 .purchase-insight-table tbody tr:nth-child(even) td{background:#fbfdfc}
 .purchase-insight-table tbody tr:hover td{background:#f1f8f5}
 .purchase-insight-table td:first-child strong{padding:0;background:none}
+.purchase-insight-split-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;align-items:start}
+.purchase-insight-panel{min-width:0;padding:10px;border:1px solid #dcece6;border-radius:9px;background:#fff}
+.purchase-insight-panel h4{margin:0 0 9px;color:#145744;font-size:11px;font-weight:700;letter-spacing:.025em}
+.purchase-insight-panel .table-wrap{margin:0}
+.purchase-insight-panel .purchase-insight-table{width:100%;min-width:760px;table-layout:fixed}
+.purchase-insight-amount-panel .purchase-insight-table{min-width:620px}
+.purchase-insight-table th{text-align:center;vertical-align:middle}
+.purchase-insight-table th:first-child,.purchase-insight-table td:first-child{text-align:left}
+.purchase-insight-table td.purchase-insight-number,.purchase-insight-table td.purchase-insight-amount-cell{text-align:center;vertical-align:middle;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.purchase-insight-table td.purchase-insight-amount-cell{color:#145744}
+.purchase-insight-table td.purchase-insight-category{background:#f0f8f4;border-left:3px solid #008f69}
+.purchase-insight-table td.purchase-insight-category strong{display:block;color:#124d3d;font-size:11px;font-weight:700}
+.purchase-insight-table td.purchase-insight-category small{display:block;margin-top:3px;color:#668d83;font-size:10px;font-weight:400}
 .purchase-insight-filters~#purchase-history table{font-size:11px}
 .purchase-insight-filters~#purchase-history th{font-size:10px}
 .purchase-insight-filters~#purchase-history td{font-size:11px}
 .purchase-order-amount{display:inline-block;padding:3px 7px;border:1px solid #d3eadf;border-radius:6px;background:#f0f8f4;color:#145744;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media(max-width:1200px){.purchase-insight-split-grid{grid-template-columns:1fr}}
 </style>
