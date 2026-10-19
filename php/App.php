@@ -337,6 +337,7 @@ final class DepoApp
             'getPaymentMethods' => $this->paymentMethods((bool) ($args[0] ?? false)),
             'createProductCategory' => $this->createSetting('ProductCategories', 'CAT', 'CategoryID', 'CategoryName', (string) ($args[0] ?? ''), false),
             'createExpenseCategory' => $this->createSetting('ExpenseCategories', 'EXC', 'ExpenseCategoryID', 'CategoryName', (string) ($args[0] ?? '')),
+            'updateExpenseCategory' => $this->updateSetting('expenseCategory', (string) ($args[0] ?? ''), (array) ($args[1] ?? [])),
             'createPaymentMethod' => $this->createSetting('PaymentMethods', 'PMT', 'PaymentMethodID', 'MethodName', (string) ($args[0] ?? '')),
             'updateSettingItem' => $this->updateSetting((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (array) ($args[2] ?? [])),
             'getDashboardData' => $this->dashboard((string) ($args[0] ?? '')),
