@@ -1663,7 +1663,7 @@ private function postDeliveredSaleVoucher(array $sale): void
 
     private function createGoodsReceiptReturn(array $input): array
     {
-        $this->user(true);
+        $this->user();
         $grnId=$this->text($input['GRNID']??'');$grn=$this->one('GoodsReceipts','GRNID',$grnId);
         if(!$grn||$grn['Status']!=='POSTED')throw new RuntimeException('Only a posted Goods Receipt can be returned.');
         $date=$this->requiredDate($input['ReturnDate']??'','Return date');$reason=$this->text($input['Reason']??'');$requested=[];
