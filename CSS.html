@@ -661,7 +661,7 @@
 .user-register-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}
 .user-register-heading>input{width:min(300px,42%);min-height:38px;padding:8px 11px;border:1px solid #c8e1d9;border-radius:9px;background:#fff;color:#173b32}
 .user-register-card .table-wrap{border-radius:10px}
-.user-register-card table{min-width:780px}
+.user-register-card table{min-width:1120px}
 .user-list-identity{display:flex;align-items:center;gap:10px;min-width:180px}
 .user-list-photo{display:grid;width:38px;height:38px;flex:0 0 38px;place-items:center;overflow:hidden;border-radius:50%;object-fit:cover;background:#e1f3eb;color:#087454;font-size:12px;font-weight:700}
 .user-list-identity>span:last-child{display:flex;min-width:0;flex-direction:column;gap:3px}
@@ -2068,4 +2068,10 @@
 .product-category-manager table{min-width:500px}
 .settings-category-lists-single{grid-template-columns:minmax(0,1fr)}
 @media(max-width:700px){.product-config-category-form{grid-template-columns:1fr}.product-config-category-form button{width:100%}}
+.settings-hub-navigation{display:flex;gap:6px;max-width:1480px;margin:0 auto 16px;padding:5px;border:1px solid #d8ece5;border-radius:11px;background:#edf8f3}
+.settings-hub-tab{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:9px 15px;border:1px solid transparent;border-radius:8px;background:transparent;color:#397264;font-size:12px;font-weight:700;white-space:nowrap}
+.settings-hub-tab span{font-size:14px}
+.settings-hub-tab:hover{background:#fff;color:#087454}
+.settings-hub-tab.is-active{border-color:#cfe8df;background:#fff;color:#087454;box-shadow:0 2px 7px rgba(0,104,77,.08)}
+@media(max-width:560px){.settings-hub-navigation{gap:4px}.settings-hub-tab{flex:1;gap:6px;padding:8px 7px;font-size:11px}}
 </style>

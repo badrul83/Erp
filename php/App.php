@@ -671,7 +671,20 @@ final class DepoApp
         }
         return $photo;
     }
-    private function users(): array { $this->user(true); return array_map(fn(array $row) => $this->publicUser($row), $this->rows('Users')); }
+    private function users(): array
+    {
+        $this->user(true);
+        $query = $this->db->query('SELECT u.*,
+            (SELECT h.LoginAt FROM UserLoginHistory h WHERE h.UserID=u.UserID ORDER BY h.LoginAt DESC,h.LoginHistoryID DESC LIMIT 1) AS LastLoginAt,
+            (SELECT h.IPAddress FROM UserLoginHistory h WHERE h.UserID=u.UserID ORDER BY h.LoginAt DESC,h.LoginHistoryID DESC LIMIT 1) AS LastLoginIP
+            FROM Users u ORDER BY u.Name');
+        return array_map(function (array $row): array {
+            $user = $this->publicUser($row);
+            $user['LastLoginAt'] = $row['LastLoginAt'] ?? null;
+            $user['LastLoginIP'] = $row['LastLoginIP'] ?? null;
+            return $user;
+        }, $query->fetchAll());
+    }
     private function createUser(array $input): array
     {
         $this->user(true); $password = $this->text($input['Password'] ?? ''); $role = $this->normalizedRole($this->text($input['Role'] ?? 'STANDARD'));
