@@ -1412,7 +1412,7 @@ final class DepoApp
     }
 
     private function supplies():array{ $this->user();return array_map(function(array $row):array{$row['PaidAmount']=$this->supplyPaid($row['SupplyID']);$row['PaymentStatus']=$this->paymentStatus((float)$row['TotalAmount'],(float)$row['PaidAmount']);return$row;},$this->rows('CompanySupplies','Status<>?', ['ARCHIVED'])); }
-    private function supply(string $id):?array{foreach($this->supplies()as$row)if($row['SupplyID']===$id){$row['Items']=$this->rows('CompanySupplyItems','SupplyID=?',[$id]);$row['HasGoodsReceipts']=(bool)$this->value('SELECT COUNT(*) FROM GoodsReceipts WHERE SupplyID=?',[$id]);return$row;}return null;}
+    private function supply(string $id):?array{foreach($this->supplies()as$row)if($row['SupplyID']===$id){$row['Items']=$this->rows('CompanySupplyItems','SupplyID=?',[$id]);$row['HasGoodsReceipts']=(bool)$this->value('SELECT COUNT(*) FROM GoodsReceipts WHERE SupplyID=? AND Status IN ("DRAFT","POSTED")',[$id]);if(!$row['HasGoodsReceipts']&&in_array(strtoupper((string)$row['Status']),['PARTIALLY_RECEIVED','RECEIVED'],true))$row['Status']='CONFIRMED';return$row;}return null;}
     private function purchaseOrderRegister():array
     {
         $this->user();
@@ -1480,7 +1480,7 @@ final class DepoApp
     {
         $old=$this->supply($id);if(!$old)throw new RuntimeException('Purchase Order was not found.');
         if($old['Status']==='CANCELLED')throw new RuntimeException('A cancelled Purchase Order cannot be edited.');
-        $hasReceipts=!empty($old['HasGoodsReceipts'])||in_array($old['Status'],['PARTIALLY_RECEIVED','RECEIVED'],true);
+        $hasReceipts=!empty($old['HasGoodsReceipts']);
         $agreementId=$this->text($input['AgreementID']??$old['AgreementID']);
         if($hasReceipts){
             if($agreementId!==$old['AgreementID'])throw new RuntimeException('Supplier cannot be changed after a Goods Receipt has been created.');
@@ -1489,9 +1489,9 @@ final class DepoApp
         if(!in_array($old['Status'],['DRAFT','CONFIRMED'],true))throw new RuntimeException('This Purchase Order can no longer be edited.');
         $supplier=$this->agreement($agreementId);if(!$supplier||$supplier['Status']!=='APPROVED')throw new InvalidArgumentException('Select an approved Supplier.');
         $this->assertSupplyItems((array)($input['Items']??[]),$supplier['AgreementID']);$items=$this->inheritPromotionSnapshots($this->normalizeItems((array)($input['Items']??[]),'PURCHASE',(float)$supplier['CommissionRate']),(array)($old['Items']??[]));if(!$items)throw new InvalidArgumentException('Add at least one product.');
-        $this->db->beginTransaction();try{$total=array_sum(array_column($items,'LineTotal'));$this->update('CompanySupplies','SupplyID',$id,['AgreementID'=>$supplier['AgreementID'],'SupplyDate'=>$this->requiredDate($input['SupplyDate']??'','Purchase date'),'ReferenceNo'=>$this->text($input['ReferenceNo']??''),'TotalAmount'=>$total,'Notes'=>$this->text($input['Notes']??''),'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->writeSupplyItems($id,$items);$this->syncPurchasePricesToProductUnits($items);$this->audit('UPDATE','CompanySupplies',$id,'Purchase Order updated.');$this->db->commit();return$this->supply($id);}catch(Throwable$e){if($this->db->inTransaction())$this->db->rollBack();throw$e;}
+        $this->db->beginTransaction();try{$total=array_sum(array_column($items,'LineTotal'));$this->update('CompanySupplies','SupplyID',$id,['AgreementID'=>$supplier['AgreementID'],'SupplyDate'=>$this->requiredDate($input['SupplyDate']??'','Purchase date'),'ReferenceNo'=>$this->text($input['ReferenceNo']??''),'TotalAmount'=>$total,'Status'=>$old['Status'],'Notes'=>$this->text($input['Notes']??''),'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->writeSupplyItems($id,$items);$this->syncPurchasePricesToProductUnits($items);$this->audit('UPDATE','CompanySupplies',$id,'Purchase Order updated.');$this->db->commit();return$this->supply($id);}catch(Throwable$e){if($this->db->inTransaction())$this->db->rollBack();throw$e;}
     }
-    private function supplyStatus(string $id,string $status):array{$old=$this->supply($id);if(!$old)throw new RuntimeException('Purchase Order was not found.');if($status==='CONFIRMED'&&$old['Status']!=='DRAFT')throw new RuntimeException('Only a Draft Purchase Order can be confirmed.');if($status==='CANCELLED'&&$old['Status']!=='CONFIRMED')throw new RuntimeException('Only a Confirmed Purchase Order can be cancelled.');if($status==='CANCELLED'&&$this->value('SELECT COUNT(*) FROM GoodsReceipts WHERE SupplyID=?',[$id]))throw new RuntimeException('This Purchase Order has a Goods Receipt record and cannot be cancelled.');$this->update('CompanySupplies','SupplyID',$id,['Status'=>$status,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit($status,'CompanySupplies',$id,'Purchase Order status changed.');return$this->supply($id);}
+    private function supplyStatus(string $id,string $status):array{$old=$this->supply($id);if(!$old)throw new RuntimeException('Purchase Order was not found.');if($status==='CONFIRMED'&&$old['Status']!=='DRAFT')throw new RuntimeException('Only a Draft Purchase Order can be confirmed.');if($status==='CANCELLED'&&$old['Status']!=='CONFIRMED')throw new RuntimeException('Only a Confirmed Purchase Order can be cancelled.');if($status==='CANCELLED'&&(int)$this->value('SELECT COUNT(*) FROM GoodsReceipts WHERE SupplyID=? AND Status IN ("DRAFT","POSTED")',[$id])>0)throw new RuntimeException('This Purchase Order has an active Goods Receipt. Cancel or archive the GRN first.');$this->update('CompanySupplies','SupplyID',$id,['Status'=>$status,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit($status,'CompanySupplies',$id,'Purchase Order status changed.');return$this->supply($id);}
     private function purchaseProductPriority(string $mode,string $supplierId=''):array
     {
         $this->user();
