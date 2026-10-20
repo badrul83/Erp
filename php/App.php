@@ -1767,6 +1767,23 @@ private function postDeliveredSaleVoucher(array $sale): void
             'AgreementID'=>$p['AgreementID']??'',
         ],$dailyCollection);
 
+        $trendStart=(new DateTimeImmutable($date))->modify('-13 days')->format('Y-m-d');
+        $salesTrend=[];
+        $trendStartDate=new DateTimeImmutable($trendStart);
+        for($day=0;$day<14;$day++){$trendDate=$trendStartDate->modify('+'.$day.' days')->format('Y-m-d');$salesTrend[$trendDate]=['Date'=>$trendDate,'Amount'=>0.0,'Count'=>0];}
+        $topSalesByDealer=[];
+        foreach($sales as$sale){
+            if(($sale['Status']??'')!=='DELIVERED')continue;
+            $saleDate=(string)($sale['SaleDate']??'');
+            if(isset($salesTrend[$saleDate])){$salesTrend[$saleDate]['Amount']+=(float)$sale['TotalAmount'];$salesTrend[$saleDate]['Count']++;}
+            if(!isset($salesTrend[$saleDate])||strtoupper((string)($sale['CustomerType']??'DEALER'))!=='DEALER')continue;
+            $dealerKey=(string)($sale['DealerID']??'');if($dealerKey==='')continue;
+            if(!isset($topSalesByDealer[$dealerKey]))$topSalesByDealer[$dealerKey]=['DealerID'=>$dealerKey,'Dealer'=>$dealerName[$dealerKey]??$dealerKey,'SalesAmount'=>0.0,'OrderCount'=>0];
+            $topSalesByDealer[$dealerKey]['SalesAmount']+=(float)$sale['TotalAmount'];$topSalesByDealer[$dealerKey]['OrderCount']++;
+        }
+        $topSalesByDealer=array_values($topSalesByDealer);
+        usort($topSalesByDealer,fn($a,$b)=>$b['SalesAmount']<=>$a['SalesAmount']);
+
         return[
             'activeAgreements'=>count($approved),
             'securityDeposit'=>array_sum(array_map(fn($a)=>(float)$a['SecurityDeposit'],$approved)),
@@ -1787,6 +1804,8 @@ private function postDeliveredSaleVoucher(array $sale): void
             'dailyCollectionCount'=>count($dailyCollection),
             'dailyCollectionAmount'=>array_sum(array_map(fn($p)=>(float)$p['Amount'],$dailyCollection)),
             'dailyCollectionRows'=>$dailyCollectionRows,
+            'salesTrend'=>array_values($salesTrend),
+            'topSales'=>array_slice($topSalesByDealer,0,4),
             'supplierList'=>$supplierList,
             'dealerList'=>array_values(array_map(fn($d)=>['DealerID'=>$d['DealerID'],'Dealer'=>$d['DealerName'],'Address'=>$d['Address'],'Status'=>$d['Status']],array_filter($dealers,fn($d)=>in_array($d['Status'],['ACTIVE','APPROVED'],true)))),
             'supplierDues'=>$supplierDues,
