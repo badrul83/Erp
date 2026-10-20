@@ -68,3 +68,19 @@ CREATE TABLE IF NOT EXISTS AccountingVoucherLines (
   UNIQUE KEY voucher_line_number (VoucherID, LineNo),
   INDEX (AccountID), INDEX (PartyType, PartyID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS DealerCashDeposits (
+  DepositID VARCHAR(20) PRIMARY KEY,
+  DealerID VARCHAR(20) NOT NULL,
+  DepositDate DATE NOT NULL,
+  AccountID VARCHAR(20) NOT NULL,
+  BankDetails VARCHAR(180) NULL,
+  Amount DECIMAL(16,2) NOT NULL,
+  ReferenceNo VARCHAR(160) NULL,
+  Notes VARCHAR(1000) NULL,
+  VoucherID VARCHAR(20) NOT NULL UNIQUE,
+  CreatedAt DATETIME NOT NULL,
+  CreatedBy VARCHAR(120) NOT NULL,
+  INDEX dealer_deposit_date (DealerID, DepositDate),
+  INDEX dealer_deposit_account (AccountID)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

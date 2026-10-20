@@ -296,6 +296,8 @@ final class DepoApp
             'getAccountingAccountLedger' => $this->accountingAccountLedger((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (string) ($args[2] ?? '')),
             'getAccountingPartyLedger' => $this->accountingPartyLedger((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (string) ($args[2] ?? ''), (string) ($args[3] ?? '')),
             'getSupplierPayableLedger' => $this->supplierPayableLedger((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (string) ($args[2] ?? '')),
+            'getDealerCashDeposits' => $this->dealerCashDeposits((array) ($args[0] ?? [])),
+            'createDealerCashDeposit' => $this->createDealerCashDeposit((array) ($args[0] ?? [])),
             'getEasyAccountSetup' => $this->easyAccountSetup(),
             'getEasyAccountsDashboard' => $this->easyAccountsDashboard((array) ($args[0] ?? [])),
             'getEasyAccountEntry' => $this->easyEntry((string) ($args[0] ?? '')),
@@ -1814,5 +1816,5 @@ private function postDeliveredSaleVoucher(array $sale): void
             'inventory'=>$inventory,
         ];
     }
-    private function report(string $name,array $filters):array{$rows=match($name){'agreements'=>$this->agreements(),'supplies'=>$this->supplies(),'stock'=>$this->inventory(),'sales'=>$this->sales(),'returns'=>$this->returns(),'payments'=>$this->rows('Payments'),'expenses'=>$this->rows('Expenses'),default=>throw new InvalidArgumentException('Unknown report.')};if($this->text($filters['AgreementID']??''))$rows=array_values(array_filter($rows,fn($r)=>($r['AgreementID']??'')===$filters['AgreementID']));return['rows'=>$rows,'count'=>count($rows)];}
+    private function report(string $name,array $filters):array{$rows=match($name){'agreements'=>$this->agreements(),'supplies'=>$this->supplies(),'stock'=>$this->inventory(),'sales'=>$this->sales(),'returns'=>$this->returns(),'payments'=>$this->rows('Payments'),'expenses'=>$this->rows('Expenses'),'dealers'=>$this->dealers(),'dealer-deposits'=>$this->dealerCashDeposits($filters)['rows'],default=>throw new InvalidArgumentException('Unknown report.')};if($this->text($filters['AgreementID']??''))$rows=array_values(array_filter($rows,fn($r)=>($r['AgreementID']??'')===$filters['AgreementID']));return['rows'=>$rows,'count'=>count($rows)];}
 }

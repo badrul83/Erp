@@ -20,6 +20,7 @@ trait Accounting
         if (!$this->value('SELECT COUNT(*) FROM AccountingSettings WHERE SettingKey="finance"')) {
             $this->saveAccountingSetting('finance', ['FinancialYearStartMonth'=>7,'Currency'=>'BDT','CostMethod'=>'WEIGHTED_AVERAGE','VatRegistered'=>false,'DefaultVatRate'=>0,'AccountingStartDate'=>'','IntegrationMode'=>'SETUP']);
         }
+        $this->db->exec('CREATE TABLE IF NOT EXISTS DealerCashDeposits (DepositID VARCHAR(20) PRIMARY KEY, DealerID VARCHAR(20) NOT NULL, DepositDate DATE NOT NULL, AccountID VARCHAR(20) NOT NULL, BankDetails VARCHAR(180) NULL, Amount DECIMAL(16,2) NOT NULL, ReferenceNo VARCHAR(160) NULL, Notes VARCHAR(1000) NULL, VoucherID VARCHAR(20) NOT NULL UNIQUE, CreatedAt DATETIME NOT NULL, CreatedBy VARCHAR(120) NOT NULL, INDEX (DealerID, DepositDate), INDEX (AccountID)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
     }
 
     private function accountingTemplate(): array
@@ -100,6 +101,38 @@ trait Accounting
     {
         $this->user();$this->ensureAccounting();$row=$this->one('AccountingVouchers','VoucherID',$id);if(!$row)return null;
         $row['Lines']=$this->rows('AccountingVoucherLines','VoucherID=? ORDER BY LineNo',[$id]);return$row;
+    }
+    private function dealerCashDeposits(array $filters=[]): array
+    {
+        $this->user();$this->ensureAccounting();
+        $from=$this->text($filters['From']??'');$to=$this->text($filters['To']??'');$dealerId=$this->text($filters['DealerID']??'');
+        if($from)AccountingRules::date($from);if($to)AccountingRules::date($to);if($from&&$to&&$from>$to)throw new InvalidArgumentException('From date must be before To date.');
+        $where=['v.Status="POSTED"'];$params=[];if($from){$where[]='d.DepositDate>=?';$params[]=$from;}if($to){$where[]='d.DepositDate<=?';$params[]=$to;}if($dealerId){$where[]='d.DealerID=?';$params[]=$dealerId;}
+        $query=$this->db->prepare('SELECT d.DepositID,d.DepositDate,d.DealerID,dr.DealerName,dr.DealerCode,d.AccountID,a.AccountName BankName,d.BankDetails,d.Amount,d.ReferenceNo,d.Notes,d.VoucherID,v.SourceNo VoucherNo,CASE WHEN EXISTS (SELECT 1 FROM AccountingVouchers rv WHERE rv.ReversalOf=v.VoucherID AND rv.Status="POSTED") THEN "REVERSED" ELSE "POSTED" END Status,d.CreatedAt,d.CreatedBy FROM DealerCashDeposits d JOIN Dealers dr ON dr.DealerID=d.DealerID JOIN ChartOfAccounts a ON a.AccountID=d.AccountID JOIN AccountingVouchers v ON v.VoucherID=d.VoucherID WHERE '.implode(' AND ',$where).' ORDER BY d.DepositDate DESC,d.DepositID DESC');
+        $query->execute($params);$rows=$query->fetchAll();foreach($rows as&$row)$row['Amount']=(float)$row['Amount'];unset($row);
+        $active=array_values(array_filter($rows,static fn($row)=>$row['Status']==='POSTED'));
+        return ['rows'=>$rows,'count'=>count($rows),'total'=>round(array_sum(array_column($active,'Amount')),2)];
+    }
+    private function createDealerCashDeposit(array $input): array
+    {
+        $this->user(true);$this->ensureAccounting();$dealerId=$this->text($input['DealerID']??'');$dealer=$this->dealer($dealerId);
+        if(!$dealer||!in_array($dealer['Status'],['APPROVED','ACTIVE'],true))throw new InvalidArgumentException('Select an approved or active registered dealer.');
+        $date=AccountingRules::date($input['DepositDate']??'');$this->accountingOpenPeriod($date);$accountId=AccountingRules::accountCode($input['AccountID']??'');$account=$this->one('ChartOfAccounts','AccountID',$accountId);
+        if(!$account||$account['Status']!=='ACTIVE'||$account['AccountType']!=='ASSET'||(int)$account['IsControl']===1||$account['AccountGroup']!=='Current Assets')throw new InvalidArgumentException('Select an active cash, bank, or mobile financial service asset head.');
+        $receivable=$this->one('ChartOfAccounts','AccountID','1100');if(!$receivable||$receivable['Status']!=='ACTIVE'||$receivable['AccountType']!=='ASSET'||(int)$receivable['IsControl']!==1)throw new RuntimeException('The active dealer receivable control account (1100) is required before posting deposits.');
+        $amount=AccountingRules::amount($input['Amount']??0,'Deposit amount',false);$bankDetails=substr($this->text($input['BankDetails']??''),0,180);$reference=substr($this->text($input['ReferenceNo']??''),0,160);$notes=substr($this->text($input['Notes']??''),0,1000);
+        $id=$this->id('DealerCashDeposits','DepositID','DDP');$voucherId=$this->id('AccountingVouchers','VoucherID','VCH');$now=$this->now();$sourceNo=$reference?:$id;
+        $lines=AccountingRules::lines([
+            ['AccountID'=>$accountId,'Debit'=>$amount,'Credit'=>0,'PartyType'=>'','PartyID'=>'','ReferenceNo'=>$reference,'Narration'=>'Dealer cash deposit received through '.$account['AccountName']],
+            ['AccountID'=>'1100','Debit'=>0,'Credit'=>$amount,'PartyType'=>'DEALER','PartyID'=>$dealerId,'ReferenceNo'=>$reference,'Narration'=>'Dealer balance adjusted for cash deposit '.$id],
+        ]);
+        $this->db->beginTransaction();try{
+            $this->insert('AccountingVouchers',['VoucherID'=>$voucherId,'VoucherDate'=>$date,'VoucherType'=>'RV','Status'=>'POSTED','SourceType'=>'DEALER_DEPOSIT','SourceID'=>$id,'SourceNo'=>$sourceNo,'PartyType'=>'DEALER','PartyID'=>$dealerId,'Narration'=>'Dealer cash deposit · '.$dealer['DealerName'],'TotalDebit'=>$lines['TotalDebit'],'TotalCredit'=>$lines['TotalCredit'],'ReversalOf'=>null,'CreatedAt'=>$now,'CreatedBy'=>$this->current(),'PostedAt'=>$now,'PostedBy'=>$this->current()]);
+            foreach($lines['Lines']as$number=>$line)$this->insert('AccountingVoucherLines',['VoucherLineID'=>$this->id('AccountingVoucherLines','VoucherLineID','VLI'),'VoucherID'=>$voucherId,'LineNo'=>$number+1]+$line+['CreatedAt'=>$now,'CreatedBy'=>$this->current()]);
+            $this->insert('DealerCashDeposits',['DepositID'=>$id,'DealerID'=>$dealerId,'DepositDate'=>$date,'AccountID'=>$accountId,'BankDetails'=>$bankDetails?:null,'Amount'=>$amount,'ReferenceNo'=>$reference?:null,'Notes'=>$notes?:null,'VoucherID'=>$voucherId,'CreatedAt'=>$now,'CreatedBy'=>$this->current()]);
+            $this->audit('POST','DealerCashDeposits',$id,'Dealer cash deposit posted to '.$account['AccountName'].' and applied against dealer receivable.');$this->db->commit();
+        }catch(Throwable$error){if($this->db->inTransaction())$this->db->rollBack();throw$error;}
+        return $this->dealerCashDeposits(['From'=>$date,'To'=>$date,'DealerID'=>$dealerId])['rows'][0]??[];
     }
     private function createAccountingVoucher(array $input): array
     {
