@@ -222,7 +222,9 @@ final class DepoApp
             'archiveRecordWithReversals' => $this->archiveRecordWithReversals((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (array) ($args[2] ?? []), (string) ($args[3] ?? '')),
             'restoreRecord' => $this->restoreRecord((string) ($args[0] ?? '')),
             'restoreProduct' => $this->restoreProduct((string) ($args[0] ?? '')),
+            'archiveProduct' => $this->archiveProduct((string) ($args[0] ?? ''), (string) ($args[1] ?? '')),
             'permanentlyDeleteProduct' => $this->permanentlyDeleteProduct((string) ($args[0] ?? ''), (string) ($args[1] ?? '')),
+            'getProductPurchaseHistory' => $this->getProductPurchaseHistory((string) ($args[0] ?? '')),
             'getRecordChangeHistory' => $this->getRecordChangeHistory((string) ($args[0] ?? ''), (string) ($args[1] ?? '')),
             'updateBrandingSettings' => $this->saveBranding((array) ($args[0] ?? [])),
             'getUsers' => $this->users(),
@@ -507,7 +509,7 @@ final class DepoApp
     private function adminDeleteImpact(string $table,string $id,bool $includeRefs=true):array
     {
         $this->user(true);$table=trim($table);$id=$this->text($id);$keys=$this->lifecycleTables();if(!in_array($table,['DealerSales','CompanySupplies','GoodsReceipts','Products'],true)||!isset($keys[$table])||$id==='')throw new InvalidArgumentException('Select a supported Inventory, Sales, Purchase Order or GRN record.');$record=$this->one($table,$keys[$table],$id);if(!$record||strtoupper((string)$record['Status'])==='ARCHIVED')throw new RuntimeException('Active record was not found.');if($table==='GoodsReceipts'&&(int)$this->value('SELECT COUNT(DISTINCT r.ReturnID) FROM ProductReturns r JOIN ProductReturnItems i ON i.ReturnID=r.ReturnID JOIN GoodsReceiptItems g ON g.GRNItemID=i.SourceGRNItemID WHERE g.GRNID=? AND r.Status="POSTED"',[$id])>0)throw new RuntimeException('This GRN has posted supplier returns. Reverse or archive those returns before archiving the receipt.');$groups=[];$refs=['Stock'=>[],'Vouchers'=>[],'Payments'=>[],'EasyEntries'=>[]];$add=function($key,$label,$count,$amount,$quantity=0,$note='')use(&$groups){if($count>0)$groups[]=['Key'=>$key,'Label'=>$label,'Count'=>(int)$count,'Amount'=>round((float)$amount,2),'Quantity'=>round((float)$quantity,4),'Note'=>$note];};
-        if($table==='Products'){$linked=(int)$this->value('SELECT COUNT(*) FROM DealerSaleItems WHERE ProductID=?',[$id])+(int)$this->value('SELECT COUNT(*) FROM CompanySupplyItems WHERE ProductID=?',[$id])+(int)$this->value('SELECT COUNT(*) FROM GoodsReceiptItems WHERE ProductID=?',[$id])+(int)$this->value('SELECT COUNT(*) FROM ProductReturnItems WHERE ProductID=?',[$id]);$stock=(float)$this->value('SELECT COALESCE(SUM(BaseQuantityIn-BaseQuantityOut),0) FROM StockLedger WHERE ProductID=?',[$id]);if($linked||abs($stock)>0.000001)throw new RuntimeException('Product still has transaction or stock history. First correct the source documents and bring its stock to zero.');$add('record','Product and configured units',1+(int)$this->value('SELECT COUNT(*) FROM ProductUnits WHERE ProductID=?',[$id]),0);}
+        if($table==='Products'){$add('record','Product and configured units',1+(int)$this->value('SELECT COUNT(*) FROM ProductUnits WHERE ProductID=?',[$id]),0);}
         if($table==='DealerSales'){$returns=$this->rows('ProductReturns','SaleID=?',[$id]);$returnIds=array_column($returns,'ReturnID');$stock=$this->rows('StockLedger','TransactionType="DEALER_SALE" AND ReferenceID=?',[$id]);foreach($stock as$row)$refs['Stock'][]=$row;foreach($returnIds as$returnId)foreach($this->rows('StockLedger','ReferenceID=? AND TransactionType="SALE_RETURN"',[$returnId])as$row)$refs['Stock'][]=$row;$payments=$this->rows('Payments','SaleID=? AND Status="POSTED"',[$id]);foreach($payments as$payment)$refs['Payments'][]=$payment;$accountVouchers=$this->rows('AccountingVouchers','SourceType="DEALER_SALE" AND SourceID=? AND Status="POSTED"',[$id]);foreach($accountVouchers as$voucher)$refs['Vouchers'][]=$voucher;$refs['EasyEntries']=$this->linkedEasyEntries($payments);$add('record','Invoice and sale lines',1+(int)$this->value('SELECT COUNT(*) FROM DealerSaleItems WHERE SaleID=?',[$id]),$record['TotalAmount']);$add('payments','Posted customer payments',count($payments),array_sum(array_column($payments,'Amount')));$add('stock','Sale and linked return stock movements',count($refs['Stock']),array_sum(array_map(fn($r)=>(float)$r['BaseQuantityOut']*(float)$r['UnitCost'], $refs['Stock'])),array_sum(array_map(fn($r)=>(float)$r['BaseQuantityOut']-(float)$r['BaseQuantityIn'],$refs['Stock'])));$add('returns','Linked return documents',count($returns),array_sum(array_column($returns,'TotalAmount')));$add('vouchers','Sale vouchers',count($accountVouchers),array_sum(array_column($accountVouchers,'TotalDebit')));$add('easy','Payment accounting entries',count($refs['EasyEntries']),array_sum(array_column($refs['EasyEntries'],'Amount')));}
         if($table==='CompanySupplies'){$receipts=$this->rows('GoodsReceipts','SupplyID=? AND Status="POSTED"',[$id]);foreach($receipts as$receipt)foreach($this->rows('StockLedger','TransactionType="GOODS_RECEIPT" AND ReferenceID LIKE ?',[$receipt['GRNID'].':%'])as$row)$refs['Stock'][]=$row;$payments=$this->rows('Payments','SupplyID=? AND Status="POSTED"',[$id]);foreach($payments as$payment)$refs['Payments'][]=$payment;$refs['EasyEntries']=$this->linkedEasyEntries($payments);$add('record','Purchase order and lines',1+(int)$this->value('SELECT COUNT(*) FROM CompanySupplyItems WHERE SupplyID=?',[$id]),$record['TotalAmount']);$add('receipts','Posted goods receipts',count($receipts),array_sum(array_map(fn($r)=>(float)$this->value('SELECT COALESCE(SUM(BaseAcceptedQuantity*UnitCost),0) FROM GoodsReceiptItems WHERE GRNID=?',[$r['GRNID']]),$receipts)));$add('payments','Posted supplier payments',count($payments),array_sum(array_column($payments,'Amount')));$add('stock','Receipt stock movements',count($refs['Stock']),array_sum(array_map(fn($r)=>(float)$r['BaseQuantityIn']*(float)$r['UnitCost'],$refs['Stock'])),array_sum(array_column($refs['Stock'],'BaseQuantityIn')));$add('easy','Payment accounting entries',count($refs['EasyEntries']),array_sum(array_column($refs['EasyEntries'],'Amount')));}
         if($table==='GoodsReceipts'){$refs['Stock']=$this->rows('StockLedger','TransactionType="GOODS_RECEIPT" AND ReferenceID LIKE ?',[$id.':%']);$items=$this->rows('GoodsReceiptItems','GRNID=?',[$id]);$lineNotes=[];foreach($items as$item){$product=$this->product((string)$item['ProductID']);$lineNotes[]=($product['ProductName']??$item['ProductID']).' × '.(float)$item['AcceptedQuantity'].' '.(string)$item['UnitName'];}$add('record','GRN '.$id.' header and all receipt lines',1+count($items),(float)$this->value('SELECT COALESCE(SUM(BaseAcceptedQuantity*UnitCost),0) FROM GoodsReceiptItems WHERE GRNID=?',[$id]),0,implode(' · ',$lineNotes));$add('stock','Receipt stock movements',count($refs['Stock']),array_sum(array_map(fn($r)=>(float)$r['BaseQuantityIn']*(float)$r['UnitCost'],$refs['Stock'])),array_sum(array_column($refs['Stock'],'BaseQuantityIn')));}
@@ -568,6 +570,17 @@ final class DepoApp
     private function restoreProduct(string $id): array
     {
         $this->user(true);$product=$this->one('Products','ProductID',$id);if(!$product||strtoupper((string)$product['Status'])!=='ARCHIVED')throw new RuntimeException('Archived product was not found.');$this->restoreLatestRecord('Products',$id);return$this->product($id)??throw new RuntimeException('Product was restored but could not be loaded.');
+    }
+
+    private function archiveProduct(string $id,string $reason=''):array
+    {
+        $this->user(true);$id=$this->text($id);$this->db->beginTransaction();try{$statement=$this->db->prepare('SELECT * FROM Products WHERE ProductID=? FOR UPDATE');$statement->execute([$id]);$product=$statement->fetch();if(!$product)throw new RuntimeException('Product was not found.');if(strtoupper((string)$product['Status'])==='ARCHIVED')throw new RuntimeException('Product is already archived.');$previous=(string)$product['Status'];$this->update('Products','ProductID',$id,['Status'=>'ARCHIVED','UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$note=$this->text($reason)?:'Product archived by Administrator; linked purchase, stock and sales history was retained.';$this->db->prepare('INSERT INTO ArchivedRecords (TableName,RecordID,PreviousStatus,ArchivedAt,ArchivedBy,Reason) VALUES (?,?,?,?,?,?)')->execute(['Products',$id,$previous,$this->now(),$this->current(),$note]);$this->audit('ARCHIVE','Products',$id,$note);$this->db->commit();return['ProductID'=>$id,'ProductName'=>$product['ProductName'],'Status'=>'ARCHIVED'];}catch(Throwable$e){if($this->db->inTransaction())$this->db->rollBack();throw$e;}
+    }
+
+    private function getProductPurchaseHistory(string $id):array
+    {
+        $this->user(true);$product=$this->one('Products','ProductID',$this->text($id));if(!$product)throw new RuntimeException('Product was not found.');
+        $sql='SELECT s.SupplyID,s.SupplyDate,s.Status AS PurchaseStatus,s.ReferenceNo,s.TotalAmount AS PurchaseTotal,a.Company AS SupplierName,i.SupplyItemID,i.Variant,i.UnitName,i.Quantity,i.BaseQuantity,i.UnitPrice,i.LineTotal,COALESCE((SELECT SUM(g.AcceptedQuantity) FROM GoodsReceiptItems g JOIN GoodsReceipts r ON r.GRNID=g.GRNID WHERE g.SupplyItemID=i.SupplyItemID AND r.Status="POSTED"),0) AS ReceivedQuantity FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID LEFT JOIN Agreements a ON a.AgreementID=s.AgreementID WHERE i.ProductID=? ORDER BY s.SupplyDate DESC,s.SupplyID DESC';$statement=$this->db->prepare($sql);$statement->execute([$product['ProductID']]);return['ProductID'=>$product['ProductID'],'ProductName'=>$product['ProductName'],'SKU'=>$product['SKU'],'Purchases'=>$statement->fetchAll()];
     }
 
     private function permanentlyDeleteProduct(string $id,string $confirmation): array
@@ -1143,40 +1156,6 @@ final class DepoApp
         return (string) $category;
     }
 
-    private function assertUniqueProductConfiguration(string $name, string $excludeId = ''): void
-    {
-        $normalize = static function (string $value): string {
-            $value = preg_replace('/\s+/', ' ', trim($value)) ?? trim($value);
-            return function_exists('mb_strtolower') ? mb_strtolower($value, 'UTF-8') : strtolower($value);
-        };
-        $key = $normalize($name);
-        foreach ($this->rows('Products') as $existing) {
-            if ((string) ($existing['ProductID'] ?? '') === $excludeId) continue;
-            $existingKey = $normalize((string) ($existing['ProductName'] ?? ''));
-            if ($existingKey === $key) throw new InvalidArgumentException('A product with this name is already configured. SKU and supplier do not allow duplicate product names. Edit the existing product instead of creating a duplicate.');
-        }
-    }
-    private function productConfigurationLockName(string $name): string
-    {
-        $normalize = static function (string $value): string {
-            $value = preg_replace('/\\s+/', ' ', trim($value)) ?? trim($value);
-            return function_exists('mb_strtolower') ? mb_strtolower($value, 'UTF-8') : strtolower($value);
-        };
-        return 'product-config:' . sha1($normalize($name));
-    }
-    private function acquireProductConfigurationLock(string $name): string
-    {
-        $lockName = $this->productConfigurationLockName($name);
-        $statement = $this->db->prepare('SELECT GET_LOCK(?, 10)');
-        $statement->execute([$lockName]);
-        if ((int)$statement->fetchColumn() !== 1) throw new RuntimeException('This product is being configured by another request. Please try saving again.');
-        return $lockName;
-    }
-    private function releaseProductConfigurationLock(string $lockName): void
-    {
-        $statement = $this->db->prepare('SELECT RELEASE_LOCK(?)');
-        $statement->execute([$lockName]);
-    }
     private function productConfigurationRegister(): array
     {
         $this->user(); $out=[];
@@ -1186,7 +1165,9 @@ final class DepoApp
             $optionType=strtoupper((string)($product['OptionType']??'VARIANT'));
             $options=$this->variants($product)?:[''];
             foreach ($options as $option) {
-                $out[]=['ProductID'=>$product['ProductID'],'SKU'=>$this->sku((string)($supplier['Company']??'SUP'),(string)$product['ProductName'],$option,(string)$product['ProductID']),'SupplierID'=>$product['SupplierID'],'SupplierName'=>$supplier['Company']??'','ProductName'=>$product['ProductName'],'ProductImageDataUrl'=>$product['ProductImageDataUrl']??'','Category'=>$product['Category']??'','OptionType'=>$optionType,'PromotionType'=>$product['PromotionType']??'NON_CP','PromotionGifts'=>$product['PromotionGifts']??'[]','Variant'=>$option,'PackagingSize'=>$optionType==='PACKAGING'?$option:'','PackageConversionToBase'=>$optionType==='PACKAGING'?($this->packVariantToBase($product,$option)??0):0,'BaseUnit'=>$product['BaseUnit']??$product['UnitOfMeasure']??'','UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'Status'=>$product['Status']];
+                $purchaseOrders=(int)$this->value('SELECT COUNT(DISTINCT s.SupplyID) FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID WHERE i.ProductID=? AND s.Status<>"ARCHIVED"',[$product['ProductID']]);
+                $purchaseLines=(int)$this->value('SELECT COUNT(*) FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID WHERE i.ProductID=? AND s.Status<>"ARCHIVED"',[$product['ProductID']]);
+                $out[]=['ProductID'=>$product['ProductID'],'SKU'=>$this->sku((string)($supplier['Company']??'SUP'),(string)$product['ProductName'],$option,(string)$product['ProductID']),'SupplierID'=>$product['SupplierID'],'SupplierName'=>$supplier['Company']??'','ProductName'=>$product['ProductName'],'ProductImageDataUrl'=>$product['ProductImageDataUrl']??'','Category'=>$product['Category']??'','OptionType'=>$optionType,'PromotionType'=>$product['PromotionType']??'NON_CP','PromotionGifts'=>$product['PromotionGifts']??'[]','Variant'=>$option,'PackagingSize'=>$optionType==='PACKAGING'?$option:'','PackageConversionToBase'=>$optionType==='PACKAGING'?($this->packVariantToBase($product,$option)??0):0,'BaseUnit'=>$product['BaseUnit']??$product['UnitOfMeasure']??'','UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'PurchaseOrderCount'=>$purchaseOrders,'PurchaseLineCount'=>$purchaseLines,'Status'=>$product['Status']];
             }
         }
         return $out;
@@ -1212,15 +1193,12 @@ final class DepoApp
         $hasBase=false;foreach($units as $unit)if(strcasecmp($this->text($unit['UnitName']??''),$base)===0)$hasBase=true;
         if(!$hasBase)array_unshift($units,['UnitName'=>$base,'ConversionToBase'=>1,'PurchaseAllowed'=>true,'SaleAllowed'=>true,'UnitPrice'=>0,'PurchasePrice'=>0,'SalePrice'=>0]);
         $units=$this->packagingUnits($base,$variants,$units,$optionType);
-        $lockName=$this->acquireProductConfigurationLock($name);
-        try{$this->db->beginTransaction();
+        $this->db->beginTransaction();
         try{
-            $this->assertUniqueProductConfiguration($name);
             $id=$this->id('Products','ProductID','PRD');$now=$this->now();$sku=$this->sku($supplier['Company'],$name,'',$id);
             $this->insert('Products',['ProductID'=>$id,'SKU'=>$sku,'ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'BaseUnit'=>$base,'Status'=>'ACTIVE','CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR','Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID']]);
             $this->writeUnits($id,$units);$this->audit('CREATE','Products',$id,'Product created.');$this->db->commit();return $this->product($id);
         }catch(Throwable $e){if($this->db->inTransaction())$this->db->rollBack();throw $e;}
-        }finally{$this->releaseProductConfigurationLock($lockName);}
     }
     private function sku(string $supplier,string $name,string $variant,string $id):string{ $initials=function(string $value,string $fallback):string{$parts=preg_split('/[^A-Za-z0-9]+/',strtoupper($value),-1,PREG_SPLIT_NO_EMPTY);return $parts?implode('',array_map(fn($p)=>$p[0],$parts)):$fallback;};$parts=[$initials($supplier,'SUP'),$initials($name,'PRD')];if($variant)$parts[]=preg_replace('/[^A-Z0-9]+/','',strtoupper($variant));preg_match('/(\d+)$/',$id,$m);$parts[]=str_pad($m[1]??'1',5,'0',STR_PAD_LEFT);return implode('-',$parts);}
     private function writeUnits(string $productId,array $units):void
@@ -1244,8 +1222,7 @@ final class DepoApp
         $row=['ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'BaseUnit'=>$base,'ProductType'=>strtoupper($this->text($input['ProductType']??$old['ProductType'])),'Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID'],'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()];
         $units=array_key_exists('Units',$input)?(array)$input['Units']:$this->units($id);
         if($optionType==='PACKAGING')$units=$this->packagingUnits($base,$variants,$units,$optionType);
-        $lockName=$this->acquireProductConfigurationLock($name);
-        try{$this->db->beginTransaction();try{$this->assertUniqueProductConfiguration($name,$id);$this->update('Products','ProductID',$id,$row);if(array_key_exists('Units',$input)||$optionType==='PACKAGING')$this->writeUnits($id,$units);$this->audit('UPDATE','Products',$id,'Product updated.');$this->db->commit();return $this->product($id);}catch(Throwable $e){if($this->db->inTransaction())$this->db->rollBack();throw $e;}}finally{$this->releaseProductConfigurationLock($lockName);}
+        $this->db->beginTransaction();try{$this->update('Products','ProductID',$id,$row);if(array_key_exists('Units',$input)||$optionType==='PACKAGING')$this->writeUnits($id,$units);$this->audit('UPDATE','Products',$id,'Product updated.');$this->db->commit();return $this->product($id);}catch(Throwable $e){if($this->db->inTransaction())$this->db->rollBack();throw $e;}
     }
     private function changeProductStatus(string $id,string $status):array{$this->user();$status=strtoupper($this->text($status));if(!in_array($status,['ACTIVE','DISCONTINUED','ARCHIVED'],true))throw new InvalidArgumentException('Status must be Active, Discontinued or Archived.');$old=$this->one('Products','ProductID',$id);if(!$old)throw new RuntimeException('Product was not found.');if($status==='ARCHIVED')throw new RuntimeException('Use the Administrator impact review to archive a product.');if(strtoupper((string)$old['Status'])==='ARCHIVED')throw new RuntimeException('Archived products must be restored through the Administrator recovery review.');$this->update('Products','ProductID',$id,['Status'=>$status,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit('STATUS','Products',$id,'Product status changed to '.$status.'.');return $this->product($id);}
 
