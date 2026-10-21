@@ -2260,6 +2260,17 @@
 #product-modal .product-modal .product-pack-sack-equation{display:block;color:#008f69;font-size:9px;font-weight:700;line-height:1.2}
 @media(max-width:800px){#product-modal .product-modal .product-pack-prices-header{display:none}#product-modal .product-modal .product-pack-prices-row,#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.product-modal .product-pack-price-size{grid-column:1/-1}}
 @media(max-width:600px){#product-modal .product-modal .product-pack-prices-row,#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.product-modal .product-pack-price-field span{min-height:0}}
+#product-modal .product-modal .product-pack-prices-header{grid-template-columns:1fr 1.2fr 2fr 1.2fr}
+#product-modal .product-modal .product-pack-prices-row,#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;padding:10px}
+#product-modal .product-modal .product-pack-price-size{grid-column:1/-1;padding-bottom:7px;border-bottom:1px solid #e3f0eb;font-size:12px;font-weight:800}
+#product-modal .product-modal .product-pack-sack-group{grid-column:1/-1;display:grid;grid-template-columns:minmax(150px,1fr) minmax(180px,1.2fr) minmax(180px,1.2fr);gap:10px;align-items:center;padding:11px;border:1px solid #a9d9c9;border-radius:9px;background:#f0faf6}
+#product-modal .product-modal .product-pack-sack-toggle{display:flex;align-items:center;gap:9px;min-height:42px;padding:8px 10px;border:1px solid #b8dfd2;border-radius:7px;background:#fff;color:#174c3d;font-size:12px;font-weight:750;cursor:pointer}
+#product-modal .product-modal .product-pack-sack-toggle input[type="checkbox"]{width:17px;height:17px;min-height:17px;margin:0;accent-color:#008f69}
+#product-modal .product-modal .product-pack-sack-toggle span{min-height:0}
+#product-modal .product-modal .product-pack-sack-group .product-pack-price-field span{min-height:0;color:#397264;font-size:10px}
+#product-modal .product-modal .product-pack-sack-equation{grid-column:1/-1;margin:0;padding-top:2px;font-size:10px;line-height:1.4}
+@media(max-width:800px){#product-modal .product-modal .product-pack-prices-row,#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:repeat(2,minmax(0,1fr))}#product-modal .product-modal .product-pack-sack-group{grid-template-columns:repeat(2,minmax(0,1fr))}#product-modal .product-modal .product-pack-sack-toggle{grid-column:1/-1}}
+@media(max-width:560px){#product-modal .product-modal .product-pack-prices-row,#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:minmax(0,1fr)}#product-modal .product-modal .product-pack-sack-group{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 .purchase-modal #purchase-items .item-product,.purchase-modal #purchase-items .item-product option{font-weight:700}
