@@ -689,7 +689,7 @@
   var PRODUCT_MEASUREMENT_OPTIONS=['Pcs','Box','Carton','Truck','Pack','Bundle','Dozen','Pair','Set','Bag','Bottle','Can','Case','Pallet','Sack','Drum','Roll','Tube','Kg','Gram','Tonne','Litre','Millilitre','Meter'];
   function productMeasurementOptions(currentValue,baseName,excludeBase,extraValues,excludeValue){var values=PRODUCT_MEASUREMENT_OPTIONS.slice();[baseName,currentValue].concat(extraValues||[]).forEach(function(value){var name=txt(value).trim();if(name&&values.every(function(item){return item.toLowerCase()!==name.toLowerCase();}))values.push(name);});return values.filter(function(value){var key=value.toLowerCase();return (!excludeBase||key!==String(baseName||'').toLowerCase())&&(!excludeValue||key!==String(excludeValue).toLowerCase());}).sort(compareVariantOptions);}
   function productMeasurementSelect(currentValue,baseName,excludeBase,placeholder,disableBase,extraValues,excludeValue,markBase){var values=productMeasurementOptions(currentValue,baseName,excludeBase,extraValues,excludeValue);return (placeholder?'<option value="">'+placeholder+'</option>':'')+values.map(function(value){var isBase=String(value).toLowerCase()===String(baseName||'').toLowerCase();return '<option value="'+esc(value)+'"'+(isBase&&disableBase?' disabled':'')+(String(value).toLowerCase()===String(currentValue||'').toLowerCase()?' selected':'')+'>'+esc(displayUnitName(value))+(isBase&&(disableBase||markBase)?' (Base Unit)':'')+'</option>';}).join('');}
-  function productUnitPriceValue(unit){var value=unit&&unit.UnitPrice;if(value===null||typeof value==='undefined'||value===''){value=unit&&unit.SalePrice;}if(value===null||typeof value==='undefined'||value===''){value=unit&&unit.PurchasePrice;}return value===null||typeof value==='undefined'||value===''?0:value;}
+  function productUnitPriceValue(unit){var values=[unit&&unit.UnitPrice,unit&&unit.SalePrice,unit&&unit.PurchasePrice],firstPresent;for(var i=0;i<values.length;i++){var value=values[i];if(value===null||typeof value==='undefined'||value==='')continue;if(firstPresent===undefined)firstPresent=value;if(Number(value)>0)return value;}return firstPresent===undefined?0:firstPresent;}
   function isProductCartonUnit(value){return /^(?:ctn|cartons?)$/i.test(String(value||'').trim());}
   function isProductPieceUnit(value){return /^(?:pc|pcs|piece|pieces)$/i.test(String(value||'').trim());}
   function productBasePriceLabel(baseName,hasCartonPriceUnit){var unit=isProductCartonUnit(baseName)||hasCartonPriceUnit?'CTN':displayUnitName(baseName||'Base Unit');return 'Default price per '+unit+' (BDT)';}
@@ -754,7 +754,7 @@
     var baseName=(product&&(product.BaseUnit||product.UnitOfMeasure))||'';
     var baseUnit=(product&&product.Units||[]).filter(function(unit){return txt(unit.UnitName).toLowerCase()===baseName.toLowerCase();})[0]||null;
     var cartonPriceUnit=(product&&product.Units||[]).filter(function(unit){return isProductCartonUnit(unit.UnitName)&&Number(unit.ConversionToBase)>0;})[0]||null;
-    var basePrice=productUnitPriceValue(cartonPriceUnit||baseUnit);
+    var basePrice=productUnitPriceValue(baseUnit);
     var modal=document.createElement('div');
     modal.id='product-modal';
     modal.className='modal-backdrop';
