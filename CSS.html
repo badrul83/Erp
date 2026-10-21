@@ -2271,6 +2271,41 @@
 #product-modal .product-modal .product-pack-sack-equation{grid-column:1/-1;margin:0;padding-top:2px;font-size:10px;line-height:1.4}
 @media(max-width:800px){#product-modal .product-modal .product-pack-prices-row,#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:repeat(2,minmax(0,1fr))}#product-modal .product-modal .product-pack-sack-group{grid-template-columns:repeat(2,minmax(0,1fr))}#product-modal .product-modal .product-pack-sack-toggle{grid-column:1/-1}}
 @media(max-width:560px){#product-modal .product-modal .product-pack-prices-row,#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:minmax(0,1fr)}#product-modal .product-modal .product-pack-sack-group{grid-template-columns:minmax(0,1fr)}}
+/* Keep the product register readable at 100% and reserve only the space each column needs. */
+.inventory-page #product-configuration-register table{width:100%;min-width:1455px;table-layout:fixed;font-size:11px}
+.inventory-page #product-configuration-register th,.inventory-page #product-configuration-register td{padding:7px 6px;font-size:11px;line-height:1.25}
+.inventory-page #product-configuration-register th{font-size:11px;letter-spacing:.025em}
+.inventory-page #product-configuration-register th:nth-child(1),.inventory-page #product-configuration-register td:nth-child(1){width:40px}
+.inventory-page #product-configuration-register th:nth-child(2),.inventory-page #product-configuration-register td:nth-child(2){width:190px;min-width:0}
+.inventory-page #product-configuration-register th:nth-child(3),.inventory-page #product-configuration-register td:nth-child(3){width:115px}
+.inventory-page #product-configuration-register th:nth-child(4),.inventory-page #product-configuration-register td:nth-child(4){width:130px}
+.inventory-page #product-configuration-register th:nth-child(5),.inventory-page #product-configuration-register td:nth-child(5){width:140px}
+.inventory-page #product-configuration-register th:nth-child(6),.inventory-page #product-configuration-register td:nth-child(6){width:160px}
+.inventory-page #product-configuration-register th:nth-child(7),.inventory-page #product-configuration-register td:nth-child(7){width:70px}
+.inventory-page #product-configuration-register th:nth-child(8),.inventory-page #product-configuration-register td:nth-child(8){width:175px}
+.inventory-page #product-configuration-register th:nth-child(9),.inventory-page #product-configuration-register td:nth-child(9){width:105px}
+.inventory-page #product-configuration-register th:nth-child(10),.inventory-page #product-configuration-register td:nth-child(10){width:75px}
+.inventory-page #product-configuration-register th:nth-child(11),.inventory-page #product-configuration-register td:nth-child(11){position:sticky;right:0;width:255px;min-width:255px;z-index:3;background:#fff;box-shadow:-5px 0 8px rgba(20,70,55,.06)}
+.inventory-page #product-configuration-register th:nth-child(11){z-index:5;background:#f1faf6}
+.inventory-page #product-configuration-register .product-config-actions{display:flex;min-width:0;flex-wrap:nowrap;justify-content:flex-start;gap:4px;white-space:nowrap}
+.inventory-page #product-configuration-register .product-config-actions button{min-height:30px;padding:5px 6px;font-size:11px;line-height:1.1;white-space:nowrap}
+.inventory-page #product-configuration-register td .status,.inventory-page #product-configuration-register .product-config-sku-count,.inventory-page #product-configuration-register .unit-chip,.inventory-page #product-configuration-register .product-config-purchases{font-size:11px}
+.inventory-page #product-configuration-register .product-config-product-cell>span>small{font-size:11px;line-height:1.2}
+.inventory-page #product-configuration-register .product-config-product-cell>span:last-child{overflow:hidden}
+.inventory-page #product-configuration-register .product-config-product-cell strong{font-size:11px;line-height:1.25}
+.inventory-page #product-configuration-register .product-config-variant-list{display:flex;flex-wrap:nowrap;gap:4px;min-width:0;overflow:hidden;white-space:nowrap}
+.inventory-page #product-configuration-register .product-config-variant-item{display:inline-flex;flex:0 0 auto;padding:4px 7px;font-size:11px;line-height:1.2}
+.inventory-page #product-configuration-register .product-config-variant-item strong{font-size:11px}
+.inventory-page #product-configuration-register .product-config-unit-details{position:relative;min-width:0;font-size:11px}
+.inventory-page #product-configuration-register .product-config-unit-details>summary{display:flex;align-items:center;gap:6px;min-width:0;cursor:pointer;list-style:none;white-space:nowrap}
+.inventory-page #product-configuration-register .product-config-unit-details>summary::-webkit-details-marker{display:none}
+.inventory-page #product-configuration-register .product-config-unit-details>summary>span{min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:11px;font-weight:600}
+.inventory-page #product-configuration-register .product-config-unit-details>summary>b{flex:0 0 auto;color:#008f69;font-size:11px}
+.inventory-page #product-configuration-register .product-config-unit-detail-list{display:grid;gap:5px;margin-top:7px;padding:8px;border:1px solid #cfe8df;border-radius:7px;background:#f7fcfa}
+.inventory-page #product-configuration-register .product-config-unit-detail{display:flex;justify-content:space-between;gap:8px;font-size:11px;line-height:1.3}
+.inventory-page #product-configuration-register .product-config-unit-detail strong,.inventory-page #product-configuration-register .product-config-unit-detail span{font-size:11px}
+.inventory-page #product-configuration-register .product-config-unit-summary-empty{font-size:11px}
+@media(max-width:1455px){.inventory-page #product-configuration-register .table-wrap{overflow:auto}.inventory-page #product-configuration-register th:nth-child(11),.inventory-page #product-configuration-register td:nth-child(11){position:sticky;right:0}}
 </style>
 
 .purchase-modal #purchase-items .item-product,.purchase-modal #purchase-items .item-product option{font-weight:700}
