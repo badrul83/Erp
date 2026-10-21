@@ -1213,6 +1213,7 @@ final class DepoApp
         if(!$supplier||$supplier['Status']!=='APPROVED')throw new InvalidArgumentException('Select an approved Supplier for the product.');
         $name=$this->text($input['ProductName']??$old['ProductName']);if(!$name)throw new InvalidArgumentException('Product Name is required.');
         $base=$this->text($input['BaseUnit']??$input['UnitOfMeasure']??$old['BaseUnit']);
+        $this->assertProductBaseUnitChangeAllowed($id,(string)($old['BaseUnit']??''),$base);
         $optionType=strtoupper($this->text($input['OptionType']??$old['OptionType']??'VARIANT'));
         $variants=$this->variants(['Variant'=>$input['Variants']??$input['Variant']??$old['Variant']]);
         $this->assertProductPromotionVariants($promotion,$variants);
@@ -1223,6 +1224,19 @@ final class DepoApp
         $units=array_key_exists('Units',$input)?(array)$input['Units']:$this->units($id);
         if($optionType==='PACKAGING')$units=$this->packagingUnits($base,$variants,$units,$optionType);
         $this->db->beginTransaction();try{$this->update('Products','ProductID',$id,$row);if(array_key_exists('Units',$input)||$optionType==='PACKAGING')$this->writeUnits($id,$units);$this->audit('UPDATE','Products',$id,'Product updated.');$this->db->commit();return $this->product($id);}catch(Throwable $e){if($this->db->inTransaction())$this->db->rollBack();throw $e;}
+    }
+    private function assertProductBaseUnitChangeAllowed(string $productId,string $current,string $requested):void
+    {
+        if(strcasecmp(trim($current),trim($requested))===0)return;
+        $history=[
+            'purchase order lines'=>(int)$this->value('SELECT COUNT(*) FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID WHERE i.ProductID=? AND s.Status<>"ARCHIVED"',[$productId]),
+            'goods receipt lines'=>(int)$this->value('SELECT COUNT(*) FROM GoodsReceiptItems WHERE ProductID=?',[$productId]),
+            'sales lines'=>(int)$this->value('SELECT COUNT(*) FROM DealerSaleItems WHERE ProductID=?',[$productId]),
+            'stock movements'=>(int)$this->value('SELECT COUNT(*) FROM StockLedger WHERE ProductID=?',[$productId]),
+            'return lines'=>(int)$this->value('SELECT COUNT(*) FROM ProductReturnItems WHERE ProductID=?',[$productId]),
+        ];
+        $used=array_keys(array_filter($history,fn(int $count):bool=>$count>0));
+        if($used)throw new InvalidArgumentException('Stock Base Unit is locked because this product already has '.implode(', ',$used).'. Cancel or archive unposted documents first, or create a new product with a new SKU.');
     }
     private function changeProductStatus(string $id,string $status):array{$this->user();$status=strtoupper($this->text($status));if(!in_array($status,['ACTIVE','DISCONTINUED','ARCHIVED'],true))throw new InvalidArgumentException('Status must be Active, Discontinued or Archived.');$old=$this->one('Products','ProductID',$id);if(!$old)throw new RuntimeException('Product was not found.');if($status==='ARCHIVED')throw new RuntimeException('Use the Administrator impact review to archive a product.');if(strtoupper((string)$old['Status'])==='ARCHIVED')throw new RuntimeException('Archived products must be restored through the Administrator recovery review.');$this->update('Products','ProductID',$id,['Status'=>$status,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit('STATUS','Products',$id,'Product status changed to '.$status.'.');return $this->product($id);}
 
