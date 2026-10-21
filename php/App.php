@@ -216,6 +216,7 @@ final class DepoApp
             'updatePresence' => $this->updatePresence((string) ($args[0] ?? '')),
             'getOnlineUsers' => $this->onlineUsers(),
             'getBrandingSettings' => $this->branding(),
+            'saveProductConfigurationTemplate' => $this->saveProductConfigurationTemplate((array) ($args[0] ?? [])),
             'getArchivedRecords' => $this->getArchivedRecords(),
             'archiveRecord' => $this->archiveRecord((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (string) ($args[2] ?? '')),
             'getAdminDeleteImpact' => $this->adminDeleteImpact((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), false),
@@ -803,6 +804,24 @@ final class DepoApp
         $this->ensureSettingsTable();
         $v = $this->value('SELECT SettingValue FROM settings WHERE SettingKey=?',[$key]);
         return $v === false ? $default : json_decode((string)$v,true);
+    }
+    private function productConfigurationTemplate(): array
+    {
+        $stored=$this->setting('product_configuration_master',['StockBaseUnits'=>['Carton','Kg','Piece']]);
+        $units=is_array($stored)?($stored['StockBaseUnits']??[]):[];
+        return ['StockBaseUnits'=>is_array($units)&&$units?$units:['Carton','Kg','Piece']];
+    }
+    private function saveProductConfigurationTemplate(array $input): array
+    {
+        $this->user(true);
+        $allowed=['Pcs','Piece','Box','Carton','Truck','Pack','Bundle','Dozen','Pair','Set','Bag','Bottle','Can','Case','Pallet','Sack','Drum','Roll','Tube','Kg','Gram','Tonne','Litre','Millilitre','Meter'];
+        $requested=$input['StockBaseUnits']??[];
+        if(!is_array($requested))throw new InvalidArgumentException('Select one or more Stock Base Units.');
+        $selected=[];
+        foreach($requested as$value){$name=$this->text($value);foreach($allowed as$option)if(strcasecmp($option,$name)===0){if(!in_array($option,$selected,true))$selected[]=$option;break;}}
+        if(!$selected)throw new InvalidArgumentException('Select at least one Stock Base Unit.');
+        $this->ensureSettingsTable();$json=json_encode(['StockBaseUnits'=>$selected],JSON_UNESCAPED_UNICODE);$this->db->prepare('INSERT INTO settings (SettingKey,SettingValue,UpdatedAt,UpdatedBy) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE SettingValue=VALUES(SettingValue),UpdatedAt=VALUES(UpdatedAt),UpdatedBy=VALUES(UpdatedBy)')->execute(['product_configuration_master',$json,$this->now(),$this->current()]);$this->audit('UPDATE','Settings','product_configuration_master','Product Configuration Master updated.');
+        return ['StockBaseUnits'=>$selected];
     }
     private function branding(): array
     {
@@ -1697,7 +1716,7 @@ private function postDeliveredSaleVoucher(array $sale): void
     {
         $user = $this->user();
         if ($this->dealerUserId($user)) {
-            return ['agreements'=>[],'products'=>$this->dealerOrderCatalog(),'dealers'=>$this->dealers(),'purchases'=>[],'sales'=>$this->sales(),'productCategories'=>[],'expenseCategories'=>[],'paymentMethods'=>[]];
+            return ['agreements'=>[],'products'=>$this->dealerOrderCatalog(),'dealers'=>$this->dealers(),'purchases'=>[],'sales'=>$this->sales(),'productCategories'=>[],'expenseCategories'=>[],'paymentMethods'=>[],'productConfigurationTemplate'=>[]];
         }
         $allowed = array_flip($this->configuredPermissionKeys($user));
         $can = fn(string $key): bool => isset($allowed[$key]);
@@ -1713,6 +1732,7 @@ private function postDeliveredSaleVoucher(array $sale): void
             'productCategories'=>$can('product_config')?$this->rows('ProductCategories'):[],
             'expenseCategories'=>($can('product_config')||$can('expenses'))?$this->rows('ExpenseCategories'):[],
             'paymentMethods'=>($can('product_config')||$can('payments'))?$this->paymentMethods():[],
+            'productConfigurationTemplate'=>$can('product_config')?$this->productConfigurationTemplate():[],
         ];
     }
 

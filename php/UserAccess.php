@@ -265,7 +265,7 @@ trait UserAccess
             'getProductReturns'=>'returns','createProductReturn'=>'returns','createPurchaseReturn'=>'returns',
             'getPayments'=>'payments','createPayment'=>'payments','deletePayment'=>'payments',
             'getExpenses'=>'expenses','createExpense'=>'expenses',
-            'getProducts'=>'product_config','getProductConfigurationRegister'=>'product_config','getProductDetails'=>'product_config','createProduct'=>'product_config','updateProduct'=>'product_config','changeProductStatus'=>'product_config',
+            'getProducts'=>'product_config','getProductConfigurationRegister'=>'product_config','getProductDetails'=>'product_config','createProduct'=>'product_config','updateProduct'=>'product_config','changeProductStatus'=>'product_config','saveProductConfigurationTemplate'=>'product_config',
             'getProductCategories'=>'product_config','getExpenseCategories'=>'accounting','getPaymentMethods'=>'product_config','createProductCategory'=>'product_config','createExpenseCategory'=>'accounting','updateExpenseCategory'=>'accounting','createPaymentMethod'=>'product_config','updateSettingItem'=>'product_config',
             'getReport'=>'reports',
             'getAccountingDashboard'=>'accounting','getAccountingSetup'=>'accounting','saveAccountingSetup'=>'accounting','getChartOfAccounts'=>'accounting','saveChartAccount'=>'accounting','getAccountingVouchers'=>'accounting','getAccountingDaybook'=>'accounting','getAccountingVoucher'=>'accounting','createAccountingVoucher'=>'accounting','reverseAccountingVoucher'=>'accounting','getAccountingTrialBalance'=>'accounting','getAccountingAccountLedger'=>'accounting','getAccountingPartyLedger'=>'accounting','getSupplierPayableLedger'=>'accounting',
