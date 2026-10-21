@@ -221,6 +221,8 @@ final class DepoApp
             'getAdminDeleteImpact' => $this->adminDeleteImpact((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), false),
             'archiveRecordWithReversals' => $this->archiveRecordWithReversals((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (array) ($args[2] ?? []), (string) ($args[3] ?? '')),
             'restoreRecord' => $this->restoreRecord((string) ($args[0] ?? '')),
+            'restoreProduct' => $this->restoreProduct((string) ($args[0] ?? '')),
+            'permanentlyDeleteProduct' => $this->permanentlyDeleteProduct((string) ($args[0] ?? ''), (string) ($args[1] ?? '')),
             'getRecordChangeHistory' => $this->getRecordChangeHistory((string) ($args[0] ?? ''), (string) ($args[1] ?? '')),
             'updateBrandingSettings' => $this->saveBranding((array) ($args[0] ?? [])),
             'getUsers' => $this->users(),
@@ -561,6 +563,16 @@ final class DepoApp
     {
         $this->user(true);
         return $this->rows('ArchivedRecords','RestoredAt IS NULL ORDER BY ArchivedAt DESC');
+    }
+
+    private function restoreProduct(string $id): array
+    {
+        $this->user(true);$product=$this->one('Products','ProductID',$id);if(!$product||strtoupper((string)$product['Status'])!=='ARCHIVED')throw new RuntimeException('Archived product was not found.');$this->restoreLatestRecord('Products',$id);return$this->product($id)??throw new RuntimeException('Product was restored but could not be loaded.');
+    }
+
+    private function permanentlyDeleteProduct(string $id,string $confirmation): array
+    {
+        $this->user(true);$id=$this->text($id);$this->db->beginTransaction();try{$statement=$this->db->prepare('SELECT * FROM Products WHERE ProductID=? FOR UPDATE');$statement->execute([$id]);$product=$statement->fetch();if(!$product)throw new RuntimeException('Product was not found.');if(strtoupper((string)$product['Status'])!=='ARCHIVED')throw new RuntimeException('Archive the product first, then permanently delete it from Show Archived Products.');$normalize=static function(string$value):string{$value=preg_replace('/\s+/',' ',trim($value))??trim($value);return function_exists('mb_strtolower')?mb_strtolower($value,'UTF-8'):strtolower($value);};if($confirmation===''||$normalize($confirmation)!==$normalize((string)$product['ProductName']))throw new InvalidArgumentException('Type the exact product name to confirm permanent deletion.');$references=(int)$this->value('SELECT COUNT(*) FROM CompanySupplyItems WHERE ProductID=? OR OfferProductID=?',[$id,$id])+(int)$this->value('SELECT COUNT(*) FROM GoodsReceiptItems WHERE ProductID=?',[$id])+(int)$this->value('SELECT COUNT(*) FROM DealerSaleItems WHERE ProductID=?',[$id])+(int)$this->value('SELECT COUNT(*) FROM ProductReturnItems WHERE ProductID=?',[$id])+(int)$this->value('SELECT COUNT(*) FROM StockLedger WHERE ProductID=?',[$id]);if($references>0)throw new RuntimeException('This product has purchase, receipt, sale, return, offer or stock history. It cannot be permanently deleted; keep it archived so its records remain valid.');$this->audit('DELETE','Products',$id,'Product permanently deleted by Administrator after archive; no transaction or stock history was linked.');$this->db->prepare('DELETE FROM ProductUnits WHERE ProductID=?')->execute([$id]);$this->db->prepare('DELETE FROM RecordReversalLinks WHERE ArchiveID IN (SELECT ArchiveID FROM ArchivedRecords WHERE TableName="Products" AND RecordID=?)')->execute([$id]);$this->db->prepare('DELETE FROM ArchivedRecords WHERE TableName="Products" AND RecordID=?')->execute([$id]);$this->db->prepare('DELETE FROM Products WHERE ProductID=?')->execute([$id]);$this->db->commit();return['ProductID'=>$id,'ProductName'=>$product['ProductName'],'Status'=>'DELETED'];}catch(Throwable$e){if($this->db->inTransaction())$this->db->rollBack();throw$e;}
     }
 
     private function getRecordChangeHistory(string $table, string $id): array
@@ -1168,7 +1180,7 @@ final class DepoApp
     private function productConfigurationRegister(): array
     {
         $this->user(); $out=[];
-        foreach ($this->rows('Products','COALESCE(Status,"ACTIVE")<>?', ['ARCHIVED']) as $product) {
+        foreach ($this->rows('Products') as $product) {
             $supplier=$this->agreement((string) ($product['SupplierID'] ?? ''));
             $units=array_values(array_filter($this->units((string) $product['ProductID']),fn(array $unit):bool=>strtoupper((string) ($unit['Status'] ?? 'ACTIVE'))!=='ARCHIVED'));
             $optionType=strtoupper((string)($product['OptionType']??'VARIANT'));
