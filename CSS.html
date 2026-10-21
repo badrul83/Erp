@@ -2248,4 +2248,16 @@
 @media(max-width:1100px){.dashboard-concept-grid{grid-template-columns:1.2fr 1fr}.dashboard-rank-row{grid-template-columns:minmax(90px,1fr) minmax(35px,.8fr) 75px;gap:7px}}
 @media(max-width:850px){.dashboard-concept-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-concept-grid,.dashboard-concept-secondary{grid-template-columns:1fr}}
 @media(max-width:600px){.dashboard-concept-page{gap:10px}.dashboard-concept-heading h2{font-size:19px}.dashboard-concept-heading>div>span{font-size:9px}.dashboard-concept-kpis{gap:8px}.dashboard-concept-kpi{grid-template-columns:31px minmax(0,1fr);column-gap:8px;min-height:91px;padding:10px}.dashboard-concept-icon{width:30px;height:30px;border-radius:9px;font-size:14px}.dashboard-concept-kpi strong{font-size:15px}.dashboard-concept-kpi small{font-size:8px}.dashboard-concept-panel>header{padding:13px 12px 9px}.dashboard-activity-grid{gap:5px;padding:7px 9px 10px}.dashboard-activity-card{display:block;padding:7px}.dashboard-activity-icon{margin-bottom:5px}.dashboard-activity-card small{min-height:22px;font-size:8px}.dashboard-activity-card strong{font-size:10px}.dashboard-activity-card em{font-size:7px}.dashboard-rank-list,.dashboard-top-stock{padding:0 10px 8px}.dashboard-rank-row{grid-template-columns:minmax(80px,1fr) minmax(35px,.65fr) 70px;gap:6px}.dashboard-rank-name{font-size:9px}.dashboard-rank-row>strong,.dashboard-top-stock-row>b{font-size:9px}.dashboard-sales-chart{height:150px}}
+/* Product package conversion: keep CTN and Gunny Sack fields aligned in the same configuration window. */
+#product-modal .product-modal .product-pack-prices-header,
+#product-modal .product-modal .product-pack-prices-row{grid-template-columns:repeat(8,minmax(0,1fr));gap:7px;align-items:start}
+#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-header,
+#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:repeat(6,minmax(0,1fr))}
+#product-modal .product-modal .product-pack-price-field{grid-template-columns:1fr;gap:4px;min-width:0}
+#product-modal .product-modal .product-pack-price-field span{min-height:23px;line-height:1.2}
+#product-modal .product-modal .product-pack-price-field input{min-width:0;width:100%}
+#product-modal .product-modal .product-pack-sack-toggle input[type="checkbox"]{width:16px;height:16px;min-height:16px;justify-self:start;accent-color:#008f69}
+#product-modal .product-modal .product-pack-sack-equation{display:block;color:#008f69;font-size:9px;font-weight:700;line-height:1.2}
+@media(max-width:800px){#product-modal .product-modal .product-pack-prices-header{display:none}#product-modal .product-modal .product-pack-prices-row,#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.product-modal .product-pack-price-size{grid-column:1/-1}}
+@media(max-width:600px){#product-modal .product-modal .product-pack-prices-row,#product-modal .product-modal .product-pack-prices.is-carton-skipped .product-pack-prices-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.product-modal .product-pack-price-field span{min-height:0}}
 </style>
