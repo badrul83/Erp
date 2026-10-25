@@ -42,6 +42,7 @@ final class DepoApp
         $this->ensureProductPromotionSchema();
         $this->ensureTransactionPromotionSchema();
         $this->ensureProductImageSchema();
+        $this->ensureProductColorSchema();
         $this->ensureSupplierProfileSchema();
         $this->ensureUserAccessSchema();
         $this->ensureDealerSalesForceSchema();
@@ -199,6 +200,11 @@ final class DepoApp
         $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME="ProductImageDataUrl"');
         if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN ProductImageDataUrl MEDIUMTEXT NULL AFTER ProductName');
     }
+    private function ensureProductColorSchema(): void
+    {
+        $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME="ProductColor"');
+        if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN ProductColor VARCHAR(100) NULL AFTER Category');
+    }
     public function dispatch(string $method, array $args): mixed
     {
         $public = ['getAppInfo', 'getAuthState', 'loginUser', 'logoutUser', 'getBrandingSettings'];
@@ -217,6 +223,9 @@ final class DepoApp
             'getOnlineUsers' => $this->onlineUsers(),
             'getBrandingSettings' => $this->branding(),
             'saveProductConfigurationTemplate' => $this->saveProductConfigurationTemplate((array) ($args[0] ?? [])),
+            'updateProductMasterPrices' => $this->updateProductMasterPrices((string) ($args[0] ?? ''), (array) ($args[1] ?? [])),
+            'renameProductMasterItem' => $this->renameProductMasterItem((string) ($args[0] ?? ''), (array) ($args[1] ?? [])),
+            'updateProductMasterConversions' => $this->updateProductMasterConversions((string) ($args[0] ?? ''), (array) ($args[1] ?? [])),
             'getArchivedRecords' => $this->getArchivedRecords(),
             'archiveRecord' => $this->archiveRecord((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), (string) ($args[2] ?? '')),
             'getAdminDeleteImpact' => $this->adminDeleteImpact((string) ($args[0] ?? ''), (string) ($args[1] ?? ''), false),
@@ -823,6 +832,68 @@ final class DepoApp
         $this->ensureSettingsTable();$json=json_encode(['StockBaseUnits'=>$selected],JSON_UNESCAPED_UNICODE);$this->db->prepare('INSERT INTO settings (SettingKey,SettingValue,UpdatedAt,UpdatedBy) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE SettingValue=VALUES(SettingValue),UpdatedAt=VALUES(UpdatedAt),UpdatedBy=VALUES(UpdatedBy)')->execute(['product_configuration_master',$json,$this->now(),$this->current()]);$this->audit('UPDATE','Settings','product_configuration_master','Product Configuration Master updated.');
         return ['StockBaseUnits'=>$selected];
     }
+    private function updateProductMasterPrices(string $productId, array $input): array
+    {
+        $this->user();
+        $product=$this->one('Products','ProductID',$productId);
+        if(!$product||strtoupper((string)($product['Status']??''))==='ARCHIVED')throw new RuntimeException('Active product was not found.');
+        $prices=$input['Prices']??[];
+        if(!is_array($prices)||!$prices)throw new InvalidArgumentException('Enter at least one unit price.');
+        $units=$this->units($productId);$byName=[];
+        foreach($units as$unit)if(strtoupper((string)($unit['Status']??'ACTIVE'))!=='ARCHIVED')$byName[strtolower(trim((string)$unit['UnitName']))]=$unit;
+        $optionType=strtoupper((string)($product['OptionType']??'VARIANT'));$updated=[];$unitUpdates=[];$baseName=(string)($product['BaseUnit']??$product['UnitOfMeasure']??'');
+        foreach($prices as$price){
+            if(!is_array($price))continue;
+            $name=$this->text($price['UnitName']??'');$key=strtolower($name);$unit=$byName[$key]??null;
+            if(!$unit)throw new InvalidArgumentException('A selected package or unit no longer exists. Refresh the Product Configuration Master.');
+            $isPack=$optionType==='PACKAGING'&&preg_match('/^Pack\s*\(/i',$name);
+            $isSack=$optionType==='PACKAGING'&&preg_match('/^Gunny Sack\s*\(/i',$name);
+            if($optionType==='PACKAGING'&&!$isPack&&!$isSack)throw new InvalidArgumentException('Only configured pack or Gunny Sack prices can be edited here. Carton prices follow the configured pack count.');
+            if($optionType!=='PACKAGING'&&strcasecmp($name,$baseName)!==0)throw new InvalidArgumentException('Edit non-package prices using the product Base Unit.');
+            $purchase=array_key_exists('PurchasePrice',$price)?$this->num($price['PurchasePrice'],'Purchase price',true):(float)($unit['PurchasePrice']??$unit['UnitPrice']??0);
+            $sale=array_key_exists('SalePrice',$price)?$this->num($price['SalePrice'],'Sale price',true):(float)($unit['SalePrice']??$unit['UnitPrice']??0);
+            $updated[$key]=['Unit'=>$unit,'PurchasePrice'=>$purchase,'SalePrice'=>$sale,'HasPurchase'=>array_key_exists('PurchasePrice',$price),'HasSale'=>array_key_exists('SalePrice',$price),'IsPack'=>(bool)$isPack,'IsSack'=>(bool)$isSack,'ConversionToBase'=>(float)$unit['ConversionToBase']];
+        }
+        if(!$updated)throw new InvalidArgumentException('No valid unit prices were provided.');
+        if($optionType==='PACKAGING')foreach($updated as$key=>$price){
+            $unit=$price['Unit'];
+            if($price['IsSack']){$unitUpdates[(string)$unit['ProductUnitID']]=['SalePrice'=>$price['SalePrice'],'UnitPrice'=>$price['SalePrice']];continue;}
+            $unitUpdates[(string)$unit['ProductUnitID']]=['PurchasePrice'=>$price['PurchasePrice'],'SalePrice'=>$price['SalePrice'],'UnitPrice'=>$price['SalePrice']];
+            $variant=trim(substr((string)$unit['UnitName'],strlen('Pack (')));$variant=rtrim($variant,')');$packConversion=(float)$price['ConversionToBase'];
+            if($packConversion<=0)throw new InvalidArgumentException('The configured pack conversion must be greater than zero.');
+            foreach(['CTN ('.$variant.')','Gunny Sack ('.$variant.')']as$packageName){$package=$byName[strtolower($packageName)]??null;if(!$package)continue;$ratio=(float)$package['ConversionToBase']/$packConversion;if($ratio<1||abs($ratio-round($ratio))>0.00001)throw new InvalidArgumentException('The configured '.$packageName.' must contain a whole number of sealed packs.');$purchase=$price['PurchasePrice']*$ratio;$sale=$price['SalePrice']*$ratio;$packageUpdate=['PurchasePrice'=>$purchase];if(stripos($packageName,'Gunny Sack')===0)$sale=(float)($package['SalePrice']??$package['UnitPrice']??$sale);else $packageUpdate['SalePrice']=$sale;$packageUpdate['UnitPrice']=$sale;$unitUpdates[(string)$package['ProductUnitID']]=array_merge($unitUpdates[(string)$package['ProductUnitID']]??[],$packageUpdate);}
+        }
+        if($optionType!=='PACKAGING')foreach($updated as$price){$baseConversion=(float)($price['Unit']['ConversionToBase']?:1);foreach($units as$unit){if(strtoupper((string)($unit['Status']??'ACTIVE'))==='ARCHIVED')continue;$ratio=(float)$unit['ConversionToBase']/$baseConversion;$unitUpdates[(string)$unit['ProductUnitID']]=['PurchasePrice'=>$price['PurchasePrice']*$ratio,'SalePrice'=>$price['SalePrice']*$ratio,'UnitPrice'=>$price['SalePrice']*$ratio];}}
+        $this->db->beginTransaction();try{foreach($unitUpdates as$unitId=>$values)$this->update('ProductUnits','ProductUnitID',$unitId,$values+['UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit('UPDATE','Products',$productId,'Default purchase and sale prices updated from Product Configuration Master.');$this->db->commit();}catch(Throwable$e){if($this->db->inTransaction())$this->db->rollBack();throw$e;}
+        return $this->product($productId);
+    }
+    private function renameProductMasterItem(string $productId, array $input): array
+    {
+        $this->user();
+        $product=$this->one('Products','ProductID',$productId);
+        if(!$product||strtoupper((string)($product['Status']??''))==='ARCHIVED')throw new RuntimeException('Active product was not found.');
+        $name=$this->text($input['ProductName']??'');
+        if($name==='')throw new InvalidArgumentException('Product name cannot be empty.');
+        preg_match_all('/./us',$name,$nameChars);if(count($nameChars[0])>180)throw new InvalidArgumentException('Product name must be 180 characters or fewer.');
+        if($name===(string)$product['ProductName'])return $this->product($productId);
+        $this->update('Products','ProductID',$productId,['ProductName'=>$name,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);
+        $this->audit('UPDATE','Products',$productId,'Product name corrected from Product Configuration Master; SKU and linked history retained.');
+        return $this->product($productId);
+    }
+    private function updateProductMasterConversions(string $productId, array $input): array
+    {
+        $this->user();$product=$this->one('Products','ProductID',$productId);
+        if(!$product||strtoupper((string)($product['Status']??''))==='ARCHIVED')throw new RuntimeException('Active product was not found.');
+        $units=$this->units($productId);$byName=[];foreach($units as$unit)if(strtoupper((string)($unit['Status']??'ACTIVE'))!=='ARCHIVED')$byName[strtolower(trim((string)$unit['UnitName']))]=$unit;
+        $base=(string)($product['BaseUnit']??$product['UnitOfMeasure']??'');$optionType=strtoupper((string)($product['OptionType']??'VARIANT'));$changes=$input['Conversions']??[];if(!is_array($changes)||!$changes)throw new InvalidArgumentException('Enter at least one unit conversion.');$updates=[];
+        foreach($changes as$change){if(!is_array($change))continue;$name=$this->text($change['UnitName']??'');$key=strtolower($name);$unit=$byName[$key]??null;if(!$unit)throw new InvalidArgumentException('A unit no longer exists. Refresh this product row.');if(strcasecmp($name,$base)===0)throw new InvalidArgumentException('The base unit conversion is fixed at 1.');$factor=$this->num($change['ConversionToBase']??'','Conversion quantity');if($optionType==='PACKAGING'){$match=[];if(!preg_match('/^(CTN|Gunny Sack)\s*\((.+)\)$/i',$name,$match))throw new InvalidArgumentException('Only configured carton and Gunny Sack counts can be changed here.');$pack=$byName[strtolower('Pack ('.$match[2].')')]??null;if(!$pack||(float)$pack['ConversionToBase']<=0)throw new InvalidArgumentException('The matching sealed pack is not configured.');$packCount=$factor/(float)$pack['ConversionToBase'];if($packCount<1||abs($packCount-round($packCount))>0.00001)throw new InvalidArgumentException('Each carton or Gunny Sack must contain a whole number of sealed packs.');}
+            $updates[(string)$unit['ProductUnitID']]=['UnitName'=>$name,'ConversionToBase'=>$factor];}
+        if(!$updates)throw new InvalidArgumentException('No valid unit conversions were provided.');
+        $changed=false;foreach($updates as$id=>$change){$old=$byName[strtolower($change['UnitName'])];if(abs((float)$old['ConversionToBase']-(float)$change['ConversionToBase'])>0.0000001){$changed=true;break;}}
+        if($changed)$this->assertProductConversionsChangeAllowed($productId,$units,array_values($updates));
+        $this->db->beginTransaction();try{foreach($updates as$id=>$change)$this->update('ProductUnits','ProductUnitID',$id,$change+['UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit('UPDATE','Products',$productId,'Unit conversions updated from Product Configuration Master.');$this->db->commit();}catch(Throwable$e){if($this->db->inTransaction())$this->db->rollBack();throw$e;}
+        return $this->product($productId);
+    }
     private function branding(): array
     {
         $stored = $this->setting('branding', ['CompanyName'=>'Distribution ERP','Address'=>'','SoftwareName'=>'Distribution ERP','LogoDataUrl'=>'']);
@@ -1215,7 +1286,7 @@ final class DepoApp
         $this->db->beginTransaction();
         try{
             $id=$this->id('Products','ProductID','PRD');$now=$this->now();$sku=$this->sku($supplier['Company'],$name,'',$id);
-            $this->insert('Products',['ProductID'=>$id,'SKU'=>$sku,'ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'BaseUnit'=>$base,'Status'=>'ACTIVE','CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR','Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID']]);
+            $this->insert('Products',['ProductID'=>$id,'SKU'=>$sku,'ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'ProductColor'=>$this->text($input['ProductColor']??''),'BaseUnit'=>$base,'Status'=>'ACTIVE','CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR','Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID']]);
             $this->writeUnits($id,$units);$this->audit('CREATE','Products',$id,'Product created.');$this->db->commit();return $this->product($id);
         }catch(Throwable $e){if($this->db->inTransaction())$this->db->rollBack();throw $e;}
     }
@@ -1239,8 +1310,9 @@ final class DepoApp
         $this->validateProductOptionType($optionType,$base,$variants);
         $category=$this->assertProductCategory($this->text($input['Category']??$old['Category']??''),$this->text($old['Category']??''));
         $image=array_key_exists('ProductImageDataUrl',$input)?$this->productImage($input['ProductImageDataUrl']):($old['ProductImageDataUrl']??null);
-        $row=['ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'BaseUnit'=>$base,'ProductType'=>strtoupper($this->text($input['ProductType']??$old['ProductType'])),'Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID'],'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()];
+        $row=['ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'ProductColor'=>$this->text($input['ProductColor']??$old['ProductColor']??''),'BaseUnit'=>$base,'ProductType'=>strtoupper($this->text($input['ProductType']??$old['ProductType'])),'Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID'],'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()];
         $units=array_key_exists('Units',$input)?(array)$input['Units']:$this->units($id);
+        if(array_key_exists('Units',$input)&&$this->productUnitConversionsDiffer($this->units($id),$units))$this->assertProductConversionsChangeAllowed($id);
         if($optionType==='PACKAGING')$units=$this->packagingUnits($base,$variants,$units,$optionType);
         $this->db->beginTransaction();try{$this->update('Products','ProductID',$id,$row);if(array_key_exists('Units',$input)||$optionType==='PACKAGING')$this->writeUnits($id,$units);$this->audit('UPDATE','Products',$id,'Product updated.');$this->db->commit();return $this->product($id);}catch(Throwable $e){if($this->db->inTransaction())$this->db->rollBack();throw $e;}
     }
@@ -1256,6 +1328,20 @@ final class DepoApp
         ];
         $used=array_keys(array_filter($history,fn(int $count):bool=>$count>0));
         if($used)throw new InvalidArgumentException('Stock Base Unit is locked because this product already has '.implode(', ',$used).'. Cancel or archive unposted documents first, or create a new product with a new SKU.');
+    }
+    private function productUnitConversionsDiffer(array $before,array $after):bool
+    {
+        $map=function(array$units):array{$out=[];foreach($units as$unit){if(!is_array($unit)||strtoupper((string)($unit['Status']??'ACTIVE'))==='ARCHIVED')continue;$name=strtolower(trim((string)($unit['UnitName']??'')));if($name!=='')$out[$name]=(float)($unit['ConversionToBase']??0);}ksort($out);return$out;};$old=$map($before);$new=$map($after);if(array_keys($old)!==array_keys($new))return true;foreach($old as$name=>$value)if(abs($value-$new[$name])>0.0000001)return true;return false;
+    }
+    private function assertProductConversionsChangeAllowed(string $productId):void
+    {
+        $history=[
+            'purchase orders'=>(int)$this->value('SELECT COUNT(*) FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID WHERE i.ProductID=? AND s.Status<>"ARCHIVED"',[$productId]),
+            'goods receipts'=>(int)$this->value('SELECT COUNT(*) FROM GoodsReceiptItems WHERE ProductID=?',[$productId]),
+            'sales'=>(int)$this->value('SELECT COUNT(*) FROM DealerSaleItems WHERE ProductID=?',[$productId]),
+            'stock movements'=>(int)$this->value('SELECT COUNT(*) FROM StockLedger WHERE ProductID=?',[$productId]),
+            'returns'=>(int)$this->value('SELECT COUNT(*) FROM ProductReturnItems WHERE ProductID=?',[$productId]),
+        ];$used=array_keys(array_filter($history,fn(int$count):bool=>$count>0));if($used)throw new InvalidArgumentException('Unit conversions are locked because this product has '.implode(', ',$used).'. This protects existing quantities and stock history. Create a new product/SKU to use a different conversion.');
     }
     private function changeProductStatus(string $id,string $status):array{$this->user();$status=strtoupper($this->text($status));if(!in_array($status,['ACTIVE','DISCONTINUED','ARCHIVED'],true))throw new InvalidArgumentException('Status must be Active, Discontinued or Archived.');$old=$this->one('Products','ProductID',$id);if(!$old)throw new RuntimeException('Product was not found.');if($status==='ARCHIVED')throw new RuntimeException('Use the Administrator impact review to archive a product.');if(strtoupper((string)$old['Status'])==='ARCHIVED')throw new RuntimeException('Archived products must be restored through the Administrator recovery review.');$this->update('Products','ProductID',$id,['Status'=>$status,'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()]);$this->audit('STATUS','Products',$id,'Product status changed to '.$status.'.');return $this->product($id);}
 
