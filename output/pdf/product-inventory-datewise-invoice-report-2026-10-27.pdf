@@ -1,0 +1,1766 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<<
+/Producer (pypdf)
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Count 8
+/Kids [ 4 0 R 10 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R ]
+>>
+endobj
+3 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+4 0 obj
+<<
+/Contents 5 0 R
+/MediaBox [ 0 0 841.8898 595.2756 ]
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F1-0 7 0 R
+/F2 8 0 R
+/F2-0 9 0 R
+>>
+/ProcSet [ /ImageB /ImageC /ImageI /PDF /Text ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Annots [ ]
+/Parent 2 0 R
+>>
+endobj
+5 0 obj
+<<
+/Length 24235
+>>
+stream
+q
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+.784314 .866667 .839216 RG
+n 42.51969 34.01575 m 799.3701 34.01575 l S
+BT /F1 7 Tf 8.4 TL ET
+.333333 .443137 .423529 rg
+BT 1 0 0 1 42.51969 21.25984 Tm (ERP data snapshot | Read-only export | 27 Oct 2026) Tj T* ET
+BT 1 0 0 1 777.1871 21.25984 Tm (Page 1) Tj T* ET
+Q
+q
+1 0 0 1 48.51969 533.2598 cm
+q
+BT 1 0 0 1 0 4 Tm 22 TL /F2 18 Tf .090196 .239216 .227451 rg (Product, Inventory & Date-wise Invoice Report) Tj T* ET
+Q
+Q
+q
+1 0 0 1 48.51969 519.2598 cm
+q
+.333333 .443137 .423529 rg
+BT 1 0 0 1 0 3 Tm /F1 8 Tf 11 TL (Local ERP database snapshot | 27 October 2026 | Names and values as currently stored) Tj T* ET
+Q
+Q
+q
+1 0 0 1 -89.29134 475.7598 cm
+q
+.917647 .960784 .945098 rg
+n 0 37.5 1020.472 -18 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 24.5 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRODUCTS) Tj T* ET
+Q
+Q
+q
+1 0 0 1 422.6929 24.5 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (STOCK BALANCES) Tj T* ET
+Q
+Q
+q
+1 0 0 1 575.7638 24.5 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PURCHASE DOCS) Tj T* ET
+Q
+Q
+q
+1 0 0 1 731.6693 24.5 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (SALES INVOICES) Tj T* ET
+Q
+Q
+q
+1 0 0 1 850.7244 24.5 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PO VALUE \(ALL\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 5 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 2 Tm /F1 7.5 Tf 9.5 TL (22 total | 20 active | 1 discontinued | 1 archived) Tj T* ET
+Q
+Q
+q
+1 0 0 1 422.6929 5 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 2 Tm /F1 7.5 Tf 9.5 TL (26 product/variant/agreement groups) Tj T* ET
+Q
+Q
+q
+1 0 0 1 575.7638 5 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 2 Tm /F1 7.5 Tf 9.5 TL (9 total | 8 received | 1 archived) Tj T* ET
+Q
+Q
+q
+1 0 0 1 731.6693 5 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 2 Tm /F1 7.5 Tf 9.5 TL (0 found) Tj T* ET
+Q
+Q
+q
+1 0 0 1 850.7244 5 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 2 Tm /F1 7.5 Tf 9.5 TL (BDT 6,887,696.37) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.784314 .866667 .839216 RG
+.4 w
+n 0 37.5 m 1020.472 37.5 l S
+n 0 0 m 1020.472 0 l S
+n 0 0 m 0 37.5 l S
+n 1020.472 0 m 1020.472 37.5 l S
+.3 w
+n 0 19.5 m 1020.472 19.5 l S
+n 416.6929 0 m 416.6929 37.5 l S
+n 569.7638 0 m 569.7638 37.5 l S
+n 725.6693 0 m 725.6693 37.5 l S
+n 844.7244 0 m 844.7244 37.5 l S
+Q
+Q
+Q
+q
+1 0 0 1 48.51969 470.7598 cm
+Q
+q
+1 0 0 1 48.51969 461.2598 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 2 Tm /F1 7.5 Tf 9.5 TL (Received PO value: BDT 5,812,841.37 | Archived PO value: BDT 1,074,855.00 | All stored purchase documents currently show UNPAID.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 48.51969 451.7598 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 2 Tm /F1 7.5 Tf 9.5 TL (On-hand quantities are shown in each product base unit; different base units must not be added together. This PDF is a report snapshot, not a restorable backup.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 48.51969 428.7598 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 3 Tm /F2 12 Tf 15 TL (1. Product master) Tj T* ET
+Q
+Q
+q
+1 0 0 1 48.51969 93.75984 cm
+q
+.917647 .960784 .945098 rg
+n 0 330 707 -14 re f*
+.090196 .239216 .227451 rg
+BT /F2 6.8 Tf 12 TL ET
+q
+1 0 0 1 4 319 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Product ID) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 319 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (SKU) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 319 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Product name) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 319 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Category) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 319 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Supplier) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 319 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Base unit) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 319 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Variant\(s\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 658 319 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Status) Tj T* ET
+Q
+Q
+BT /F1 6.8 Tf 12 TL ET
+q
+1 0 0 1 4 305 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000022) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 305 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-1DP-000022) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 305 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (10 Detergent Powder) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 305 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Detergent Powder) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 305 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 305 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Kg) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 305 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (2 kg) Tj T* ET
+Q
+Q
+q
+1 0 0 1 658 305 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ARCHIVED) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 291 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000010) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 291 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-MB-000010) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 291 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Super Mosquito Coils Mega Beguni) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 291 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 291 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 291 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 299 cm
+Q
+q
+1 0 0 1 658 291 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 277 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000021) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 277 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-BBBSG-000021) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 277 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Black Black Smart Green) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 277 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 277 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 277 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 285 cm
+Q
+q
+1 0 0 1 658 277 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 263 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000020) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 263 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-BSMCMY-000020) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 263 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Black Smart Yellow) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 263 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 263 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 263 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 271 cm
+Q
+q
+1 0 0 1 658 263 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 249 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000007) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 249 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-HS-000007) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 249 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Hi-Super Mosquito Coils) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 249 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 249 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 249 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 257 cm
+Q
+q
+1 0 0 1 658 249 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 235 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000002) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 235 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-BRC-000002) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 235 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Mega Super Mosquito Coil Red) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 235 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 235 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 235 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 243 cm
+Q
+q
+1 0 0 1 658 235 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 221 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000001) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 221 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-BMC-000001) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 221 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Mosquito Coils Mega) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 221 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 221 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 221 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 229 cm
+Q
+q
+1 0 0 1 658 221 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 207 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000003) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 207 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-BWC-000003) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 207 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Mosquito Coils Mega White) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 207 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 207 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 207 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 215 cm
+Q
+q
+1 0 0 1 658 207 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 193 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000006) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 193 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-SS-000006) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 193 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Smart Super Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 193 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 193 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 193 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 201 cm
+Q
+q
+1 0 0 1 658 193 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 179 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000005) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 179 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-BS-000005) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 179 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Super Mosquito Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 179 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 179 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 179 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 187 cm
+Q
+q
+1 0 0 1 658 179 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 165 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000004) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 165 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-BBS-000004) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 165 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Super Mosquito Coil Black Smart) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 165 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 165 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 165 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 173 cm
+Q
+q
+1 0 0 1 658 165 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 151 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000013) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 151 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-BBS-000013) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 151 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Super Mosquito Coil Black Super) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 151 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 151 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 151 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 159 cm
+Q
+q
+1 0 0 1 658 151 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 137 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000011) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 137 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-MR-000011) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 137 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Boss Super Mosquito Coils Mega Read) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 137 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 137 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 137 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 145 cm
+Q
+q
+1 0 0 1 658 137 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 123 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000018) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 123 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-DV-000018) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 123 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Dal Vaza) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 123 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Fast Foods) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 123 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 123 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Gram) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 131 cm
+Q
+q
+1 0 0 1 658 123 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 109 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000008) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 109 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-GB-000008) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 109 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Great Boss) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 109 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Detergent Powder) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 109 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 109 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Gram) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 109 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (40 g, 200 g, 500 g, 1 kg, 2 kg, 1.5 g) Tj T* ET
+Q
+Q
+q
+1 0 0 1 658 109 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 95 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000015) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 95 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-GBJ-000015) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 95 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Great Boss Jor) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 95 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Detergent Powder) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 95 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 95 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Gram) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 95 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (1500 g) Tj T* ET
+Q
+Q
+q
+1 0 0 1 658 87 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 9.2 Tm /F1 6.8 Tf 8 TL (DISCONTINU) Tj T* (ED) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 73 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000016) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 73 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-JC-000016) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 73 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Jahal-Chanachur) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 73 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Fast Foods) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 73 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 73 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Gram) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 73 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (15 g, 30 g) Tj T* ET
+Q
+Q
+q
+1 0 0 1 658 73 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 59 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000017) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 59 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-K-000017) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 59 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Kurmure) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 59 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Fast Foods) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 59 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 59 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Gram) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 59 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (150 g) Tj T* ET
+Q
+Q
+q
+1 0 0 1 658 59 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 45 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000009) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 45 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-MO-000009) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 45 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Masterd Oil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 45 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Oil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 45 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 45 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Millilitre) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 45 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (80 ml, 200 ml) Tj T* ET
+Q
+Q
+q
+1 0 0 1 658 45 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 31 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000012) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 31 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-BSB-000012) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 31 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Mini Beauty Shop Bar) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 31 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Shop) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 31 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 31 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 39 cm
+Q
+q
+1 0 0 1 658 31 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 17 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000019) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 17 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-MV-000019) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 17 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Motor Vaza) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 17 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Fast Foods) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 17 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 17 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Pack) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 25 cm
+Q
+q
+1 0 0 1 658 17 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 0 0 1 4 3 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (PRD-000014) Tj T* ET
+Q
+Q
+q
+1 0 0 1 52 3 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACW-SSG-000014) Tj T* ET
+Q
+Q
+q
+1 0 0 1 134 3 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Smart Super Gold) Tj T* ET
+Q
+Q
+q
+1 0 0 1 279 3 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Coil) Tj T* ET
+Q
+Q
+q
+1 0 0 1 357 3 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Arafat Chemical Works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 462 3 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (Carton) Tj T* ET
+Q
+Q
+q
+1 0 0 1 516 11 cm
+Q
+q
+1 0 0 1 658 3 cm
+q
+.090196 .239216 .227451 rg
+BT 1 0 0 1 0 1.2 Tm /F1 6.8 Tf 8 TL (ACTIVE) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.784314 .866667 .839216 RG
+.25 w
+n 0 330 m 707 330 l S
+n 0 0 m 707 0 l S
+n 0 0 m 0 330 l S
+n 707 0 m 707 330 l S
+n 0 316 m 707 316 l S
+n 0 302 m 707 302 l S
+n 0 288 m 707 288 l S
+n 0 274 m 707 274 l S
+n 0 260 m 707 260 l S
+n 0 246 m 707 246 l S
+n 0 232 m 707 232 l S
+n 0 218 m 707 218 l S
+n 0 204 m 707 204 l S
+n 0 190 m 707 190 l S
+n 0 176 m 707 176 l S
+n 0 162 m 707 162 l S
+n 0 148 m 707 148 l S
+n 0 134 m 707 134 l S
+n 0 120 m 707 120 l S
+n 0 106 m 707 106 l S
+n 0 84 m 707 84 l S
+n 0 70 m 707 70 l S
+n 0 56 m 707 56 l S
+n 0 42 m 707 42 l S
+n 0 28 m 707 28 l S
+n 0 14 m 707 14 l S
+n 48 0 m 48 330 l S
+n 130 0 m 130 330 l S
+n 275 0 m 275 330 l S
+n 353 0 m 353 330 l S
+n 458 0 m 458 330 l S
+n 512 0 m 512 330 l S
+n 654 0 m 654 330 l S
+Q
+Q
+Q
+ 
+
+Q
+
+q
+0.0 0.0 841.8898 595.2756 re
+W
+n
+1 0 0 1 0 0 cm
+BT
+/F1-0 12 Tf
+14.4 TL
+ET
+1 1 1 rg
+n
+0 470 841.8898 58 re
+f*
+0.917647 0.960784 0.945098 rg
+n
+47.51969 474 m
+794.3701 474 l
+797.1341 474 799.3701 476.236 799.3701 479 c
+799.3701 518 l
+799.3701 520.764 797.1341 523 794.3701 523 c
+47.51969 523 l
+44.75569 523 42.51969 520.764 42.51969 518 c
+42.51969 479 l
+42.51969 476.236 44.75569 474 47.51969 474 c
+h
+f*
+0.090196 0.239216 0.227451 rg
+BT
+/F2-0 8 Tf
+9.6 TL
+ET
+BT
+1 0 0 1 48.18898 508 Tm
+(PRODUCTS 22 \05020 active\054 1 discontinued\054 1 archived\051 \174 STOCK BALANCES 26) Tj
+T*
+ET
+BT
+1 0 0 1 48.18898 495 Tm
+(PURCHASE DOCS 9 \0508 received\054 1 archived\051 \174 SALES INVOICES 0) Tj
+T*
+ET
+BT
+/F1-0 7.4 Tf
+8.88 TL
+ET
+BT
+1 0 0 1 48.18898 482 Tm
+(Received PO value BDT 5\054812\054841\05637 \174 Archived PO value BDT 1\054074\054855\05600 \174 All PO value BDT 6\054887\054696\05637) Tj
+T*
+ET
+Q
+
+
+endstream
+endobj
+6 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+7 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+8 0 obj
+<<
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+9 0 obj
+<<
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+10 0 obj
+<<
+/Contents 11 0 R
+/MediaBox [ 0 0 841.8898 595.2756 ]
+/Resources <<
+/Font 12 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Parent 2 0 R
+>>
+endobj
+11 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 2690
+>>
+stream
+GauI<>uM\$'Sc)P($@?oK[!+>mDidT'%.:oK&'rmP8b;r`!P)72GMZbO0>APb,3-J1;"he_4"m#7lm\`O0uSNJo^HY\F8V47"[5-GU5mO)Lj$+1.C51kiMTtlTnS%WXt&n\hmcZGq9j_8if$tR$!Q"(/<IYTs@qe9%,Xt9p6;l/iKsb)BGm[Q$r\d^O9.m0?TMf'^!Z*/@95,EG8c&et)FI.5Illg:[9NT"I0IV2NH16He'CB)-/TU4;C.SQm/[B33uirTe(0YT[/sDs&X6\LaB$pbRo%=n("S=&kNB\e95ErH*)5P2(B&)j:ZeTmGN<X`F.SP=(h>]ZEm81>/KPPHn(ir+@iH'pe@KQ0cu%D)S!,N/$rWa6D^QU:m4hanZb-L"k:&[A:pg6l+8CG'TuUp\1Xi&#8Gh,H=Y0bVj$M[\S1J3]A';I@?SUWN%684<9kB]P-QiZbR]"YKO"jh3NMMpcachomXG*3Ua6sqY.*t2GP([Md*ODIQZ=E@U7u4US!%naUprD+4j7i!JPAb,%fg72k-5OJ$t9sF?ZJMSGnm,gYJ>0aZ[=CS:<<$cB=aBZ9lj)ajp@&otHIZ`,IC45<CpMc'OZr-Rda\_fpmqkVRs7b+P+GVk\Fc/hYo3MGE?l0%pK4%gr7+,qf^DJ@m*Tbi!/.H'[X+*Q_u,A>\@aPQ6El7fjBGD[Bg^2)U%N4H]9to#"D_#8E?SMF`\sU$?pNkb&S[@`SjY,]s0BgW'U7F)NF&i8`SFloU3dbs6i<h,?fg3Hh-_qKX='DBP&b2t@1=L1&G4ic*J.P<k#ge3G/^oAu-)[l<]+:?Ka'[o;m4HoRa)/a9(ESC!qB1i!/!(0Il?/b=hSl%)0hq,7t2Y6Z\sB"f$h4jr:'R8T@!%i?qU%iFm-I_`NMS1I_4)(PuO`NM+;fensn4O8.h[?6bg7TcFPh+U:2*6oHX(^rmS+fLS-7<Ob%Y3a3!mec5%bZ-]1[-d;W=s//'XrT2q7.%c9f$%0#B+3)-OUc$D<he4*]GW-QIV,7O%lXU@K:&Zi@Kib9/?*M/?:@hQUdR"*NF%h?T;tdJkJl^rGk+$dF`O.Z>B4gh]Pk!Vk21D:?muRe$kt1g@_d#!GN!+6<kK:6E6<%+PZFGrHWl!;50+'F4Jl;T=Fk2fb@e<QcGS0V.FF)NJlgq,D@<Q_.%KtiodE4M:8!]oM:^4oq\J2((pG!8b684f;_DI7m1,uteecGAAn1tUn.&!?_X/KM$MeWi:d'W6(+<4V>/6;9pYEYXOc6/.2W47OcCX3OiS:?/ZXF,RNIWaS&am0q4\j@,HbjHJbB0sh^ebWN!gh`1>*4hW7TP/.gAs0.\:)jl0d!A!WZ)Nb"30=N"tm5:'dFaDN3!/c[r_6K/I^gL3#RI4:(%cBe)LBTp37Na#n@aY'IotV^lfU9.$E!%a>A4>bo;5Nm:-9Vq(O$ioU,K*@Kl$!/>5r6+W8O`9VIg*b^QD,iLCAGL*<A!!QEi*"24Rg?1$Kk(W\d.<!a6gVFnX%)c\2IdEKZWHDSl5J\pg7"cE*m02R(QW>-g^TN8kV)HA;NdEKZ7HAPq5:7uRWM:!_>F@r3fh3ET[N*Wp2[T;lE^lfY>&1CLOKn*_klH7e53(9Q-YH:qL@(:G'@*&:pJ>"2;",t3##$a&rYEVaS1aB*LCMV05J\lP2GD(dt#S_=2[H+t7Yl"]`":Q#B,]H>_^RSA:K"p4m+jQ%K68,Qg,uD*7PX$B6V?Dbt;^YDC5b3EOeEsZ/#_$S^9/ImCkgd(MV*O"Nlc)F<UpC-Agh"IuAV%K;Y[iNI"pu)D1ggWM3VJ\tAk&ZElYPDf'Q,!S:s?u7Ja,g#rBRUho`LN8Qm5GlBP(cfrO^kO;-=`RgC+;NbWmmMB%Ua@1LS<7f*rEDVJa0^Cd7mM=jc_bUr/V*$2!\,o7!?OqtP_O52HfL:LYdYMA<'0YiKun!$/3`G[ecqO;tnQ([TZo0V#c0_-)TX"@415G<<$Qc/ehRV)hjG:oKcX!R#E2)3';/75]<mcHCd5`Og[F5#r+l59_Q^$H3ek=CPddCa906Wk^-*;0-3>BNC(e[iqCZ"%>>@>g_<Jhu!Y0.+n'!Em;mX'SrCY-q`![2NtrkC%U(qG0ZjrG0V0?69mWq;8hK`4'@[t$1+b6i<$>,"la/XM@qf4PJQUFF&UA1'J4dbUPP&=*gY+>[[A>g'YJ?2C8m^XB3KkVa?(q#1S@"*Y\">0dGbU#&L.`MiJ-B",6^=EV$n2k!_!ug$t`;NV_eBBM`1W)N&1O#cE7AM4D4_PW;&G%UG2,_N*1hbR1<N#!Bc]Fa?Ub:=pC-kJ[@iGC4OOG$@mqqR3EQ)kmWY'>QoY5IH1ml:Zh[imS?qr;U[T)Q]SB+ha4V#q^8FVNd\TiY)Crqo,U'I4kE2'.Jo_n/K[u8+#PVl/Q<fL/K^7L,e)Vhp\i;pHo%F<e@'b3l=m]gULd6-/K`M+c*i#,k\7KeUXIWP(+o9fHpa)l:U;VpXa?LRq.SI1Cs,=k:U;Vp/UEk&q5EpB\O@1'-8m\Blaj$3q.SU5Cs,>lSn;1jWdC1Oq5ERm[cO:4e)V9=Gad:3RNC$r=ET\)2l*GY<?$td0tQ//8U_k#D#qBP[X.@'^5eV7>D@FUb]Zis(UT6mBX*R5GG;,*gouj/W*W!eSS2/K0`0Kmhme/Xn1V%j16h~>
+endstream
+endobj
+12 0 obj
+<<
+/F1 6 0 R
+/F2 8 0 R
+>>
+endobj
+13 0 obj
+<<
+/Contents 14 0 R
+/MediaBox [ 0 0 841.8898 595.2756 ]
+/Resources <<
+/Font 12 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Parent 2 0 R
+>>
+endobj
+14 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 3130
+>>
+stream
+GauI<9lo't(5DS_'j.=RRO%rc+;\<_9'`Gi2lYo.DRs7&`b$HP/g\&&kPk5aJ0ZE%7K>F>%\61E*/f1M#S2J2ISl9,5LfVCg^l5f+Q*,c$"`2V,GAhAP)$O-a+p_1Y%!fsS>IRW1\E!C.k_aaaSjB6QD?&I[)`Tkdl=$f$F1h\-t4eBHAnuJii35S^&Hfi53D!_`2R3b[ITQ%_$\USl31k9Od<jtbX@SoV)RJcO8&+bWn`qO[k44r:X,L/QeY[(lFPZO5EkB)kGHcQ-HWm]T!3lZhiNUXahtS+I'RoEAP@/:ce&01I&mT<=lNN5(3Y?$IY0$bAf9-R\u?#dZW,JLa:d$<l89<5qPC4:<\9ZDKW*dlCXnkj76Z0I'dlGEejEot[;!jP9Ejgas4pJ0A8uKN&S=6<]+$#[MOs-=%CI:cWh6G`rZ(e-k'FG=hRCbpT\AVmf4Xb>Xg,rd\Aas;>i\^f_!?+T`hBVWq+:=K_m[9Q9QT.42K-#W<P,<$/_N)DO)e<-rqMT1pP3qfUhJi"Xd>BBR7-b:ErC,e^L(u+_@$CEq#0OE7/u=#:LL[Sk.b3Zb^;fq$k.F1<oopsRbc7<%B`-b2!"C4,"]l9n)$+4JM@n`km7bTHi64X-r6#Y6.D2cM4#$TWgD1+D*[&LfRQ;Cg&Pp9c3?m)H"B5aBpAC75bZ&;5SCV'#;r?K;?mnRKFTD@W"-$Im;u_:3hVSYY6,,C3[aOBJE6N2&:@@l:q.)iTTGj"TQp'`?^(n3^bc?dUbZDi`s!/MpIuQG7O'7Jf*Ec^c_?Ap*\TK&EshL?KcAtS$5r+4MV!-i6Lk?qP,8.D!lZpI7%OY.RZL437]@?+.`nP^X&6A=<hPPJ<hO].'d7i*MT?IG'I[#66&gS).?McjCBU1d[79+E(kG#.)M-o@j$\D0-t7uE-rtS-N?igd@)\q02%1:=!t6&\",tjb&FuqR$lP]?N28T`;mW?O!<UF);<AfA=:S*2WGkI\_KAc3qN/]('_>uA\SYNZ))u6=E=7=A;7?o]N-@d//=;BnC6jF7Bo`9Cg_^,ibV9=;R^G?c&MuPATJZ3[Q%Pc(p/'hT8DQl\Gs3MW30X%aJ\mCD!lZ.S"H(m1dm6HrR'c?5JRY&C;C$;J*@Hq:T+i_6RAQBN$5?6.EBEn,N>!`$D>@/6YNJ^C[Tl!:4AqiFrg=CVjI%Hj0OZc6a_7\d%%KS0$p`c@(k=r51'#n,_bA0:.\Mm+JK;iefk`4MgBAkIk5n*8c#+=o\.L?dOJ?'22/D@V&""N6OPDWR6?14Ns"X,($V6`,"^7QTBVu4l>dt.qj;8\@cn8T0:]X&XVp@&]3RltNa&Mp9jnX;FdHS!l#8D'/%k-Ke+&L<-IJ3Pg,%a^;3HYX_l:tX-.#n&acd3M[,l3I]khK<%NBlI0&T<%^,6Wo!k0RuUmH'7.3"k@JR:.@bapc/jV9IE9<6YP,ATi9F'J@&YUPM2V+4cnSR"Ber5VX"t/HH4.F\Cs_S,fFs,tQFoZ<IAE/mJGl0h;?[bT94B4+KXiIpRXlR;\%[0272\Hl=^2=keX/!u+LGE;.XJ1`i<OGNE^L[4CgN?FsKn!UKEi?IsOZHU\,PcSHY0@D_.oPL3@S./Fp#[f\&6#R=2I?jC(6g.dIqKP]5R!<L13A]6'X3MOaXr:9ZI`WRP^8FCI@6(a_8Fod:9i;s?(liO7[qb')9&/e;@k*m<`5c/njhJiRQUQJa2m6cmt4klq<MAC(3MARfFMV$qr+i=A=8>F$VD\kZ:^lDU!JAb;+8`<N4U9AoeWdpgtX+2CKWds(LYO;%oJ3o^JBUg]J83sk%D$(ElH'BZ$TdV2gI<_0jCd?CT%C=$t8(9SmOE^B+-F9^7lp$]Q;tE[pV>H>mXC^_?ET8XQ",`oF9?o2_"se^IF(AD_%@=j,dkXTe91b")Y3Zi'72mBO$9;8m'R3rmqe#.N!JPQDKnQ1BK*(WT$BkPaV5do<S22E)c-285pjh1Sbod[gIFF>ijhIXus21:(jiu*-Nrlk=5Dio2UC=YiH,;?d_#=9'@7##Z"g6`9(,nEdG:!It\_*id0j,KfX-VNtl]pXl$;dcU04-EhSPLun/-pqb)0-L*mTInY1aVm\"oqT^5QO-g;>hT%*rBS7P?b0t9o*Ar>q@>]h5\5>\o*!=1I;#KGP9m\H[G(A^>6>V-CK`<B<e7jW8D\/Z]'1eq9o+hG+J?_M2cpT3IdZ/I97<P3[kknfT^3BgGhEUVtmQ?;mLCOj5MV]aT60L-acuLeo.<9fr3,MW%-K!qL9SeIr/-n2:j,nj[7jHa[V\pYnL;MBuuLWMLhWt2OY.5?*_joT]qW!MLhWt2Tc8n0%hYZ1j23\Q:?olh6X_l0%jo%cudB!Z[nuH2C\p"0%jo!cudB!RAI/%)RVDJU_O!533r)UPoiS<!6HHU$lEu[U]Vl*Bg:@"-hXap)&TBiPJ3C<^9@EW1A#Q*jaEAc7<Q@?LAlV.ViQ_AW:&-Vd'ro9YQ))P*M*X(g$*PY!d@VVgJ+s30asegc6Xh/6ebYr4fPnDlD82ZP<V6pkPhX_j`X(!b-iq3Y5?N=)ck$^RV*V!g+^/=Pd/S><lEgkh,he"I]6@[)sZ8ITSmYUG)+=3'gK.OL+N&Co$c?.oiSUVH+,(qqRtdMG$&ibD\'I/iJ9V)N>b,b-hWCPb!h&j4$5a2CGj2!O)7m6<--"W>%dK/f'^R8W'-!5"mdZIW&p*OSskaP0T>Ig$+-?Zed#!Seb<I%2.,6Z0$h_ji"!A'S:3MNq`tc#Kq]"l?A917#5d)0H?hP"E:rL?(70A2`I24ic/4jdaXk@&q7#I':H$IUfl_^/SGAdgJ\:+%?2kqMA$S7DY$G9f6Jo#BbDu"Zh-Yq`hiN+^YBT'1HF2Rp]p_r^8fQs=LRJ;F?g]7KmF%:Bb<;7X<L\;;Y/tTVqoNhV2RUk]h4`2Zbc)).6I@3(>caaq(+>@+8?/&W5'f/=+urEh=8N7;76dj<RO6YQCR#g#Q?Lpne[OW>+p#(PrS-E!n*5@E9O7LV9rYFI50T#pdTgs:DtRjt/F01iqUGdq`k2&VHF:SRd;D"jkXdH]qDnDo((/I&;nq$o7_<g.f4.X!S"sEel)^F\r=9;n\'G~>
+endstream
+endobj
+15 0 obj
+<<
+/Contents 16 0 R
+/MediaBox [ 0 0 841.8898 595.2756 ]
+/Resources <<
+/Font 12 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Parent 2 0 R
+>>
+endobj
+16 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 3214
+>>
+stream
+GauaD?$G>9(5D;T/,&)?C5jNhYB*,>'KTc!C!4`[dO4QATh/LZKOJ!G`udm5Q)'DKm,>o((6$m_oP/;[5LG6t$hDh4_YeV`,T>Lf2a7Q\P3tPt#ec>fJ#;]'ci,oqOu*S887!485Df4uaJ=XVp?HH_U%BOk`>JiQkDLaFBLtd]GsUGJ]kp&ZB01Z4f:Ud^]tjOh02rj@W]ZM3,VuGAoEW=;O]FmX:I\Ke5/!aNhr!;;1uIB$?KFuK=h17+d;>"A0?Vi)1DPC&Q'F8LK\fE],^gP[7JFRGrRY6JT_9X&4HUuM\FuEiTqLo5'>LJJfES1a#%c3M,Enr6<@3kg<*j+?YG.on%O422[5TW/\M3_+&K+lQBN>:br;+Y/1LJ["SucGe8XY6ofX_%,&!CBT2-33"lXAO5@@6G(fkQ2ReB1#CS%]BEH;e,:S%H/E*]\Q1C)l8UDQ7`gSSVK;6mck^n+1:cYM-sk\pV!nDP*L9o:fu"$WQ9(e408FT^?LNmT_.bSD7s9.HZ*qdrr,M^o@:>?>g^`-j"_gDFLmZeLhUFi)RB@5HU>1"*XX8oC[j(je'MtG`_tf%^TD;aR%H;XJHrp?@KC$h2O).^Ki[uGiPhhdV!P57%c@cf4u9Vo#W-4/T^Srn6</"Pb/rj$+0I8:nZP7D3]Up2fq&1QLd\^TFYW,f\S+e2,M_f.Knjj7g;RYqX'X%ciPL=(a4Nh+bU7N:dP3/#i$/XnV-HcN^cI`/ej!`!-NWWJfjG6FRo;8S,=['PPdYj0@Vq%;:2mYs08,59"HS:MtVNS"H_Ug!FVVb:B6W$(BU8:Hr';9J-kcA5D26Js%u+7c[V0QPQ.@?*CC/h!?;F$?If+\@f[pNZ-l+$Q8Jug`C!BJ=J08bmDD/@"$\f""'FmcirCF^!=(<\cnQYn$1Ttl`#js@Qk5T/![uOUTRHU/E"MbC@rX3*ENl&QE9*c:krC3OEH!`U0Q^\O&>[]F$D8=1"Va3nGG,"/.h94J`rJ^\Ec;#T,<1_m#Z+,:%g%uS"[U.Z+@N@DI!?,&D@/ctKNoQX!<W*ORr8WT#P#o9!a*pc!!aq:/iZ+1"g1,l9#q$c+oF&GJ-k`s5fm+D0[M/[I03[u\D++tZnG$b!h^5:!U?MtH>9)r^aFSUEcD'qKDp^gP4"M.-nXT9g#P:ga-$)u\7<r.V8Fqq^gq981FkF!#h0"0C_G63cO?XZS78&_0@p:#ba56Z!FT@"TD9o"/t%dKMRa%j:48@g)PZfENtRU1o494uQcUr_JGIZ*![';["JA>93s4DGV8,Sr!)BX&*pad89G","!N63O!>A;X?'p/j$G#]'AcbTG0cV%I+%$0qOCK2ZP3FeEO@`6U/juoG*nF>S.<Io':'CM/Q3]6-3Br$OYWi_-dN+,DdgB%<1&Fk+#r!g"#m5IKW;r.AW;r.HF9@)QHYssHZ\7jc%0^pI5Xmp8CZA51$]]E=hWR$rGpLn/-81G\MbJUGTVT1B!Mu(V^=PP"1e9l'Ki*2`2GcXFaY77Q1/L5-EAMA2oV`E;!oVMCGOK;qUb!3VMVkB9H_:>_D\gLbjAH$(mJ[uaP.mse-(jWSV3G=2K]tJ1rs*M`j>fhf?Qt0FFP7Uo&iC2#H%%WNf*M.67k%bEKuu)4"Q2'VV'kKsJN]u_Me.B_i.C6G#>.S1o\=Y,0#GOH"<#?0K+X?8@h&P2WQS"l;?5kkh(XFYm"uC>SoeEE(<c[o_$/AC&X8G<%n5O`#tiJDP2X&/-pbs8Afe1ZhZY=#n$^2"7L;bn,>)?ideAT2#qhUY=TXP^K-`4J^r[1U'[Mnm4OOXh8b',*@%ZmAWtDSDr6>^:.<]8.Csh!oOOr5'!=%).&<r>;O$a.=L=m:Za<Q<KQkYSmoWAI\OM9m+r]*;AMHpgGdYlnu&6LX`1B\Lo(IM"kET3U'Y(6jNbX%AbHnl[-M=Gdu_.:,OB9:.fY"%$hm^Z`o`Y>A@bkFN!l]T#p!i@D-@-.(,EWAJm_?qiefm2YQatST2L2tC$"fB7+A^L#g!dUBt\j"gof^g(:`Tqo;0.nkiq'r#\[LSV=DT\#F,^I)@+Y[Uh8T8;kcI7<Y*u(U6+NZl$)3Ve\DX\p&*t_q:-cdMVh+3,qlpVQ>OTjp8jRj"P^nfd35q*-7O9?lk!6Ho9)32M.G`KQMS$4+MfQdhCOgd2;fS<;>"Q+*tjgO0pP/G5fUrLB7f/o?$PBQO"(=+gW'4dK*.>.G,(]kB2)$3$o_Mq"\Y4$B]-0'3qNiTR[PZ':#qZs;^2ok`?;cH\Ak;]DtdaK/NbB>>Z'9lIGSA9_;?S(>tq1`=bAdV-_Oj76?PS=XmJK3)t5tUT'_=dX7"-UBBbMuu^>$gV('9lhgABF0)ikT$WN?tfgM"EfdgGf'f98;-?)9<uG'%lUZbE>0cE;JFRcTc2loP=njIDTURh4s\(^REWMaL@YbF>k_BBU&*=-IKqjl(OR;"V96+mSS9Y.E<&M9#gC?h1+<"o4VFZm9OPZ_c4308J?A)B"U2+`ss(cK&^lM<ph2O_8upl]]'eEORc+0H0"EW7ifD7')k0W".`a9_B!^0q&jG_K:Z9JXuP4m>s8'oB:k9<\u5Psd<JaSJj8EN:*+J+^%3R!jUPY_YbMi9j.Z:dS2;,%SU.bSOA4%E:7,:eIt-Y<Q0,&po#\TMCh[2YVG$dABZ:t1b3C)%r7[lo;Hq@XbjQR%>5t4se,HdoD9l4BIkR*LZS'lk7@NSeVI]'LNcoSEZ?H1;gtHX<euiAX;;4fZDbh<Z9Zc"`W;1j?ZM%BWopaCd*]<=AV8J,3Yjk_YXB!nDM>clIBtCY9P-r;(ZujDn_kpaGZIY\J=-p!gfG_]B#+7>+k`W>#ZE^Em[73m(\n%p/;m.fVX0ab*K,X[-2dL1"_R;`MZpCLIRP%aDNIs3HK<T>,#B:;5%cST@_T"k]`'O/mHZc<mg*RfH+DP/;%^1o+3!U&"!SI-aJ(M/HO4QPKDgJk"lMg-/rRtFtDt]Z,D6:B&qb<^>>LPVDS%cT)d=0Q:pK8m/HCKAsn'-=1QZq"fSpq>/0-<mKdE;bVi[q+f-C]3B7ePc!7lT1;1=L0-S!K8?IWO/1*i`+dq+p7iTCnZhR<>X/8Q"InrL7>CRs:'5;s)Vib38)$Rm,(U1SmHsq5U+`VHC#$6b3%FrJ!A5MFgrFf?0b8[[JbU;e=0S;c4j.a("<so75-c&$NPj!<~>
+endstream
+endobj
+17 0 obj
+<<
+/Contents 18 0 R
+/MediaBox [ 0 0 841.8898 595.2756 ]
+/Resources <<
+/Font 12 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Parent 2 0 R
+>>
+endobj
+18 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 2379
+>>
+stream
+Gb!lb?ZX[U'ZJu,.J*m>C@p,`+)*/TlkTp;nA:)BFdkW/(WVqLG51PWfno+E=Al&p@:ltW:$+A(:K!4;,Md-)W;4L!hie3e7q;,^"XAtinKhU!P%=Iq3>iod4,@u&"d:3(@e6A>UI[D'anqD09-SYW=;n)*aG;UJ'j2*=VNK5iFg3qe5M,tC]meC94qdN!M54PcF)f<Ui[H=[ll4TSOY)9nLoW?emp;)G-h#C&793u1[EPdTe"S$NaSS*33%UBemj.r1\gVEOC[uXH&PdWLR#JeAnIl;u?!V4dYsbpf=$Om2Eh[mKG\>$jD,@NPOHQ>eNu:=VB1a?_;_qaW+.B2Tq5GI##^bs:0/uPhETVE]*ndD2de(lpfam\SMditujNHi[UXePJ-?Aa+9V`Z)4H:%KWhRYu2k%.d@6Ep7/>=RN@1r+mZ\pfp;R'HNit:0,:e++56s;P>m-Pt(5MEL-9gQr"1,&7\,U^e.im57od:[$6R8r<mRP/9:Ced//jk#dr6r&b<?@=q]:7dUZDpFrfH@DnbVU'k<B?RsUYeOs?d!jSEVIO>)PAWiRQ&;I3a=lrX9X!K0P!c#&1+/Da4C_g3*cJX8gH!WhJZqPuD+N?'8D3^J8Md)PENu*7KAC)f_neNKjXaUG_g%.,ft*\IZW0cObLnRI,V]f)Y51>`)bG%B,MTD?%[pkBOo/SkOA(P^n0k:n`SpeMF)^==Z<=f1o>7T$Qk:rO/+VH]n9fY$es4]nokcjm$?BCqjt$1:dA_!!/QnheG+=gtZ#o:L`A.gk>L30HeP_-MXCfRe,KWnQWE[V<,#<lMBDSM_:pr=58l"uYbUqLMm?B0%;'D)kZ"0ZcP2-AAQ7VAIXX-UToh#ukPU"GDPJm)i$D;'V/@=JOSkZpWIrPiuZ(1qc2)%G6.$fat>JU+9eH1JR]ZlnG=;6)bN$K_po:Cau^;,\[80:mJc.ZCj#2T+jHDc3hm0h;pMT$e(f'bdf[=2PVDX[^d-(;NZB)uTea8N<fc(<UgfI^#9O--VImS+g]FCr9Q51`'?T"^crYg0f@&&X@)99'E?LlEKIW.+m8Q"YJ75pea:!haen3rr0Rj7+(`Iib84'Tr223!pprIgViNiDT_Je0FCN!XZs>#L3;`:/OX=1B9jY-:#iIbQ&@)I:e)*`71i:'Zs$FR/N[Zr(*J%RF-%j?\>cpJ_EWQr7XZ'2XVq\r$WhM&uYY)*9kj7MA*Yl,Cs<gpp@4i>E.7f1n,R.:U=UjRBGAd/1@B8M/N9e5[3ud]^eQ)7I2os.#p'p6hgC$MH&mrd_[G^,`I^ND"dR_E?l1(c1l]m0%OV%'Kq>mP],)BOW)8=o/s$C&\2-<YTZ^489rd7'W[P5NjsG`8((;o=n2`0B5sBBWk>teDeHrk**2k`?:)bCQt2JC+uRNHGol(BLt$M"M;m`DfN)/.UGu;18isAE<qf-)[j=Ad;]a;gij>YAP'kLQEG%Z7mUR`E&_<+iP4p(Hiqgr<P4s;'29C3<3H1UI2jo"4/f$3Oc8?KW3aZE/[E0Q)/EWO?dEZ:cr_f:0')**,liC%gS4MhCrVK"H2Gk!%'477/?X,IpO]giGC.f3VF`F.(AntqD28+jo)j1,8R_R^.-VO4mC7_i\38$dGZSniE2JShk;;#8WG'q<aG4H]6[5?I^dOd$;=NM>DF<nO'l&MOI(tDLE(*YgEh_KG[5AbVQ%-(LV;6l8=..Oeb48[Z!Kc)N_[?"TmMR\]#a"FAoEs;HnMl*M2R`B:;h9U/C/R[\O/R[E5!h'+iMUTDA@NNS`/CQ"-[&fXmnfc/5)6BpLf-T2;4-UKO=G3"U)sKYhMGY]JUo5-K$E>OEodd\N(e"!s'VilI:dHfA(0F?@U>;`;pjih.rYIK=Ff#2HH(K(#W6H"DUDgA]lb6$[BCp?bQ6DaL^815gJrNP&_S4?1K706<#5^$N%JELk([QF;9lSJ=(p;WQE63&7LT05OVj&+Q`n\Dio\:>2i^hjq;dG`=&9SeI@pFGl`A%t#`IXjd""Xq>'k2/jr<ftm.&,&I^_3[k('b!NZT'AeI4PjZFm#oY50C'fU7B[YhH9u@C0uMOJ`X@pg[a]`K2)FP'gP-;,.>TWG=i:0IiGn7ML:l<.X->DM-[-8j`:="Kk4=K7XZ?uF9XZp[87uG_d:%4<?gm/mACH,HV1R7hGdVR2.0>h67L6Xo&2=eX=G6(^Jp?2VO55!@#qrPeT$A:eaP4cap-[#]bfYq!<Z->L'SS%$kY,5=J*m)1Lj^sFnM;q:Q'"/P^2[brGN\0Gms&W;rC/h4QZIabU+PThuCW4=3>RI`3+M[s2=>lV)hh"rrfP8p.k\C@/gA6%JEQt]3t(1E"a3R!G%psj<P!1!jVF$[/~>
+endstream
+endobj
+19 0 obj
+<<
+/Contents 20 0 R
+/MediaBox [ 0 0 841.8898 595.2756 ]
+/Resources <<
+/Font 12 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Parent 2 0 R
+>>
+endobj
+20 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 1642
+>>
+stream
+Gb"/)gJZcs&:N^lqN7SXR&`]&N.Ie1'bW,oo"p=9#]R!oOQG2mMN?X9=cu4Jb>:$ub3k]"\IR&XT%6cN:BLiV?bH.o>l]g2YlC9s(GNB$XullO:N//D\_lpNTHmUs"[9X/*b?b0%qcu-&l?Ho4S2"&b%"Zq%1=jukXi\e#+NO+:.\j[qE_g--]8dc$99@aY(Y:KK^@E!^rmj9(;W/-_Z6lH_!]V'$!]rF"Nr(%>Mc/94Mk5@?&m?DrW)KGGA1Y4@Go<c#Jl)n"suQBo%"F4<]A$C4>?]tl6ju%%*^:t0c+st5oGbbZFC*[LqdQ[BqJhJE$'i!+S]Xm%&@0Us1NreaKr*bfX7E4=?)HP_rYj*:03?5aY.h((N0j&+6!WS;YYU]B-(QEVg1+K&m9Qt,&G3[Z&g+;Sljl6:C*^Ps!:"jM(2!T"\"ZWM"9WMLtS-7O?TS(`E.$p-droqe`+n76hFY">t$angr,-(1n)>V1qR&IRrWUio^U\`+md+ucR80F*k#qN&Psj],VF7']K(\7BP]<^``FR\YY9PF1^f66-[6XUI_]?E.aDM5H972s]6D$F];V?S3Wq/-Gq%iT8pRg\Yg-pJ?EU/Nk@T"\agf&Rfdob,\V*bgY>mKoM3]ltP$'`=%"'hMe,5nD15_4aN:!e9HcS%A9B0*t*_b$oG7&I0P-KGPB<S_KP_Ha<J^>Q;HILsgc<#3l9od]arG%XrE0/B-9/qs8,8eJQW2SRn"[AV5P+RG&(#M<Aj_</DBIYL5?bM?R#*0KTfrZjk4k$jjpZe00:`6O9=YHTQV$Y+Fkd3dpfU,q;$<PD/iDRYW+C$BGd?eY`mP]<kE63!uX)KKo"_W0u8@Xg]$FckgI_V<4ENa+gfVViP^`6<H7E#MSm5B3jC<>nCX(k34[2CU+gs?U]aC=c[<kH$PV4nWBHemF=;\>Qgdp'=1pj.=LeNO]m+/mh&.:bkEld\37=7POi(\EX5lCX:pE2hPJI)iR(L(/.0arfR>-G>%OPk@6H]X:^WY>Wh'l2EI:g*B+HVC^+='S@^#Nj"n[[.+$Fh`pslI@egT=#E`U'E](t@n1l;_7bTU';TWjqNns%B.D,AY1.oWiL:0QU;ZOqKo)J@n4eW,.Q1UQnA#aVp/ht9IiXM3et<F>!SV#m.d7bB4k?:glc\[8",;+2iirV^43(EC1Ri/E5qo%L,%i-Jp:CQf>jJ\1\IKAio3Z"3-jU'9ND2QFDOrRbPfgKH(/^`hK1.6tiA+N2ic5nfP3pG<YXl_m1fu"ZI4g.@.PeKL+r/j*#)f8mpI0_RIuVoW"5Wr7G^b";MkA;4SN`ILGgTnrkVhBt`TA:J6Mn8ES%:J8l6KV,6FXejlP<bCcg?\OI"C#I03D781g>?U)KORn0]jUgX]jq+eNUm\[Md7@j'&)'1p5noZsKtN88GGD88GGD88GGD82jqoOHs:P+dG[m)cA+ATck/AL/_-%Z?(/`P4R:EUQWi\DK]Rbr!Y)*!p4Ah;0%n%P\clW?q%')>c]@,^7;;R(#tAj-#40!X=+gORh_c/H]]'A^F>mnMYL3Vq)p:DGtTE/rj1](*Dp%]da\r[V_gIZk>%p=Z.\Bk@'e=]_.KTDK?[/("#`32'("t,KJAH]#Bp(IZB_&H~>
+endstream
+endobj
+21 0 obj
+<<
+/Contents 22 0 R
+/MediaBox [ 0 0 841.8898 595.2756 ]
+/Resources <<
+/Font 12 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Parent 2 0 R
+>>
+endobj
+22 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 2577
+>>
+stream
+Gb!T[?$"LR'Sc)J.s+?ENmXaN>s_(rR2,i,3h>6Lh&)<\+0`AFIS>6=-%##:YcB#&2nirB=ECe68!;b2QHmVcN/'WlrHG\Xm,98&s.*OaZHK^NkYeb1+5-JOaiBUn3j"'IV5qIo%BmoI;6^pu:R4\tdKj3*VKBq6Z%aitotFCkMg]Ee?CpK`2P/e8V_;'I_b(pd.\'a:AY`u)GOYcE=3,q:74F4?iR80Xn,1-.];i=tgFVY$S*SUjrQSY*p!r;A3WG:#IsbA#@n9esCpmo<bN^$iq&?sD2M+G3\(6k^=n1b00C!`jZ_L;Y%rF$8aR'=FZt_f=g+`GnZdMf8Zra2]ji4jWlG8mGkJ$teAA2nn)4TSk/D@)]Va?*s$?ihGh(G/Xp<C:qRr:XSiM1@H69&:"DbJ"$G."I8T9S\]fq]^TXlQ(/0Ip^Yq+<*<2WBW-b#7qE[&%P2akK^"4?MZpV[>k=\mk!fD6n,GZ\C&M(V_lo&:Ldchpu"TG24]eB(_\m]NW)-`/AYbG5fDFo1/.2HhI$j_%2S:<@V6%_<*]"VQDa^4"8spG$`fn#Q=F'qg31iDqfaZS"2WA3R1BPNn4_eq^p28Z1c_Np2Y,h:^/8[rOQ#EIB/8)]WQ&"p$1gc[QRf"i<9_b\mF:DbMt9Z+_u85SmBs;L>=J#N['giE6.4s5EG,"EuaCPXOkJqbm7]M^'Y=jAuj2H<]&[nE'FO;*pd?Z4a>Bk:4ZSn[FqdV<h#/Z2qo'/>M[N@J"(X>@2'=<?Uu)8W3^f`>qON/7^7>Ea`ie[,n.DUD/[`000)h/(eO@R:(ou(_k#j`"j;A/^=bDYfii`![]#q^a;2`MM8kReSUf/r(NrrfKo72p=Vsm_f,10$?f$5;6b#qaS(;DP%VcbZW#X'V=B1X;li`hZZ`jhkC/t^0C)0D5.ZEF;c"_7-RUm#mp$@,$S$[XP5H%pg!H[mk@L5JF\l4,_"iDs2VdLalMGQ!kkZhQ,,:"g;F,2%Rh@1E5+sX3tAI^1,<PBFVUKC]r"Zug`eM$:CArdjl6u<8sNctY?I/U"8Ze+kW`.Uf*SrfWQE=k;02tqnl*j=lu,&>].'h+C%Z(`q4k\O+d:9<=#_Z_;_'qWjRn=Urtj)n:==mU*kC5)0\HiG^dA:p"f#)GN2rOC#'V#5e6Ju8`#JBca?SqTg5\Y98#6mmkLRcOh\)PZD@!6(]rJ0LOi50^G7MF]],Kopu9(-o_,/V#)rQ!j\$)WU!a!6(.t"]2#?!]%Xp.&':;!/1a>=kWp*=D%XYn^^kD8X(+'5%-_*KNnnXGdIWNUjNQCLdJ"&JDt71i;jWDhZHDYV.'l?%qs>V,M*#G*pitB.Gk63\tq3D0MWH1clPHgnqTP&U9?=7+=E`mUNhrC7[O10g.dE.,%Uij;\6hi'M$Ot5bYb/NRY<AO@8Ikjo])P.5?^X8IqIbqn+=k!EeGOg&`[_-n7qn!/9\h^l9jCWstd,O@16dTmW"@lGt?E';Kf,^(I#7h.Xmjg]pYHC,gn+A.=;jYg*GRdWYa<dHX%sG60_jX;HYd4b+aDmK5Hj5Ts_85(LKU*[dpY"/&KDdfC^j"G[X]bq+63batoalXisa6(7k.g3l2I@ffd"Orf-N4Quk\W_HG.`X0ciP6,kl@W5-.l["#+G$Qceg%B49![qXt1o:_4!qca?jc9J?^E5g?F;QC'QA5cO$[,/g.XFN0'IX=-P=3YPB]AP>qF<7TFTXm[3rLS?qaU\9h*6ibpAQI<3s)G'n]ukJbnOionPd-S2X;meN*,S0il/Rki]&FQ*ei<r*RFiojeIo*+r#a9P+;NG:gMZp5"hjs$'\lfn&T&Pdi&5*F/8e4Ue^qB6iJL.Um=H"7QrG7;$?B&,cg,D&O<hi6:kYA".Ef6>h&*,D@um.eNCP'?6!4n4Pcd/+Hf;L>I]#PgH-WAB1o.7OPeNEj,'0OiU:]a%5UUjf^H_<"H.G!Jp7tgaB5nG0#g,4N8N+_p<-6(YBSB=1dkXLhKUkFX/_58UEOA_*t:_-<;#@37mg5c1c_:eJL:)tf\g$l*Xtuue)JadXa4/5)PX+,`M4TVHWiNMU2lpK&PWZjZ)@C=k4^FYUYMGOH][')9TLoTMXDX6e:'dVNTr<!Ve69JgT)6"pK(?qh6i9Hqkskh'r1;A+4[B+U[`IK2530"HlYYhl([.EO$<TV0A,a"@>91g%_a+a"5Ess,dots<Ys'">=7fo-p_']Ym$$^l7GgR]K#ffn.mFI9)TduCgXFLMVp[J#F$?:j9@$26q>Q%-R`$@p*[(jAab)",#Xo&^f")kH_6s=H!?o6B`DZ,'3OfMILEK/MRaaurmK$RX5DA13VY-h/:Btu9joKQe=[nO3h%gCQLu4G'Z^`sOq<q]pc&*BW.WFQ_pVj/;^p@6Q:]M1`+CCD<7d@K0(K%i4+>[C.8kH\nTn;TMA@WJV)7_Tg&rC;8h+V''-pD0Bg8N0NC3,^p)eI4pn&h3Zq9`01B@]OWlc.c+<P's%[*kRPlE_/W>aVK:/jrN2]3au[)ik!B2+-=3,(,Na#T?3E0N-2"cm7h"Kt94'6`pWjE*\B~>
+endstream
+endobj
+23 0 obj
+<<
+/Contents 24 0 R
+/MediaBox [ 0 0 841.8898 595.2756 ]
+/Resources <<
+/Font 12 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Parent 2 0 R
+>>
+endobj
+24 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 1371
+>>
+stream
+GauHL>uTK;'Rf.Ggdg')6BWqDg3kH4G1`K&8D9W*l&4k`OQ'A.G"OR>+2:nJ#D"4VG2.`OM.93Ah!<u^d:GT5L\\^L*8kK=LMn%a%c_>4+UMS)#/fufh&_\u(pFQB*8sEI(b!ZR\9bWN6cb*l.T-h2KJF\SbX!^I!_M&IQGI7<-BN-F\D<_ZrW=E6NW;!KGp'Tu4*:p5/[AsHN,YJ">Wml@iRJ**OtqS4:DUp/.H(M:l""gBnn\L+qncG?E=!`8&if"#.i<binS:Y-[_%ceYZS3O]3cg^%Ir/09?]gT.'<`10^rj3LNo3g&J<!0@2tGf3.;JFKu!)(pm-R'H0-^gqbGiGUBaJd>Qtk*0'>8K5OTD\?QjH3JiaBmL_%"YKMj3mR:MACD:Z_WRPmJI72Q<6*Zs?GL4]B"O;$JaPU,rPWE4B8iIJM#'7"K2l>(6ZSnc?5o.SfAqSjl68I<ErH9Ouc%/r-X[VuagGW\+e1d$=Vpiq8Xk4E1_:d6(UCmJiYp%-"R,$GLP0c>[Y+'#4GKn:eHrZ'N]$;jLU!*sCu>eb_7)(tW]Nh*ZJ5q;thqR)Qn-Ddfs2QefMc"*6.>D$LEou?YRZ*P_5cGcP"j'(1/-7Lc&o@\<,+HCbX]I[.=/JHRhG`H$.G9(4Gop<[ZQp!u7Ys!e-WSZ:QnD2i$=mEl[og4>+Vt?FPJC/Cge`=CmmZt3-^p0;="h`I9"HN*g*S(,""A[';A+uhg33f=%4!!,n("Tih8+2&MRCTdslg$\K'Pi,pTDKlBANYc_-Y3Pald<@8=d%XYBT>Q5s)aQpqbFa-C6Ms#;Y1%&p-ls3;N,eT"cp!*D\(=O<H``0fsOmJ8I+lJ]/'1pCMdQiGGWd#>\rtK?h.O]h7fh>:j.//(Hg!T]ffNe?!QoiGP`X"1`1oFRs\;:h9"7OG6[DU/n5j$md>sM5>;!cReu8^I*(47(PEk*39r!&s5<@tY3lOd5N0=:?dATV'.9s7OaHd/HAnr];I037SVV"h-Ogj^)T,.!n[QSXdU9#[_JiC]/=)mGN@bHt.V:WJ?k@Ai]!2FV+S)0E>>VP=\JlVU,q9JH)SFjSG(41oCq_'c^X9T*HRj4P9DI[$#`Op?(GO%IR9?PJ(\AK1+S+,'-]Q@r&WU4\9#.ugifO43XG1h2Xj5++"\!.,T&<U.d<M;VC<6i_;Uqf&GXJ.fDhProe%IK!Ohl[`rX8#*758Ifm\Ga?NCoDkT'=?rgAr)Nq'*p^=Jcnf9G`b@eS2#GLoj+Yr_It8SM?>f8uI!Dn79Y`[Dd)Cr4^O'JQ["LfB$3PR).2>Cj8(F\pnosD3=L0aGoX#IW5U:X&ELU"l*moS,D]P2b?3`PG\_B^&J*D.]d4~>
+endstream
+endobj
+xref
+0 25
+0000000000 65535 f 
+0000000015 00000 n 
+0000000054 00000 n 
+0000000162 00000 n 
+0000000211 00000 n 
+0000000466 00000 n 
+0000024754 00000 n 
+0000024861 00000 n 
+0000024968 00000 n 
+0000025080 00000 n 
+0000025192 00000 n 
+0000025394 00000 n 
+0000028177 00000 n 
+0000028219 00000 n 
+0000028421 00000 n 
+0000031644 00000 n 
+0000031846 00000 n 
+0000035153 00000 n 
+0000035355 00000 n 
+0000037827 00000 n 
+0000038029 00000 n 
+0000039764 00000 n 
+0000039966 00000 n 
+0000042636 00000 n 
+0000042838 00000 n 
+trailer
+<<
+/Size 25
+/Root 3 0 R
+/Info 1 0 R
+>>
+startxref
+44302
+%%EOF
