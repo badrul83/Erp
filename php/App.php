@@ -1262,6 +1262,19 @@ final class DepoApp
         }
         return $out;
     }
+    private function productConfigurationSignature(array $product,array $units,array $promotion):string
+    {
+        $normalizeText=static function($value):string{$value=preg_replace('/\s+/u',' ',trim((string)$value))??trim((string)$value);return function_exists('mb_strtolower')?mb_strtolower($value,'UTF-8'):strtolower($value);};
+        $rawVariants=$product['Variants']??$product['Variant']??'';$variants=is_array($rawVariants)?array_values(array_filter(array_map(fn($value)=>$this->text($value),$rawVariants))):$this->variants(['Variant'=>$rawVariants]);$variants=array_map($normalizeText,$variants);sort($variants,SORT_STRING);
+        $gifts=json_decode((string)($promotion['PromotionGifts']??'[]'),true);if(!is_array($gifts))$gifts=[];$gifts=array_map(static fn($gift)=>json_encode($gift,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),$gifts);sort($gifts,SORT_STRING);
+        $unitRows=[];foreach($units as$unit){if(strtoupper((string)($unit['Status']??'ACTIVE'))==='ARCHIVED')continue;$unitRows[]=['name'=>$normalizeText($unit['UnitName']??''),'conversion'=>round((float)($unit['ConversionToBase']??0),8),'purchaseAllowed'=>!empty($unit['PurchaseAllowed']),'saleAllowed'=>!empty($unit['SaleAllowed']),'purchasePrice'=>round((float)($unit['PurchasePrice']??$unit['UnitPrice']??0),6),'salePrice'=>round((float)($unit['SalePrice']??$unit['UnitPrice']??0),6),'unitPrice'=>round((float)($unit['UnitPrice']??$unit['SalePrice']??0),6)];}usort($unitRows,static fn($a,$b)=>strcmp($a['name'],$b['name']));
+        return json_encode(['name'=>$normalizeText($product['ProductName']??''),'supplier'=>(string)($product['SupplierID']??$product['AgreementID']??''),'category'=>$normalizeText($product['Category']??''),'color'=>$normalizeText($product['ProductColor']??''),'baseUnit'=>$normalizeText($product['BaseUnit']??$product['UnitOfMeasure']??''),'variants'=>$variants,'optionType'=>strtoupper((string)($product['OptionType']??'VARIANT')),'productType'=>strtoupper((string)($product['ProductType']??'REGULAR')),'promotionType'=>strtoupper((string)($promotion['PromotionType']??'NON_CP')),'gifts'=>$gifts,'units'=>$unitRows],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+    }
+    private function assertNoDuplicateProductConfiguration(array $input,array $units,array $promotion):void
+    {
+        $signature=$this->productConfigurationSignature($input,$units,$promotion);
+        foreach($this->rows('Products') as$product){$existingPromotion=$this->normalizeProductPromotion($product);if($signature===$this->productConfigurationSignature($product,$this->units((string)$product['ProductID']),$existingPromotion))throw new InvalidArgumentException('An identical product configuration already exists. Change the product name or another configuration detail before saving.');}
+    }
     private function createProduct(array $input): array
     {
         $this->user();
@@ -1285,6 +1298,7 @@ final class DepoApp
         $units=$this->packagingUnits($base,$variants,$units,$optionType);
         $this->db->beginTransaction();
         try{
+            $this->assertNoDuplicateProductConfiguration(['ProductName'=>$name,'SupplierID'=>$supplier['AgreementID'],'Category'=>$category,'ProductColor'=>$this->text($input['ProductColor']??''),'BaseUnit'=>$base,'Variants'=>$variants,'OptionType'=>$optionType,'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR'],$units,$promotion);
             $id=$this->id('Products','ProductID','PRD');$now=$this->now();$sku=$this->sku($supplier['Company'],$name,'',$id);
             $this->insert('Products',['ProductID'=>$id,'SKU'=>$sku,'ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'ProductColor'=>$this->text($input['ProductColor']??''),'BaseUnit'=>$base,'Status'=>'ACTIVE','CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR','Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID']]);
             $this->writeUnits($id,$units);$this->audit('CREATE','Products',$id,'Product created.');$this->db->commit();return $this->product($id);
