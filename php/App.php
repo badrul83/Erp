@@ -1047,7 +1047,20 @@ final class DepoApp
     private function units(string $productId = ''): array { return $productId ? $this->rows('ProductUnits','ProductID=?',[$productId]) : $this->rows('ProductUnits'); }
     private function product(string $id): ?array { $this->user(); $row=$this->one('Products','ProductID',$id); if($row)$row['Units']=$this->units($id); return $row; }
     private function productImage(mixed $value): ?string { $image=$this->text($value);if(!$image)return null;if(!preg_match('#^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$#i',$image)||strlen($image)>200000)throw new InvalidArgumentException('Product image must be a valid JPG, PNG or WebP image below 200 KB.');return $image; }
-    private function variants(array $product): array { $raw=$this->text($product['Variant']??$product['Variants']??'');$out=[];foreach(explode(',',$raw) as $value){$value=$this->text($value);if($value&&!in_array(strtolower($value),array_map('strtolower',$out),true))$out[]=$value;}return $out; }
+    private function variants(array $product): array
+    {
+        $raw=$product['Variant']??$product['Variants']??'';
+        $values=is_array($raw)?$raw:explode(',',(string)$raw);
+        $out=[];
+        foreach($values as $entry){
+            if(!is_string($entry)&&!is_numeric($entry))continue;
+            foreach(explode(',',(string)$entry) as $value){
+                $value=$this->text($value);
+                if($value&&strcasecmp($value,'Array')!==0&&!in_array(strtolower($value),array_map('strtolower',$out),true))$out[]=$value;
+            }
+        }
+        return $out;
+    }
     private function massUnitKgFactor(string $unitName):?float
     {
         $unit=strtolower(preg_replace('/[^a-z]/i','',$unitName));
@@ -1281,10 +1294,10 @@ final class DepoApp
         $unitRows=[];foreach($units as$unit){if(strtoupper((string)($unit['Status']??'ACTIVE'))==='ARCHIVED')continue;$unitRows[]=['name'=>$normalizeText($unit['UnitName']??''),'conversion'=>round((float)($unit['ConversionToBase']??0),8),'purchaseAllowed'=>!empty($unit['PurchaseAllowed']),'saleAllowed'=>!empty($unit['SaleAllowed']),'purchasePrice'=>round((float)($unit['PurchasePrice']??$unit['UnitPrice']??0),6),'salePrice'=>round((float)($unit['SalePrice']??$unit['UnitPrice']??0),6),'unitPrice'=>round((float)($unit['UnitPrice']??$unit['SalePrice']??0),6)];}usort($unitRows,static fn($a,$b)=>strcmp($a['name'],$b['name']));
         return json_encode(['name'=>$normalizeText($product['ProductName']??''),'supplier'=>(string)($product['SupplierID']??$product['AgreementID']??''),'category'=>$normalizeText($product['Category']??''),'color'=>$normalizeText($product['ProductColor']??''),'baseUnit'=>$normalizeText($product['BaseUnit']??$product['UnitOfMeasure']??''),'packageSizeGrams'=>round((float)($product['PackageSizeGrams']??0),3),'variants'=>$variants,'optionType'=>strtoupper((string)($product['OptionType']??'VARIANT')),'productType'=>strtoupper((string)($product['ProductType']??'REGULAR')),'promotionType'=>strtoupper((string)($promotion['PromotionType']??'NON_CP')),'gifts'=>$gifts,'units'=>$unitRows],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
     }
-    private function assertNoDuplicateProductConfiguration(array $input,array $units,array $promotion):void
+    private function assertNoDuplicateProductConfiguration(array $input,array $units,array $promotion,?string $ignoreProductId=null):void
     {
         $signature=$this->productConfigurationSignature($input,$units,$promotion);
-        foreach($this->rows('Products') as$product){$existingPromotion=$this->normalizeProductPromotion($product);if($signature===$this->productConfigurationSignature($product,$this->units((string)$product['ProductID']),$existingPromotion))throw new InvalidArgumentException('An identical product configuration already exists. Change the product name or another configuration detail before saving.');}
+        foreach($this->rows('Products') as$product){if($ignoreProductId!==null&&(string)$product['ProductID']===$ignoreProductId)continue;$existingPromotion=$this->normalizeProductPromotion($product);if($signature===$this->productConfigurationSignature($product,$this->units((string)$product['ProductID']),$existingPromotion))throw new InvalidArgumentException('An identical product configuration already exists. Change the product name or another configuration detail before saving.');}
     }
     private function createProduct(array $input): array
     {
@@ -1341,6 +1354,7 @@ final class DepoApp
         $units=array_key_exists('Units',$input)?(array)$input['Units']:$this->units($id);
         if(array_key_exists('Units',$input)&&$this->productUnitConversionsDiffer($this->units($id),$units))$this->assertProductConversionsChangeAllowed($id);
         if($optionType==='PACKAGING')$units=$this->packagingUnits($base,$variants,$units,$optionType);
+        $this->assertNoDuplicateProductConfiguration(['ProductName'=>$name,'SupplierID'=>$supplier['AgreementID'],'Category'=>$category,'ProductColor'=>$row['ProductColor'],'PackageSizeGrams'=>$packageSizeGrams,'BaseUnit'=>$base,'Variants'=>$variants,'OptionType'=>$optionType,'ProductType'=>$row['ProductType']],$units,$promotion,$id);
         $this->db->beginTransaction();try{$this->update('Products','ProductID',$id,$row);if(array_key_exists('Units',$input)||$optionType==='PACKAGING')$this->writeUnits($id,$units);$this->audit('UPDATE','Products',$id,'Product updated.');$this->db->commit();return $this->product($id);}catch(Throwable $e){if($this->db->inTransaction())$this->db->rollBack();throw $e;}
     }
     private function assertProductBaseUnitChangeAllowed(string $productId,string $current,string $requested):void
