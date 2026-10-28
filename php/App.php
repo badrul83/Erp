@@ -43,6 +43,7 @@ final class DepoApp
         $this->ensureTransactionPromotionSchema();
         $this->ensureProductImageSchema();
         $this->ensureProductColorSchema();
+        $this->ensureProductPackageSizeSchema();
         $this->ensureSupplierProfileSchema();
         $this->ensureUserAccessSchema();
         $this->ensureDealerSalesForceSchema();
@@ -204,6 +205,16 @@ final class DepoApp
     {
         $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME="ProductColor"');
         if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN ProductColor VARCHAR(100) NULL AFTER Category');
+    }
+    private function ensureProductPackageSizeSchema(): void
+    {
+        $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME="PackageSizeGrams"');
+        if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN PackageSizeGrams DECIMAL(12,3) NULL AFTER ProductColor');
+    }
+    private function normalizePackageSizeGrams(mixed $value): ?float
+    {
+        if ($value === null || trim((string) $value) === '') return null;
+        return round($this->num($value, 'Package size in grams'), 3);
     }
     public function dispatch(string $method, array $args): mixed
     {
@@ -1257,7 +1268,7 @@ final class DepoApp
             foreach ($options as $option) {
                 $purchaseOrders=(int)$this->value('SELECT COUNT(DISTINCT s.SupplyID) FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID WHERE i.ProductID=? AND s.Status<>"ARCHIVED"',[$product['ProductID']]);
                 $purchaseLines=(int)$this->value('SELECT COUNT(*) FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID WHERE i.ProductID=? AND s.Status<>"ARCHIVED"',[$product['ProductID']]);
-                $out[]=['ProductID'=>$product['ProductID'],'SKU'=>$this->sku((string)($supplier['Company']??'SUP'),(string)$product['ProductName'],$option,(string)$product['ProductID']),'SupplierID'=>$product['SupplierID'],'SupplierName'=>$supplier['Company']??'','ProductName'=>$product['ProductName'],'ProductImageDataUrl'=>$product['ProductImageDataUrl']??'','Category'=>$product['Category']??'','OptionType'=>$optionType,'PromotionType'=>$product['PromotionType']??'NON_CP','PromotionGifts'=>$product['PromotionGifts']??'[]','Variant'=>$option,'PackagingSize'=>$optionType==='PACKAGING'?$option:'','PackageConversionToBase'=>$optionType==='PACKAGING'?($this->packVariantToBase($product,$option)??0):0,'PurchasedPackSizes'=>$this->purchasedPackSizesInGrams((string)$product['ProductID'],$option),'BaseUnit'=>$product['BaseUnit']??$product['UnitOfMeasure']??'','UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'PurchaseOrderCount'=>$purchaseOrders,'PurchaseLineCount'=>$purchaseLines,'Status'=>$product['Status']];
+                $out[]=['ProductID'=>$product['ProductID'],'SKU'=>$this->sku((string)($supplier['Company']??'SUP'),(string)$product['ProductName'],$option,(string)$product['ProductID']),'SupplierID'=>$product['SupplierID'],'SupplierName'=>$supplier['Company']??'','ProductName'=>$product['ProductName'],'ProductImageDataUrl'=>$product['ProductImageDataUrl']??'','Category'=>$product['Category']??'','OptionType'=>$optionType,'PromotionType'=>$product['PromotionType']??'NON_CP','PromotionGifts'=>$product['PromotionGifts']??'[]','Variant'=>$option,'PackagingSize'=>$optionType==='PACKAGING'?$option:'','PackageConversionToBase'=>$optionType==='PACKAGING'?($this->packVariantToBase($product,$option)??0):0,'PackageSizeGrams'=>$product['PackageSizeGrams']??null,'PurchasedPackSizes'=>$this->purchasedPackSizesInGrams((string)$product['ProductID'],$option),'BaseUnit'=>$product['BaseUnit']??$product['UnitOfMeasure']??'','UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'PurchaseOrderCount'=>$purchaseOrders,'PurchaseLineCount'=>$purchaseLines,'Status'=>$product['Status']];
             }
         }
         return $out;
@@ -1268,7 +1279,7 @@ final class DepoApp
         $rawVariants=$product['Variants']??$product['Variant']??'';$variants=is_array($rawVariants)?array_values(array_filter(array_map(fn($value)=>$this->text($value),$rawVariants))):$this->variants(['Variant'=>$rawVariants]);$variants=array_map($normalizeText,$variants);sort($variants,SORT_STRING);
         $gifts=json_decode((string)($promotion['PromotionGifts']??'[]'),true);if(!is_array($gifts))$gifts=[];$gifts=array_map(static fn($gift)=>json_encode($gift,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),$gifts);sort($gifts,SORT_STRING);
         $unitRows=[];foreach($units as$unit){if(strtoupper((string)($unit['Status']??'ACTIVE'))==='ARCHIVED')continue;$unitRows[]=['name'=>$normalizeText($unit['UnitName']??''),'conversion'=>round((float)($unit['ConversionToBase']??0),8),'purchaseAllowed'=>!empty($unit['PurchaseAllowed']),'saleAllowed'=>!empty($unit['SaleAllowed']),'purchasePrice'=>round((float)($unit['PurchasePrice']??$unit['UnitPrice']??0),6),'salePrice'=>round((float)($unit['SalePrice']??$unit['UnitPrice']??0),6),'unitPrice'=>round((float)($unit['UnitPrice']??$unit['SalePrice']??0),6)];}usort($unitRows,static fn($a,$b)=>strcmp($a['name'],$b['name']));
-        return json_encode(['name'=>$normalizeText($product['ProductName']??''),'supplier'=>(string)($product['SupplierID']??$product['AgreementID']??''),'category'=>$normalizeText($product['Category']??''),'color'=>$normalizeText($product['ProductColor']??''),'baseUnit'=>$normalizeText($product['BaseUnit']??$product['UnitOfMeasure']??''),'variants'=>$variants,'optionType'=>strtoupper((string)($product['OptionType']??'VARIANT')),'productType'=>strtoupper((string)($product['ProductType']??'REGULAR')),'promotionType'=>strtoupper((string)($promotion['PromotionType']??'NON_CP')),'gifts'=>$gifts,'units'=>$unitRows],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        return json_encode(['name'=>$normalizeText($product['ProductName']??''),'supplier'=>(string)($product['SupplierID']??$product['AgreementID']??''),'category'=>$normalizeText($product['Category']??''),'color'=>$normalizeText($product['ProductColor']??''),'baseUnit'=>$normalizeText($product['BaseUnit']??$product['UnitOfMeasure']??''),'packageSizeGrams'=>round((float)($product['PackageSizeGrams']??0),3),'variants'=>$variants,'optionType'=>strtoupper((string)($product['OptionType']??'VARIANT')),'productType'=>strtoupper((string)($product['ProductType']??'REGULAR')),'promotionType'=>strtoupper((string)($promotion['PromotionType']??'NON_CP')),'gifts'=>$gifts,'units'=>$unitRows],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
     }
     private function assertNoDuplicateProductConfiguration(array $input,array $units,array $promotion):void
     {
@@ -1286,6 +1297,7 @@ final class DepoApp
         if(!$supplier||$supplier['Status']!=='APPROVED')throw new InvalidArgumentException('Select an approved Supplier for the product.');
         $base=$this->text($input['BaseUnit']??$input['UnitOfMeasure']??'');
         if(!$base)throw new InvalidArgumentException('Base Unit is required.');
+        $packageSizeGrams=$this->normalizePackageSizeGrams($input['PackageSizeGrams']??null);
         $optionType=strtoupper($this->text($input['OptionType']??'VARIANT'));
         $variants=$this->variants(['Variant'=>$input['Variants']??$input['Variant']??'']);
         $this->assertProductPromotionVariants($promotion,$variants);
@@ -1298,9 +1310,9 @@ final class DepoApp
         $units=$this->packagingUnits($base,$variants,$units,$optionType);
         $this->db->beginTransaction();
         try{
-            $this->assertNoDuplicateProductConfiguration(['ProductName'=>$name,'SupplierID'=>$supplier['AgreementID'],'Category'=>$category,'ProductColor'=>$this->text($input['ProductColor']??''),'BaseUnit'=>$base,'Variants'=>$variants,'OptionType'=>$optionType,'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR'],$units,$promotion);
+            $this->assertNoDuplicateProductConfiguration(['ProductName'=>$name,'SupplierID'=>$supplier['AgreementID'],'Category'=>$category,'ProductColor'=>$this->text($input['ProductColor']??''),'PackageSizeGrams'=>$packageSizeGrams,'BaseUnit'=>$base,'Variants'=>$variants,'OptionType'=>$optionType,'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR'],$units,$promotion);
             $id=$this->id('Products','ProductID','PRD');$now=$this->now();$sku=$this->sku($supplier['Company'],$name,'',$id);
-            $this->insert('Products',['ProductID'=>$id,'SKU'=>$sku,'ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'ProductColor'=>$this->text($input['ProductColor']??''),'BaseUnit'=>$base,'Status'=>'ACTIVE','CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR','Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID']]);
+            $this->insert('Products',['ProductID'=>$id,'SKU'=>$sku,'ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'ProductColor'=>$this->text($input['ProductColor']??''),'PackageSizeGrams'=>$packageSizeGrams,'BaseUnit'=>$base,'Status'=>'ACTIVE','CreatedAt'=>$now,'CreatedBy'=>$this->current(),'UpdatedAt'=>$now,'UpdatedBy'=>$this->current(),'ProductType'=>strtoupper($this->text($input['ProductType']??'REGULAR'))?:'REGULAR','Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID']]);
             $this->writeUnits($id,$units);$this->audit('CREATE','Products',$id,'Product created.');$this->db->commit();return $this->product($id);
         }catch(Throwable $e){if($this->db->inTransaction())$this->db->rollBack();throw $e;}
     }
@@ -1324,7 +1336,8 @@ final class DepoApp
         $this->validateProductOptionType($optionType,$base,$variants);
         $category=$this->assertProductCategory($this->text($input['Category']??$old['Category']??''),$this->text($old['Category']??''));
         $image=array_key_exists('ProductImageDataUrl',$input)?$this->productImage($input['ProductImageDataUrl']):($old['ProductImageDataUrl']??null);
-        $row=['ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'ProductColor'=>$this->text($input['ProductColor']??$old['ProductColor']??''),'BaseUnit'=>$base,'ProductType'=>strtoupper($this->text($input['ProductType']??$old['ProductType'])),'Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID'],'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()];
+        $packageSizeGrams=array_key_exists('PackageSizeGrams',$input)?$this->normalizePackageSizeGrams($input['PackageSizeGrams']):($old['PackageSizeGrams']??null);
+        $row=['ProductName'=>$name,'ProductImageDataUrl'=>$image,'Category'=>$category,'ProductColor'=>$this->text($input['ProductColor']??$old['ProductColor']??''),'PackageSizeGrams'=>$packageSizeGrams,'BaseUnit'=>$base,'ProductType'=>strtoupper($this->text($input['ProductType']??$old['ProductType'])),'Variant'=>implode(', ',$variants),'OptionType'=>$optionType,'PromotionType'=>$promotion['PromotionType'],'PromotionGifts'=>$promotion['PromotionGifts'],'UnitOfMeasure'=>$base,'SupplierID'=>$supplier['AgreementID'],'UpdatedAt'=>$this->now(),'UpdatedBy'=>$this->current()];
         $units=array_key_exists('Units',$input)?(array)$input['Units']:$this->units($id);
         if(array_key_exists('Units',$input)&&$this->productUnitConversionsDiffer($this->units($id),$units))$this->assertProductConversionsChangeAllowed($id);
         if($optionType==='PACKAGING')$units=$this->packagingUnits($base,$variants,$units,$optionType);
