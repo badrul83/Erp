@@ -292,6 +292,7 @@ final class DepoApp
             'getDealerTeamSummary' => $this->getDealerTeamSummary(),
             'getLookupData' => $this->lookups(),
             'getAgreements' => $this->agreements(),
+            'getProductConfigurationSuppliers' => $this->productConfigurationSuppliers(),
             'getAgreement' => $this->agreement((string) ($args[0] ?? '')),
             'createAgreement' => $this->createAgreement((array) ($args[0] ?? [])),
             'updateAgreement' => $this->updateAgreement((string) ($args[0] ?? ''), (array) ($args[1] ?? [])),
@@ -956,6 +957,13 @@ final class DepoApp
     private function agreements(): array
     {
         $this->user(); return array_map(function(array $row): array { $deposits=$this->deposits($row['AgreementID']); $row['PurchaseDiscountRate']=(float)$row['CommissionRate']; $row['SecurityDeposits']=$deposits; if($deposits) $row['SecurityDeposit']=array_sum(array_map(fn($d)=>(float)$d['Amount'],$deposits)); return $row; },$this->rows('Agreements','Status<>?', ['ARCHIVED']));
+    }
+    private function productConfigurationSuppliers(): array
+    {
+        $this->user();
+        $statement=$this->db->prepare('SELECT AgreementID,Company,Status FROM Agreements WHERE Status=? ORDER BY Company,AgreementID');
+        $statement->execute(['APPROVED']);
+        return $statement->fetchAll();
     }
     private function agreement(string $id): ?array { foreach($this->agreements() as $row) if($row['AgreementID']===$id) return $row; return null; }
     private function writeDeposits(string $agreementId,array $items): float
