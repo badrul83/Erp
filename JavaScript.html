@@ -851,7 +851,18 @@
       var canReceive=current==='CONFIRMED'||current==='PARTIALLY_RECEIVED';
       modal.querySelector('.purchase-modal').innerHTML='<div class="modal-card-header"><div><p class="eyebrow">Purchase Order Preview</p><h2>'+esc(purchase.SupplyID)+'</h2></div><button type="button" class="modal-close purchase-modal-close">×</button></div><div class="purchase-detail-topbar"><div class="purchase-detail-actions">'+(current!=='CANCELLED'?'<button type="button" class="primary-button purchase-edit-modal">Edit PO</button>':'')+(current==='DRAFT'?'<button type="button" class="primary-button purchase-confirm-modal">Confirm</button>':'')+(state.user&&state.user.Role==='ADMIN'?'<button type="button" class="danger-button purchase-delete-modal">Delete</button>':'')+(canReceive?'<button type="button" class="primary-button purchase-open-grn">Open Goods Receipt (GRN)</button>':'')+(current==='CONFIRMED'?'<button type="button" class="danger-button purchase-cancel-modal">Cancel</button>':'')+'<button type="button" class="secondary-button purchase-modal-close">Close</button></div><div class="purchase-detail-stagebar">'+purchaseStage(current)+'</div></div><div class="purchase-detail-grid"><div><span>Supplier</span><strong>'+esc(purchaseAgreementName(purchase.AgreementID))+'</strong></div><div><span>Purchase Date</span><strong>'+esc(purchaseDate(purchase.SupplyDate))+'</strong></div><div><span>Reference No</span><strong>'+esc(purchase.ReferenceNo||'-')+'</strong></div></div><div class="transaction-items-header"><h3>Invoice Preview</h3></div><div class="table-wrap"><table><thead><tr><th>Product</th><th>CP</th><th>Variant</th><th>Unit</th><th>Quantity</th><th>Unit Price</th><th>Subtotal</th></tr></thead><tbody>'+itemRows+'</tbody></table></div>'+purchaseFreeGiftSummaryHtml(items)+'<div class="purchase-grand-total"><div><span>Grand Total Amount</span><strong>৳ '+money(purchase.TotalAmount)+'</strong></div></div><div class="purchase-notes-display"><span>Notes</span><strong>'+esc(purchase.Notes||'-')+'</strong></div>';
       if(reportOnly){modal.querySelectorAll('.purchase-edit-modal,.purchase-confirm-modal,.purchase-delete-modal,.purchase-open-grn,.purchase-cancel-modal').forEach(function(button){button.remove();});}
-      var editButton=modal.querySelector('.purchase-edit-modal');if(editButton)editButton.addEventListener('click',function(){modal.remove();openPurchaseForEdit(purchase);});
+      var editButton=modal.querySelector('.purchase-edit-modal');if(editButton)editButton.addEventListener('click',function(event){
+        event.preventDefault();event.stopPropagation();
+        try{
+          openPurchaseForEdit(purchase);
+          var editForm=$('purchase-form-modal');
+          if(!editForm||!editForm.querySelector('#purchase-form'))return;
+          modal.remove();
+          editForm.scrollIntoView({block:'start'});
+        }catch(error){
+          showMessage('Could not open the Purchase Order for editing. '+(error.message||'Please try again.'),'error');
+        }
+      });
       var confirmButton=modal.querySelector('.purchase-confirm-modal');if(confirmButton)confirmButton.addEventListener('click',function(){modal.remove();confirmPurchaseOrder(purchase.SupplyID);});
       var grnButton=modal.querySelector('.purchase-open-grn');if(grnButton)grnButton.addEventListener('click',function(){modal.remove();showView('goods-receipts');});
       var cancelButton=modal.querySelector('.purchase-cancel-modal');if(cancelButton)cancelButton.addEventListener('click',function(){modal.remove();cancelPurchaseOrder(purchase.SupplyID);});
