@@ -1272,17 +1272,16 @@ final class DepoApp
 
     private function productConfigurationRegister(): array
     {
-        $this->user(); $out=[];
-        foreach ($this->rows('Products') as $product) {
-            $supplier=$this->agreement((string) ($product['SupplierID'] ?? ''));
-            $units=array_values(array_filter($this->units((string) $product['ProductID']),fn(array $unit):bool=>strtoupper((string) ($unit['Status'] ?? 'ACTIVE'))!=='ARCHIVED'));
-            $optionType=strtoupper((string)($product['OptionType']??'VARIANT'));
-            $options=$this->variants($product)?:[''];
-            foreach ($options as $option) {
-                $purchaseOrders=(int)$this->value('SELECT COUNT(DISTINCT s.SupplyID) FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID WHERE i.ProductID=? AND s.Status<>"ARCHIVED"',[$product['ProductID']]);
-                $purchaseLines=(int)$this->value('SELECT COUNT(*) FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID WHERE i.ProductID=? AND s.Status<>"ARCHIVED"',[$product['ProductID']]);
-                $out[]=['ProductID'=>$product['ProductID'],'SKU'=>$this->sku((string)($supplier['Company']??'SUP'),(string)$product['ProductName'],$option,(string)$product['ProductID']),'SupplierID'=>$product['SupplierID'],'SupplierName'=>$supplier['Company']??'','ProductName'=>$product['ProductName'],'ProductImageDataUrl'=>$product['ProductImageDataUrl']??'','Category'=>$product['Category']??'','OptionType'=>$optionType,'PromotionType'=>$product['PromotionType']??'NON_CP','PromotionGifts'=>$product['PromotionGifts']??'[]','Variant'=>$option,'PackagingSize'=>$optionType==='PACKAGING'?$option:'','PackageConversionToBase'=>$optionType==='PACKAGING'?($this->packVariantToBase($product,$option)??0):0,'PackageSizeGrams'=>$product['PackageSizeGrams']??null,'PurchasedPackSizes'=>$this->purchasedPackSizesInGrams((string)$product['ProductID'],$option),'BaseUnit'=>$product['BaseUnit']??$product['UnitOfMeasure']??'','UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'Units'=>$units,'PurchaseOrderCount'=>$purchaseOrders,'PurchaseLineCount'=>$purchaseLines,'Status'=>$product['Status']];
-            }
+        $this->user(); $out=[];$products=$this->rows('Products');$supplierNames=[];$unitsByProduct=[];$purchaseStats=[];$packSizesByProductVariant=[];
+        foreach($this->rows('Agreements')as$supplier)$supplierNames[(string)$supplier['AgreementID']]=(string)($supplier['Company']??'');
+        foreach($this->units()as$unit){if(strtoupper((string)($unit['Status']??'ACTIVE'))==='ARCHIVED')continue;$unitsByProduct[(string)$unit['ProductID']][]=$unit;}
+        $purchaseQuery=$this->db->query('SELECT i.ProductID,COUNT(DISTINCT s.SupplyID) AS PurchaseOrderCount,COUNT(*) AS PurchaseLineCount FROM CompanySupplyItems i JOIN CompanySupplies s ON s.SupplyID=i.SupplyID WHERE s.Status<>"ARCHIVED" GROUP BY i.ProductID');
+        foreach($purchaseQuery->fetchAll()as$stat)$purchaseStats[(string)$stat['ProductID']]=$stat;
+        $packQuery=$this->db->query('SELECT DISTINCT i.ProductID,COALESCE(i.Variant,"") AS Variant,i.UnitName FROM GoodsReceiptItems i JOIN GoodsReceipts r ON r.GRNID=i.GRNID WHERE r.Status="POSTED"');
+        foreach($packQuery->fetchAll()as$pack){if(!preg_match('/^(?:Pack|CTN)\s*\((\d+(?:\.\d+)?)\s*(kg|kgs|kilograms?|g|gm|gms|grams?|mg|milligrams?)\)$/i',(string)$pack['UnitName'],$match))continue;$factor=$this->massUnitKgFactor($match[2]);if(!$factor)continue;$size=round((float)$match[1]*$factor*1000,6);if($size<=0)continue;$key=(string)$pack['ProductID'].'|'.(string)$pack['Variant'];if(!in_array($size,$packSizesByProductVariant[$key]??[],true))$packSizesByProductVariant[$key][]=$size;}
+        foreach($packSizesByProductVariant as&$sizes)sort($sizes,SORT_NUMERIC);unset($sizes);
+        foreach($products as$product){$productId=(string)$product['ProductID'];$supplierName=$supplierNames[(string)($product['SupplierID']??'')]??'';$units=$unitsByProduct[$productId]??[];$optionType=strtoupper((string)($product['OptionType']??'VARIANT'));$options=$this->variants($product)?:[''];$purchaseStat=$purchaseStats[$productId]??[];
+            foreach($options as$option){$packKey=$productId.'|'.(string)$option;$out[]=['ProductID'=>$product['ProductID'],'SKU'=>$this->sku($supplierName?:'SUP',(string)$product['ProductName'],$option,$productId),'SupplierID'=>$product['SupplierID'],'SupplierName'=>$supplierName,'ProductName'=>$product['ProductName'],'ProductImageDataUrl'=>$product['ProductImageDataUrl']??'','Category'=>$product['Category']??'','OptionType'=>$optionType,'PromotionType'=>$product['PromotionType']??'NON_CP','PromotionGifts'=>$product['PromotionGifts']??'[]','Variant'=>$option,'PackagingSize'=>$optionType==='PACKAGING'?$option:'','PackageConversionToBase'=>$optionType==='PACKAGING'?($this->packVariantToBase($product,$option)??0):0,'PackageSizeGrams'=>$product['PackageSizeGrams']??null,'PurchasedPackSizes'=>$packSizesByProductVariant[$packKey]??[],'BaseUnit'=>$product['BaseUnit']??$product['UnitOfMeasure']??'','UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'Units'=>$units,'PurchaseOrderCount'=>(int)($purchaseStat['PurchaseOrderCount']??0),'PurchaseLineCount'=>(int)($purchaseStat['PurchaseLineCount']??0),'Status'=>$product['Status']];}
         }
         return $out;
     }
