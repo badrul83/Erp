@@ -2683,4 +2683,17 @@
 #purchase-form-modal.purchase-form-page .modal-actions{position:static;bottom:auto;z-index:auto;flex:0 0 auto;}
 #purchase-form-modal.purchase-form-page #purchase-items{height:auto;max-height:none;overflow-x:auto;overflow-y:visible;overscroll-behavior: auto}
 @media(max-width:600px){#purchase-form-modal.purchase-form-page{padding:0}#purchase-form-modal.purchase-form-page .purchase-modal{max-height:none;border-radius:10px}#purchase-form-modal.purchase-form-page #purchase-form{padding:12px 10px 16px}#purchase-form-modal.purchase-form-page .modal-actions{position:static;gap:8px;margin:14px 0 0;padding:10px 0 0}}
+/* Keep purchase row tracks aligned with the visible headings. */
+.purchase-modal #purchase-items .purchase-line-item-header,
+.purchase-modal #purchase-items .purchase-item-row,
+.purchase-modal #purchase-items .purchase-item-row.has-variant,
+.purchase-modal #purchase-items .purchase-item-row.has-gram-pack,
+.purchase-modal #purchase-items .purchase-item-row.has-variant.has-gram-pack{grid-template-columns:38px minmax(180px,1.85fr) minmax(150px,.8fr) minmax(95px,.75fr) minmax(125px,1fr) minmax(100px,.7fr) minmax(110px,.85fr) minmax(120px,.9fr) 38px;gap:7px;min-width:1120px}
+.purchase-modal #purchase-items .purchase-item-row .item-variant-field.is-hidden{display:none!important}
+.purchase-modal #purchase-items .item-promotion-field{min-width:0;overflow:visible}
+.purchase-modal #purchase-items .item-promotion-options{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:3px;padding:2px}
+.purchase-modal #purchase-items .item-promotion-choice{gap:4px;padding:4px 5px;font-size:10px;white-space:nowrap}
+.purchase-modal #purchase-items .item-pack-size-field{min-width:0;text-align:center}
+.purchase-modal #purchase-items .item-pack-size-field .item-title{white-space:nowrap}
+.purchase-modal #purchase-items .item-pack-size{padding-right:5px;padding-left:5px;text-align:center;white-space:nowrap}
 </style>
