@@ -2696,4 +2696,17 @@
 .purchase-modal #purchase-items .item-pack-size-field{min-width:0;text-align:center}
 .purchase-modal #purchase-items .item-pack-size-field .item-title{white-space:nowrap}
 .purchase-modal #purchase-items .item-pack-size{padding-right:5px;padding-left:5px;text-align:center;white-space:nowrap}
+@media(min-width:1051px){
+  #purchase-form-modal.purchase-form-page #purchase-items .purchase-line-item-header,
+  #purchase-form-modal.purchase-form-page #purchase-items .purchase-item-row,
+  #purchase-form-modal.purchase-form-page #purchase-items .purchase-item-row.has-variant,
+  #purchase-form-modal.purchase-form-page #purchase-items .purchase-item-row.has-gram-pack,
+  #purchase-form-modal.purchase-form-page #purchase-items .purchase-item-row.has-variant.has-gram-pack{grid-template-columns:38px minmax(180px,1.8fr) minmax(178px,.95fr) minmax(95px,.65fr) minmax(125px,1fr) minmax(95px,.6fr) minmax(110px,.72fr) minmax(120px,.9fr) 38px;gap:7px;min-width:1120px}
+  #purchase-form-modal.purchase-form-page #purchase-items .purchase-item-row .item-variant-field.is-hidden{display:none!important}
+  #purchase-form-modal.purchase-form-page #purchase-items .purchase-item-row .item-product{padding-left:12px;text-align:left;text-align-last:left}
+  #purchase-form-modal.purchase-form-page #purchase-items .purchase-line-item-header>span:nth-child(2){padding-left:12px;text-align:left}
+  #purchase-form-modal.purchase-form-page #purchase-items .item-promotion-field{min-width:0;overflow:visible}
+  #purchase-form-modal.purchase-form-page #purchase-items .item-promotion-options{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:3px;padding:2px}
+  #purchase-form-modal.purchase-form-page #purchase-items .item-promotion-choice{gap:4px;padding:4px 4px;font-size:10px;white-space:nowrap}
+}
 </style>
