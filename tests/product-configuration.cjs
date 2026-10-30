@@ -30,5 +30,25 @@ for (const outer of ['Carton','Pack']) for (const [base, perPack, grams] of [['P
   assert.equal(JSON.stringify(saved.Units),JSON.stringify(product.Units),base+' save round trip');
   context.editing=-1;
 }
+// A package that is also the base unit is exactly one stock Pack.
+context.editing=-1;
+let single=context.buildProductPayload({SupplierName:'Supplier',stockUnit:'Pack',cartonUnit:'Pack',perCarton:1,perPack:1,packGrams:10,purchase:3.74,sale:3.74,name:'Dall Vaza',category:'Food'});
+single.ProductID='P2';
+const singleRow=context.liveProductRow(single,{});
+assert.equal(singleRow.perCarton,1);
+assert.equal(singleRow.perPack,1);
+assert.equal(singleRow.purchase,3.74);
+context.rows=[{_product:single}];context.editing=0;
+assert.equal(context.buildProductPayload({...singleRow,SupplierName:'Supplier'}).Units[0].SalePrice,3.74);
+const fields={};
+context.$=id=>fields[id]||(fields[id]={value:'',textContent:''});
+context.packageUnitText=String;context.linkedPriceNumber=n=>String(Number(Number(n).toFixed(6)));
+context.linkedPriceSource={purchase:'pack',sale:'pack'};context.linkedQuantitySource='package';
+fields['#stock-unit']={value:'Pack'};fields['#carton-unit']={value:'Pack'};
+fields['#qty-carton']={value:'3.74'};fields['#qty-pack']={value:'1'};
+fields['#pack-purchase-price']={value:'3.74'};fields['#pack-sale-price']={value:'3.74'};
+vm.runInContext(extract('syncLinkedPacking'),context);context.syncLinkedPacking();
+assert.equal(fields['#qty-carton'].value,'1');assert.equal(fields['#qty-carton'].readOnly,true);
+assert.equal(fields['#purchase-price'].value,'3.74');assert.equal(fields['#sale-price'].value,'3.74');
 for (const script of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) new vm.Script(script[1]);
 console.log('PASS: separate prices, zero price, packet conversions, four unit round trips, inline script syntax');
