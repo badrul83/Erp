@@ -2709,4 +2709,9 @@
   #purchase-form-modal.purchase-form-page #purchase-items .item-promotion-options{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:3px;padding:2px}
   #purchase-form-modal.purchase-form-page #purchase-items .item-promotion-choice{gap:4px;padding:4px 4px;font-size:10px;white-space:nowrap}
 }
+/* Packaging summaries share the same centered row height as other controls. */
+#purchase-form-modal #purchase-items .item-pack-size-field{display:flex;flex-direction:column;align-items:stretch;justify-content:center;min-height:38px}
+#purchase-form-modal #purchase-items .item-pack-size-field .item-pack-size-note{font-size:11px;line-height:1.35;margin:3px 0;white-space:pre-line;text-align:center}
+#purchase-form-modal #purchase-items .item-pack-size-field.has-package-summary .item-pack-size{display:none}
+#purchase-form-modal #purchase-items .item-pack-size-field.has-configured-carton .item-pack-size-note{font-size:11px}
 </style>
