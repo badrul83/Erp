@@ -214,7 +214,8 @@ final class DepoApp
     private function normalizePackageSizeGrams(mixed $value): ?float
     {
         if ($value === null || trim((string) $value) === '') return null;
-        return round($this->num($value, 'Package size in grams'), 3);
+        // Zero explicitly means weight is not applicable; NULL remains unspecified.
+        return round($this->num($value, 'Package size in grams', true), 3);
     }
     public function dispatch(string $method, array $args): mixed
     {
