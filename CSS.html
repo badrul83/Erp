@@ -3191,4 +3191,123 @@
   background:#f3fbf8;
   color:#176351;
 }
+
+/* GRN inspection heading and compact, stable receipt table columns. */
+#goods-receipt-form-modal.grn-form-page .transaction-items-header {
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px 16px;
+  margin:0 0 2px;
+  padding:0 0 8px;
+  border-bottom:1px solid #d8ece5;
+}
+#goods-receipt-form-modal.grn-form-page .transaction-items-header h3 {
+  flex:0 0 auto;
+  color:#123d32;
+  font-size:18px;
+  font-weight:700;
+  line-height:1.25;
+}
+#goods-receipt-form-modal.grn-form-page .transaction-items-header .subtle {
+  flex:0 1 auto;
+  color:#54766d;
+  font-size:10px;
+  line-height:1.35;
+  text-align:right;
+}
+#goods-receipt-form-modal.grn-form-page .grn-table-wrap {
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  border:1px solid #d8ece5;
+  border-radius:4px;
+  scrollbar-width:thin;
+}
+#goods-receipt-form-modal.grn-form-page .grn-entry-table {
+  width:100%;
+  min-width:1280px;
+  table-layout:fixed;
+  border-collapse:collapse;
+}
+#goods-receipt-form-modal.grn-form-page .grn-entry-table th {
+  padding:8px 7px;
+  color:#397264;
+  font-size:9px;
+  font-weight:700;
+  line-height:1.2;
+  white-space:nowrap;
+}
+#goods-receipt-form-modal.grn-form-page .grn-entry-table td {
+  padding:7px 7px;
+  vertical-align:middle;
+}
+#goods-receipt-form-modal.grn-form-page .grn-entry-table th:nth-child(1) { width:5%; }
+#goods-receipt-form-modal.grn-form-page .grn-entry-table th:nth-child(2) { width:21%; }
+#goods-receipt-form-modal.grn-form-page .grn-entry-table th:nth-child(3) { width:10%; }
+#goods-receipt-form-modal.grn-form-page .grn-entry-table th:nth-child(4) { width:10%; }
+#goods-receipt-form-modal.grn-form-page .grn-entry-table th:nth-child(5) { width:9%; }
+#goods-receipt-form-modal.grn-form-page .grn-entry-table th:nth-child(6),
+#goods-receipt-form-modal.grn-form-page .grn-entry-table th:nth-child(7),
+#goods-receipt-form-modal.grn-form-page .grn-entry-table th:nth-child(8) { width:9%; }
+#goods-receipt-form-modal.grn-form-page .grn-entry-table th:nth-child(9) { width:18%; }
+#goods-receipt-form-modal.grn-form-page .grn-entry-table td:first-child,
+#goods-receipt-form-modal.grn-form-page .grn-entry-table td:nth-child(n+3):nth-child(-n+8) {
+  white-space:nowrap;
+  font-size:11px;
+}
+#goods-receipt-form-modal.grn-form-page .grn-entry-table td:nth-child(2) { white-space:normal; }
+#goods-receipt-form-modal.grn-form-page .grn-product-name {
+  color:#123d32;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.3;
+}
+#goods-receipt-form-modal.grn-form-page .grn-product-variant {
+  color:#668d83;
+  font-size:11px;
+  line-height:1.3;
+}
+#goods-receipt-form-modal.grn-form-page .grn-entry-table input.grn-received,
+#goods-receipt-form-modal.grn-form-page .grn-entry-table input.grn-accepted,
+#goods-receipt-form-modal.grn-form-page .grn-entry-table input.grn-rejected {
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:30px;
+  padding:5px 7px;
+  font-size:11px;
+}
+#goods-receipt-form-modal.grn-form-page .grn-row-actions {
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:4px;
+  min-width:0;
+}
+#goods-receipt-form-modal.grn-form-page .grn-row-actions .grn-approve-line,
+#goods-receipt-form-modal.grn-form-page .grn-row-actions .grn-reject-line,
+#goods-receipt-form-modal.grn-form-page .grn-row-actions .grn-edit-line {
+  min-width:0;
+  min-height:26px;
+  padding:4px 6px;
+  font-size:10px;
+  line-height:1.2;
+}
+#goods-receipt-form-modal.grn-form-page .grn-row-actions .grn-rejection-reason {
+  grid-column:1/-1;
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:30px;
+  padding:5px 7px;
+  font-size:10px;
+}
+@media(max-width:760px){
+  #goods-receipt-form-modal.grn-form-page .transaction-items-header { align-items:flex-start; }
+  #goods-receipt-form-modal.grn-form-page .transaction-items-header .subtle { text-align:left; }
+}
 </style>
