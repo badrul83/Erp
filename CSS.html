@@ -3020,4 +3020,175 @@
   #purchase-form-modal.purchase-form-page #purchase-items .purchase-total-quantity{grid-column:1}
   #purchase-form-modal.purchase-form-page #purchase-items .purchase-total-amount{grid-column:2}
 }
+
+/* Full-page GRN editor, following the Purchase Order workspace layout. */
+#goods-receipt-form-modal.grn-form-page{position:relative;inset:auto;z-index:auto;display:block;width:100%;min-width:0;max-width:100%;min-height:0;overflow:visible;overscroll-behavior:auto;padding:0;background:transparent}
+#goods-receipt-form-modal.grn-form-page .grn-modal{display:block;box-sizing:border-box;width:100%;max-width:none;height:auto;max-height:none;min-width:0;min-height:0;overflow:visible;margin:0;padding:0;border:1px solid #d8ece5;border-radius:6px;background:#f7fcfa;box-shadow:0 4px 16px rgba(0,65,48,.07)}
+#goods-receipt-form-modal.grn-form-page .modal-card-header{position:static;top:auto;z-index:auto;align-items:center;margin:0;padding:14px 18px;border-bottom:1px solid #d8ece5;border-radius:5px 5px 0 0;background:#f3fbf8}
+#goods-receipt-form-modal.grn-form-page .modal-card-header h2{color:#123d32;font-size:20px}
+#goods-receipt-form-modal.grn-form-page #goods-receipt-form{display:flex;box-sizing:border-box;width:100%;min-width:0;flex-direction:column;gap:12px;overflow:visible;padding:14px 18px 18px}
+#goods-receipt-form-modal.grn-form-page .grn-form-grid{box-sizing:border-box;width:100%;min-width:0;margin:0;padding:14px;border:1px solid #d8ece5;border-radius:5px;background:#fff}
+#goods-receipt-form-modal.grn-form-page .grn-form-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-width:0;margin:0;padding:10px 12px;border:1px solid #d8ece5;border-radius:4px;background:#f3fbf8}
+#goods-receipt-form-modal.grn-form-page .grn-form-secondary-actions{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
+#goods-receipt-form-modal.grn-form-page .grn-form-actions button{min-height:36px;padding:8px 13px;border-radius:4px;font-size:11px;white-space:nowrap}
+#goods-receipt-form-modal.grn-form-page .grn-form-actions #save-grn-draft{border-color:#008f69;background:#008f69;color:#fff}
+#goods-receipt-form-modal.grn-form-page .grn-confirm-button{margin-left:auto;border-color:#008f69;background:#008f69;color:#fff}
+#goods-receipt-form-modal.grn-form-page .grn-table-wrap{box-sizing:border-box;width:100%;min-width:0;max-width:100%;overflow-x:auto;overflow-y:hidden;border-color:#d8ece5;border-radius:4px;scrollbar-width:thin}
+#goods-receipt-form-modal.grn-form-page .grn-entry-table{min-width:1010px}
+#goods-receipt-form-modal.grn-form-page .transaction-items-header{align-items:center;justify-content:space-between;gap:8px 16px;margin:0;padding:0 0 8px;border-bottom:1px solid #d8ece5}
+#goods-receipt-form-modal.grn-form-page .transaction-items-header h3{color:#123d32}
+#goods-receipt-form-modal.grn-form-page .grn-line-rule{margin:0;color:#668d83}
+#goods-receipt-form-modal.grn-form-page .grn-notes-field{width:100%;min-width:0;margin:0}
+#goods-receipt-form-modal.grn-form-page .grn-form-close{min-height:34px;white-space:nowrap}
+@media(max-width:760px){
+  #goods-receipt-form-modal.grn-form-page .modal-card-header,
+  #goods-receipt-form-modal.grn-form-page #goods-receipt-form{padding-right:12px;padding-left:12px}
+  #goods-receipt-form-modal.grn-form-page .grn-form-grid{padding:10px}
+  #goods-receipt-form-modal.grn-form-page .grn-form-actions{align-items:stretch;flex-direction:column}
+  #goods-receipt-form-modal.grn-form-page .grn-form-secondary-actions{width:100%}
+  #goods-receipt-form-modal.grn-form-page .grn-form-actions button{flex:1 1 auto}
+  #goods-receipt-form-modal.grn-form-page .grn-confirm-button{width:100%;margin-left:0}
+}
+
+/* Keep the PO editor inside the workspace; only the wide item grid may scroll. */
+.app-shell.purchase-form-active #app-view,
+#purchase-form-modal.purchase-form-page,
+#purchase-form-modal.purchase-form-page>.purchase-modal,
+#purchase-form-modal.purchase-form-page #purchase-form,
+#purchase-form-modal.purchase-form-page #purchase-form>.purchase-order-meta-grid,
+#purchase-form-modal.purchase-form-page #purchase-form>.purchase-order-content-grid,
+#purchase-form-modal.purchase-form-page .purchase-order-main,
+#purchase-form-modal.purchase-form-page .purchase-order-main>.transaction-items-header,
+#purchase-form-modal.purchase-form-page .purchase-form-footer {
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+}
+#purchase-form-modal.purchase-form-page #purchase-items {
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  overflow-x:auto!important;
+  overflow-y:hidden;
+  overscroll-behavior-x:contain;
+  scrollbar-width:thin;
+}
+#purchase-form-modal.purchase-form-page #purchase-items .purchase-line-item-header,
+#purchase-form-modal.purchase-form-page #purchase-items .purchase-item-row,
+#purchase-form-modal.purchase-form-page #purchase-items .purchase-item-row.has-variant,
+#purchase-form-modal.purchase-form-page #purchase-items .purchase-item-row.has-gram-pack,
+#purchase-form-modal.purchase-form-page #purchase-items .purchase-item-row.has-variant.has-gram-pack,
+#purchase-form-modal.purchase-form-page #purchase-items .purchase-total-row {
+  box-sizing:border-box;
+  max-width:none;
+}
+#purchase-form-modal.purchase-form-page .purchase-order-main>.transaction-items-header h3 {
+  flex:0 0 auto;
+}
+#purchase-form-modal.purchase-form-page .purchase-order-main>.transaction-items-header #purchase-quick-selection {
+  flex:1 1 520px;
+  width:auto;
+  min-width:0;
+  max-width:100%;
+}
+#purchase-form-modal.purchase-form-page #purchase-quick-selection .purchase-quick-selection-panel,
+#purchase-form-modal.purchase-form-page #purchase-quick-selection .purchase-product-category-filter {
+  min-width:0;
+  max-width:100%;
+}
+#purchase-form-modal.purchase-form-page #purchase-quick-selection .purchase-product-category-filter {
+  flex:1 1 auto;
+  justify-content:flex-start;
+}
+#purchase-form-modal.purchase-form-page .purchase-form-footer .purchase-form-primary-actions,
+#purchase-form-modal.purchase-form-page .purchase-form-footer .purchase-form-document-actions {
+  min-width:0;
+  max-width:100%;
+}
+
+@media(max-width:900px){
+  #purchase-form-modal.purchase-form-page #purchase-form>.purchase-order-meta-grid {
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto;
+  }
+  #purchase-form-modal.purchase-form-page .purchase-order-meta-grid>.field {
+    grid-template-columns:minmax(0,1fr);
+    gap:5px;
+  }
+  #purchase-form-modal.purchase-form-page .purchase-order-meta-grid>.field>label,
+  #purchase-form-modal.purchase-form-page .purchase-order-meta-grid>.field>input,
+  #purchase-form-modal.purchase-form-page .purchase-order-meta-grid>.field>select {
+    grid-column:1;
+  }
+  #purchase-form-modal.purchase-form-page .purchase-order-meta-grid>.field>label { grid-row:1; }
+  #purchase-form-modal.purchase-form-page .purchase-order-meta-grid>.field>input,
+  #purchase-form-modal.purchase-form-page .purchase-order-meta-grid>.field>select { grid-row:2; }
+  #purchase-form-modal.purchase-form-page #purchase-form>.purchase-order-meta-grid>.field.purchase-order-cp-field {
+    grid-column:1/-1!important;
+    grid-row:auto;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto auto auto 36px;
+    align-items:start;
+    gap:8px;
+  }
+  #purchase-form-modal.purchase-form-page .purchase-order-cp-heading { grid-column:1;grid-row:1;white-space:normal; }
+  #purchase-form-modal.purchase-form-page .purchase-order-cp-control { grid-column:1;grid-row:2;justify-self:start; }
+  #purchase-form-modal.purchase-form-page #purchase-form>.purchase-order-meta-grid>.field.purchase-order-cp-field>.purchase-order-offer-label { grid-column:1;grid-row:3; }
+  #purchase-form-modal.purchase-form-page #purchase-order-offer-description { grid-column:1;grid-row:4; }
+}
+
+/* Keep Purchase and GRN navigation colors and typography consistent. */
+#app-shell.purchase-form-active .topbar,
+#app-shell.grn-form-active .topbar {
+  border-bottom-color:#00785b;
+  background:#008f69;
+  box-shadow:0 4px 14px rgba(0,104,77,.18);
+}
+#app-shell.purchase-form-active #workspace-topbar-navigation,
+#app-shell.grn-form-active #workspace-topbar-navigation {
+  min-width:0;
+  overflow:visible;
+}
+#app-shell.grn-form-active #dashboard-product-search { display:none!important; }
+#app-shell.purchase-form-active #workspace-topbar-navigation .workspace-topbar-link,
+#app-shell.grn-form-active #workspace-topbar-navigation .workspace-topbar-link {
+  min-height:36px;
+  border:1px solid rgba(255,255,255,.38);
+  border-radius:6px;
+  background:transparent;
+  color:#f5fffb;
+  font-family:inherit;
+  font-size:11px;
+  font-weight:600;
+  line-height:1.2;
+  box-shadow:none;
+}
+#app-shell.purchase-form-active #workspace-topbar-navigation .workspace-topbar-link:hover,
+#app-shell.grn-form-active #workspace-topbar-navigation .workspace-topbar-link:hover {
+  border-color:rgba(255,255,255,.75);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+}
+#app-shell.purchase-form-active #workspace-topbar-navigation .workspace-topbar-link.is-active,
+#app-shell.grn-form-active #workspace-topbar-navigation .workspace-topbar-link.is-active {
+  border-color:#fff;
+  background:#fff;
+  color:#006f54;
+  font-weight:700;
+}
+#app-shell.purchase-form-active #workspace-topbar-navigation .workspace-topbar-link.workspace-topbar-action,
+#app-shell.grn-form-active #workspace-topbar-navigation .workspace-topbar-link.workspace-topbar-action {
+  border-color:#e4f3ee;
+  background:#e4f3ee;
+  color:#006f54;
+  font-weight:700;
+}
+#app-shell.purchase-form-active #workspace-topbar-navigation .workspace-topbar-link.workspace-topbar-action:hover,
+#app-shell.grn-form-active #workspace-topbar-navigation .workspace-topbar-link.workspace-topbar-action:hover {
+  border-color:#f3fbf8;
+  background:#f3fbf8;
+  color:#176351;
+}
 </style>
