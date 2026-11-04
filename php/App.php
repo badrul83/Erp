@@ -252,6 +252,7 @@ final class DepoApp
             'getOnlineUsers' => $this->onlineUsers(),
             'getBrandingSettings' => $this->branding(),
             'getProductConfigurationTemplate' => $this->productConfigurationTemplate(),
+            'getProductConfigurationBootstrap' => $this->productConfigurationBootstrap(),
             'saveProductCategoryDefault' => $this->saveProductCategoryDefault((array) ($args[0] ?? [])),
             'saveProductConfigurationTemplate' => $this->saveProductConfigurationTemplate((array) ($args[0] ?? [])),
             'updateProductMasterPrices' => $this->updateProductMasterPrices((string) ($args[0] ?? ''), (array) ($args[1] ?? [])),
@@ -1337,6 +1338,16 @@ final class DepoApp
             foreach($options as$option){$packKey=$productId.'|'.(string)$option;$out[]=['ProductID'=>$product['ProductID'],'SKU'=>$this->sku($supplierName?:'SUP',(string)$product['ProductName'],$option,$productId),'SupplierID'=>$product['SupplierID'],'SupplierName'=>$supplierName,'ProductName'=>$product['ProductName'],'ProductImageDataUrl'=>$product['ProductImageDataUrl']??'','Category'=>$product['Category']??'','ProductColor'=>$product['ProductColor']??'','ProductType'=>$product['ProductType']??'REGULAR','Variants'=>implode(', ',$options),'OptionType'=>$optionType,'PromotionType'=>$product['PromotionType']??'NON_CP','PromotionGifts'=>$product['PromotionGifts']??'[]','Variant'=>$option,'PackagingSize'=>$optionType==='PACKAGING'?$option:'','PackageConversionToBase'=>$optionType==='PACKAGING'?($this->packVariantToBase($product,$option)??0):0,'PackageSizeGrams'=>$product['PackageSizeGrams']??null,'PurchasedPackSizes'=>$packSizesByProductVariant[$packKey]??[],'BaseUnit'=>$product['BaseUnit']??$product['UnitOfMeasure']??'','UnitOfMeasure'=>implode(', ',array_column($units,'UnitName')),'Units'=>$units,'PurchaseOrderCount'=>(int)($purchaseStat['PurchaseOrderCount']??0),'PurchaseLineCount'=>(int)($purchaseStat['PurchaseLineCount']??0),'TransactionCount'=>(int)($transactionStats[$productId]??0),'Status'=>$product['Status']];}
         }
         return $out;
+    }
+    private function productConfigurationBootstrap(): array
+    {
+        $this->user();
+        return [
+            'Suppliers' => $this->productConfigurationSuppliers(),
+            'Categories' => $this->rows('ProductCategories'),
+            'Register' => $this->productConfigurationRegister(),
+            'Template' => $this->productConfigurationTemplate(),
+        ];
     }
     private function productConfigurationSignature(array $product,array $units,array $promotion=[]):string
     {

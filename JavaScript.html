@@ -870,11 +870,10 @@ function openGoodsReceiptForm(order,existing){
       var editButton=modal.querySelector('.purchase-edit-modal');if(editButton)editButton.addEventListener('click',function(event){
         event.preventDefault();event.stopPropagation();
         try{
+          modal.remove();
           openPurchaseForEdit(purchase);
           var editForm=$('purchase-form-modal');
-          if(!editForm||!editForm.querySelector('#purchase-form'))return;
-          modal.remove();
-          editForm.scrollIntoView({block:'start'});
+          if(editForm&&editForm.querySelector('#purchase-form'))editForm.scrollIntoView({block:'start'});
         }catch(error){
           showMessage('Could not open the Purchase Order for editing. '+(error.message||'Please try again.'),'error');
         }
