@@ -3192,6 +3192,34 @@
   color:#176351;
 }
 
+/* High-contrast Purchase and GRN workspace tabs on the green form header. */
+#app-shell.purchase-form-active #workspace-topbar-navigation .workspace-topbar-link,
+#app-shell.grn-form-active #workspace-topbar-navigation .workspace-topbar-link {
+  border-color:rgba(255,255,255,.55)!important;
+  background:rgba(0,67,49,.28)!important;
+  color:#fff!important;
+}
+#app-shell.purchase-form-active #workspace-topbar-navigation .workspace-topbar-link:hover,
+#app-shell.grn-form-active #workspace-topbar-navigation .workspace-topbar-link:hover {
+  border-color:#fff!important;
+  background:rgba(0,67,49,.48)!important;
+  color:#fff!important;
+}
+#app-shell.purchase-form-active #workspace-topbar-navigation .workspace-topbar-link.is-active,
+#app-shell.grn-form-active #workspace-topbar-navigation .workspace-topbar-link.is-active,
+#app-shell.purchase-form-active #workspace-topbar-navigation .workspace-topbar-link.workspace-topbar-action,
+#app-shell.grn-form-active #workspace-topbar-navigation .workspace-topbar-link.workspace-topbar-action {
+  border-color:#fff!important;
+  background:#fff!important;
+  color:#006f54!important;
+}
+#app-shell.purchase-form-active #workspace-topbar-navigation .workspace-topbar-link.workspace-topbar-action:hover,
+#app-shell.grn-form-active #workspace-topbar-navigation .workspace-topbar-link.workspace-topbar-action:hover {
+  border-color:#e4f3ee!important;
+  background:#e4f3ee!important;
+  color:#005b45!important;
+}
+
 /* GRN inspection heading and compact, stable receipt table columns. */
 #goods-receipt-form-modal.grn-form-page .transaction-items-header {
   box-sizing:border-box;
@@ -3310,4 +3338,5 @@
   #goods-receipt-form-modal.grn-form-page .transaction-items-header { align-items:flex-start; }
   #goods-receipt-form-modal.grn-form-page .transaction-items-header .subtle { text-align:left; }
 }
+
 </style>
