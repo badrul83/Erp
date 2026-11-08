@@ -831,7 +831,7 @@
 .topbar .workspace-topbar-copy small i{background:#10a078;box-shadow:0 0 0 3px rgba(16,160,120,.12)}
 .topbar .workspace-topbar-route{gap:2px;padding:0 5px}
 .topbar .workspace-topbar-route small{color:#80968f;font-size:8px}
-.topbar .workspace-topbar-route strong{color:#173b32;font-size:12px}
+.topbar .workspace-topbar-route .product-list-title-button{min-height:32px;padding:6px 10px;font-size:12px}
 .dashboard-topbar-context{display:flex;min-width:120px;flex:0 1 230px;align-items:center;justify-content:flex-start;gap:6px;padding:0}
 .dashboard-topbar-copy p{margin:0 0 2px;color:#00815f;font-size:8px;letter-spacing:.1em}
 .dashboard-topbar-copy h2{color:#173b32;font-size:12px;line-height:1.25}
@@ -3342,4 +3342,510 @@
   #goods-receipt-form-modal.grn-form-page .transaction-items-header .subtle { text-align:left; }
 }
 
+/* Product List quick actions share the workspace title row and control style. */
+#app-shell.product-list-topbar-active .workspace-topbar-route{flex-direction:row;align-items:center;gap:12px}
+#app-shell.product-list-topbar-active .workspace-topbar-route small{display:none}
+#app-shell.product-list-topbar-active .product-list-topbar-actions{display:flex;align-items:center;gap:6px;margin-left:4px}
+#app-shell.product-list-topbar-active .product-list-topbar-actions .workspace-topbar-link{min-height:32px;padding:6px 10px;font-size:12px}
+@media(max-width:800px){#app-shell.product-list-topbar-active .workspace-topbar-route{flex:0 1 auto;max-width:100%;gap:7px}#app-shell.product-list-topbar-active .product-list-topbar-actions{gap:5px;margin-left:2px}#app-shell.product-list-topbar-active .product-list-topbar-actions .workspace-topbar-link{min-height:30px;padding:5px 8px;font-size:12px}}
+
+/* Shared page action row: keep form actions in the global workspace header. */
+.topbar{gap:10px;margin-bottom:10px}
+.main-content{padding-top:16px}
+.workspace-topbar-actions{display:flex;min-width:0;flex:0 1 auto;align-items:center;justify-content:flex-end;overflow-x:auto;scrollbar-width:thin}
+.workspace-topbar-actions .purchase-form-footer{display:flex;min-width:0;align-items:center;justify-content:space-between;gap:10px;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.workspace-topbar-actions .purchase-form-primary-actions,.workspace-topbar-actions .purchase-form-document-actions{display:flex;flex:0 0 auto;align-items:center;gap:6px;margin:0}
+.workspace-topbar-actions .purchase-form-footer button{min-height:34px;padding:7px 10px;border:1px solid #d8ece5;border-radius:8px;background:#fff;color:#176351;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:none}
+.workspace-topbar-actions .purchase-form-footer .purchase-form-save,.workspace-topbar-actions .purchase-form-footer .purchase-form-save-exit,.workspace-topbar-actions .purchase-form-footer .purchase-form-confirm,.workspace-topbar-actions .purchase-form-footer .purchase-form-print{border-color:#008f69;background:#008f69;color:#fff}
+.workspace-topbar-actions .purchase-form-footer button:hover{border-color:#007b5c;background:#007b5c;color:#fff}
+.workspace-topbar-actions .purchase-form-footer button:disabled{opacity:.65;cursor:wait}
+.workspace-topbar-subnavigation{display:flex;min-width:0;max-width:42vw;flex:0 1 auto;align-items:center;overflow-x:auto;scrollbar-width:thin}
+.workspace-topbar-subnavigation .workspace-promoted-menu{display:flex;min-width:max-content;align-items:center;gap:5px;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;white-space:nowrap}
+.workspace-topbar-subnavigation .workspace-promoted-menu-button{flex:0 0 auto;min-height:34px;padding:7px 10px;border:1px solid #d8ece5;border-radius:8px;background:#fff;color:#176351;font-size:11px;font-weight:700;line-height:1.2;white-space:nowrap;box-shadow:none}
+.workspace-topbar-subnavigation .workspace-promoted-menu-button:hover,.workspace-topbar-subnavigation .workspace-promoted-menu-button.is-active,.workspace-topbar-subnavigation .workspace-promoted-menu-button[aria-selected="true"]{border-color:#008f69;background:#008f69;color:#fff}
+.workspace-topbar-subnavigation .workspace-promoted-menu-button:focus-visible{outline:3px solid rgba(0,143,105,.2);outline-offset:2px}
+.workspace-topbar-actions .dt-topbar-actions{display:flex;min-width:0;align-items:center;gap:6px;white-space:nowrap}
+.workspace-topbar-actions .dt-topbar-actions button{min-height:34px;padding:7px 10px;border-radius:8px;font-size:11px;font-weight:700;white-space:nowrap}
+.workspace-topbar-actions .dt-topbar-actions button:disabled{opacity:.55;cursor:not-allowed}
+.workspace-topbar-actions .customer-registration-topbar-actions{display:flex;min-width:0;align-items:center;gap:8px;white-space:nowrap}
+.workspace-topbar-actions .customer-registration-topbar-actions .workspace-page-title{flex:0 0 auto;color:#176351;font-size:12px;font-weight:700}
+.workspace-topbar-actions .customer-registration-topbar-actions .purchase-search{width:clamp(170px,19vw,300px);min-width:150px;min-height:34px;padding:0 8px}
+.workspace-topbar-actions .customer-registration-topbar-actions .customer-directory-search{max-width:300px;margin:0}
+.workspace-topbar-actions .customer-registration-topbar-actions .purchase-search input{min-height:32px;padding:6px 0;font-size:11px}
+.workspace-topbar-actions .customer-registration-topbar-actions button{min-height:34px;padding:7px 10px;font-size:11px;white-space:nowrap}
+.directory-empty-state{display:flex;min-height:136px;align-items:center;justify-content:center;gap:14px;padding:22px;border:1px dashed #d8e8e2;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdfc);color:#668d83;text-align:left}
+.directory-empty-icon{display:grid;flex:0 0 42px;width:42px;height:42px;place-items:center;border-radius:12px;background:#edf7f3;color:#008f69;font-size:18px}
+.directory-empty-state strong{display:block;color:#174b3b;font-size:13px}
+.directory-empty-state p{margin:5px 0 0;color:#73948a;font-size:11px;line-height:1.5}
+#app-shell.supplier-register-topbar-active #workspace-topbar-navigation{order:1;flex:0 0 auto;overflow:visible}
+#app-shell.supplier-register-topbar-active #workspace-topbar-actions{order:2;flex:1 1 auto;justify-content:flex-start}
+#app-shell.supplier-register-topbar-active .topbar-tools{order:3}
+.workspace-topbar-actions .supplier-register-topbar-actions{display:flex;min-width:0;align-items:center;gap:9px;white-space:nowrap}
+.workspace-topbar-actions .supplier-register-topbar-actions .workspace-page-title{flex:0 0 auto;color:#176351;font-size:13px;font-weight:700}
+.workspace-topbar-actions .supplier-register-topbar-actions .purchase-search{width:clamp(220px,30vw,460px);min-width:180px;min-height:38px;padding:0 10px}
+.workspace-topbar-actions .supplier-register-topbar-actions .purchase-search input{min-height:36px;padding:7px 0;font-size:13px}
+.workspace-topbar-actions .supplier-register-topbar-actions button{min-height:36px;padding:8px 12px;font-size:11px;white-space:nowrap}
+#app-shell.dealer-register-topbar-active #workspace-topbar-navigation{order:1;flex:0 0 auto;overflow:visible}
+#app-shell.dealer-register-topbar-active #workspace-topbar-actions{order:2;flex:0 0 auto;justify-content:flex-start}
+#app-shell.dealer-register-topbar-active #workspace-topbar-subnavigation{order:3;flex:0 0 auto;max-width:none;margin-left:4px}
+#app-shell.dealer-register-topbar-active .topbar{justify-content:flex-start;gap:8px}
+#app-shell.dealer-register-topbar-active .topbar-tools{order:4;margin-left:auto}
+.app-shell.dealer-register-topbar-active .workspace-topbar-links .workspace-topbar-link,.app-shell.dealer-register-topbar-active .workspace-topbar-subnavigation .workspace-promoted-menu-button,.workspace-topbar-actions .dealer-register-actions-topbar button{min-height:36px;padding:8px 11px;border-radius:8px;font-size:11px;font-weight:700;line-height:1.2;white-space:nowrap}
+.app-shell.dealer-register-topbar-active .workspace-topbar-links,.app-shell.dealer-register-topbar-active .workspace-promoted-menu{gap:6px}
+.workspace-grn-actions{display:flex;min-width:0;align-items:center;justify-content:flex-end;gap:6px}
+.workspace-grn-actions button{min-height:34px;padding:7px 10px;border:1px solid #d8ece5;border-radius:8px;background:#fff;color:#176351;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:none}
+.workspace-grn-actions button:hover{border-color:#008f69;background:#008f69;color:#fff}
+#app-shell.goods-receipt-topbar-active .topbar{justify-content:flex-start;gap:8px}
+#app-shell.goods-receipt-topbar-active #workspace-topbar-navigation{order:1;flex:0 0 auto;overflow:visible}
+#app-shell.goods-receipt-topbar-active #workspace-topbar-subnavigation{order:2;flex:0 0 auto;max-width:none;margin-left:2px}
+#app-shell.goods-receipt-topbar-active #workspace-topbar-actions{order:3;flex:0 0 auto;justify-content:flex-start}
+#app-shell.goods-receipt-topbar-active #dashboard-product-search{order:4;flex:0 1 250px;min-width:195px;margin-left:auto}
+#app-shell.goods-receipt-topbar-active .topbar-tools{order:5;flex:0 0 auto}
+#app-shell.goods-receipt-topbar-active .workspace-topbar-links .workspace-topbar-link,#app-shell.goods-receipt-topbar-active .workspace-topbar-subnavigation .workspace-promoted-menu-button,#app-shell.goods-receipt-topbar-active .workspace-grn-actions button{min-height:36px;padding:8px 11px;border-radius:8px;font-size:11px;font-weight:700;line-height:1.2;white-space:nowrap}
+#app-shell.goods-receipt-topbar-active .workspace-topbar-links,#app-shell.goods-receipt-topbar-active .workspace-promoted-menu,#app-shell.goods-receipt-topbar-active .workspace-grn-actions{gap:6px}
+.app-shell.purchase-form-active .topbar{min-height:54px;margin-bottom:8px}
+.app-shell.purchase-form-active #app-view{margin-top:0}
+.app-shell.workspace-view-active .main-content{padding-top:16px}
+.purchase-order-register-header{display:flex;justify-content:flex-start;align-items:center;margin-bottom:14px}
+@media(max-width:1050px){.app-shell.purchase-form-active .topbar{flex-wrap:wrap}.workspace-topbar-actions{order:5;flex:1 0 100%;justify-content:flex-start}.workspace-topbar-actions .purchase-form-footer{width:100%}.workspace-topbar-subnavigation{order:4;max-width:100%;flex:1 0 100%;justify-content:flex-start}}
+@media(max-width:800px){.workspace-topbar-actions{order:4;flex:1 0 100%;width:100%}.workspace-topbar-subnavigation{order:3;flex:1 0 100%;max-width:100%;width:100%}.workspace-topbar-actions .customer-registration-topbar-actions{width:100%;flex-wrap:wrap}#app-shell.dealer-register-topbar-active #workspace-topbar-navigation{order:2;flex:1 0 100%;width:100%}#app-shell.dealer-register-topbar-active #workspace-topbar-actions{order:4;flex:1 0 100%;width:100%}#app-shell.dealer-register-topbar-active #workspace-topbar-subnavigation{order:3;flex:1 0 100%;max-width:100%;width:100%}#app-shell.dealer-register-topbar-active .topbar-tools{order:1;width:100%;justify-content:flex-end}}
+@media(max-width:800px){#app-shell.supplier-register-topbar-active #workspace-topbar-navigation{order:2;flex:1 0 100%;width:100%}#app-shell.supplier-register-topbar-active #workspace-topbar-actions{order:3;flex:1 0 100%;width:100%}#app-shell.supplier-register-topbar-active .topbar-tools{order:1;width:100%;justify-content:flex-end}.workspace-topbar-actions .supplier-register-topbar-actions{width:100%;flex-wrap:wrap}.workspace-topbar-actions .supplier-register-topbar-actions .purchase-search{flex:1 1 220px;width:auto}}
+@media(max-width:800px){#app-shell.goods-receipt-topbar-active #workspace-topbar-navigation{order:2;flex:1 0 100%;width:100%}#app-shell.goods-receipt-topbar-active #workspace-topbar-subnavigation{order:3;flex:1 0 100%;max-width:100%;width:100%;margin-left:0}#app-shell.goods-receipt-topbar-active #workspace-topbar-actions{order:4;flex:1 0 100%;width:100%}#app-shell.goods-receipt-topbar-active #dashboard-product-search{order:5;flex:1 0 100%;width:100%;min-width:0;margin-left:0}#app-shell.goods-receipt-topbar-active .topbar-tools{order:1;width:100%;justify-content:flex-end}}
+#app-shell.sales-register-topbar-active .topbar{position:relative;justify-content:flex-start;gap:8px}
+#app-shell.sales-register-topbar-active #workspace-topbar-navigation{order:1;flex:0 0 auto;overflow:visible}
+#app-shell.sales-register-topbar-active #workspace-topbar-actions{order:2;flex:0 0 auto;justify-content:flex-start;overflow:visible}
+#app-shell.sales-register-topbar-active .topbar-tools{order:3;flex:0 0 auto;margin-left:auto}
+.workspace-topbar-actions .sales-register-topbar-actions{display:flex;min-width:0;align-items:center;gap:8px}
+.workspace-topbar-actions .sales-register-primary-actions{display:flex;flex:0 0 auto;align-items:center;gap:8px}
+.workspace-topbar-actions .sales-register-primary-actions .workspace-page-title{color:#176351;font-size:13px;font-weight:700;white-space:nowrap}
+.workspace-topbar-actions .sales-register-primary-actions button{min-height:36px;padding:8px 12px;border:1px solid #008f69;border-radius:8px;background:#008f69;color:#fff;font-size:11px;font-weight:700;line-height:1.2;white-space:nowrap;box-shadow:0 4px 10px rgba(0,143,105,.16)}
+.workspace-topbar-actions .sales-register-primary-actions button:hover{border-color:#007b5c;background:#007b5c}
+.workspace-topbar-actions .sales-register-search{position:absolute;top:50%;left:50%;display:flex;width:clamp(250px,28vw,390px);min-width:0;height:40px;align-items:center;gap:10px;padding:0 13px;border:1px solid #d7e8e1;border-radius:999px;background:#fff;box-shadow:0 2px 8px rgba(18,69,53,.05);transform:translate(-50%,-50%)}
+.workspace-topbar-actions .sales-register-search:focus-within{border-color:#54b99a;box-shadow:0 0 0 3px rgba(0,143,105,.09)}
+.workspace-topbar-actions .sales-register-search .dashboard-product-search-icon{flex:0 0 15px}
+.workspace-topbar-actions .sales-register-search input{width:100%;min-width:0;height:32px;padding:0;border:0;outline:0;background:transparent;color:#173b32;font-size:11px}
+.workspace-topbar-actions .sales-register-search input::placeholder{color:#77958b}
+@media(min-width:801px) and (max-width:1200px){#app-shell.sales-register-topbar-active .topbar{flex-wrap:wrap}#app-shell.sales-register-topbar-active #workspace-topbar-navigation{order:1}#app-shell.sales-register-topbar-active .topbar-tools{order:2}#app-shell.sales-register-topbar-active #workspace-topbar-actions{order:3;flex:1 0 100%;width:100%}.workspace-topbar-actions .sales-register-topbar-actions{display:grid;width:100%;grid-template-columns:auto auto minmax(220px,390px);justify-content:space-between}.workspace-topbar-actions .sales-register-search{position:static;grid-column:3;width:100%;transform:none}}
+@media(max-width:800px){#app-shell.sales-register-topbar-active #workspace-topbar-navigation{order:2;flex:1 0 100%;width:100%}#app-shell.sales-register-topbar-active #workspace-topbar-actions{order:3;flex:1 0 100%;width:100%}#app-shell.sales-register-topbar-active .topbar-tools{order:1;width:100%;justify-content:flex-end;margin-left:0}.workspace-topbar-actions .sales-register-topbar-actions{display:grid;width:100%;grid-template-columns:auto auto minmax(150px,1fr);gap:8px}.workspace-topbar-actions .sales-register-primary-actions{display:contents}.workspace-topbar-actions .sales-register-primary-actions .workspace-page-title{grid-column:1;align-self:center}.workspace-topbar-actions .sales-register-primary-actions button{grid-column:2}.workspace-topbar-actions .sales-register-search{position:static;grid-column:3;width:100%;height:36px;transform:none}}
+@media(max-width:500px){.workspace-topbar-actions .sales-register-topbar-actions{grid-template-columns:auto auto}.workspace-topbar-actions .sales-register-search{grid-column:1/-1}}
+/* Sales entry uses the same in-workspace layout and top action bar as Purchase. */
+#sale-form-modal.sale-form-page{position:relative;inset:auto;z-index:auto;display:block;width:100%;min-height:0;overflow:visible;overscroll-behavior:auto;padding:0;background:transparent}
+#sale-form-modal.sale-form-page>.purchase-modal{display:flex;width:100%;max-width:none;height:auto;max-height:none;min-height:0;flex-direction:column;overflow:visible;margin:0;border:1px solid #d5e8e0;border-radius:12px;background:#f7fbf9;box-shadow:0 5px 20px rgba(14,57,45,.08)}
+#sale-form-modal.sale-form-page .modal-card-header{position:static;top:auto;z-index:auto;flex:0 0 auto;border-radius:11px 11px 0 0}
+#sale-form-modal.sale-form-page .modal-card-header h2:before{display:block;margin:0 0 4px;color:#008f69;content:"SALES WORKSPACE";font-size:9px;font-weight:700;letter-spacing:.14em}
+#sale-form-modal.sale-form-page .modal-card-header h2:after{display:block;margin-top:4px;color:#668d83;content:"Add sale items, review totals, then save or confirm the sale.";font-size:11px;font-weight:400;line-height:1.4;letter-spacing:0}
+#sale-form-modal.sale-form-page #sale-form{display:flex;min-height:0;flex:none;flex-direction:column;gap:0;overflow:visible;padding:16px clamp(12px,1.5vw,24px) 20px}
+#sale-form-modal.sale-form-page #sale-form>.purchase-order-meta-grid{display:grid;width:100%;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start;margin:0 0 20px;padding:16px;border:1px solid #d8ece5;border-radius:9px;background:#fff}
+#sale-form-modal.sale-form-page .transaction-items-header{margin:0 0 10px;padding:0 0 10px;border-bottom:1px solid #dcebe5}
+#sale-form-modal.sale-form-page #sale-items{width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin}
+#sale-form-modal.sale-form-page .purchase-add-product-row{margin:10px 0 0}
+#sale-form-modal.sale-form-page .purchase-grand-total{margin-top:14px}
+#sale-form-modal.sale-form-page .purchase-notes-field{margin-top:16px}
+#sale-form-modal.sale-form-page .purchase-notes-field textarea{min-height:74px}
+.app-shell.sales-form-active .topbar{min-height:54px;margin-bottom:8px;border-bottom-color:#00785b;background:#008f69;box-shadow:0 4px 14px rgba(0,104,77,.18)}
+.app-shell.sales-form-active #app-view{margin-top:0}
+#app-shell.sales-form-active #dashboard-product-search{display:none!important}
+#app-shell.sales-form-active #workspace-topbar-navigation{min-width:0;overflow:visible}
+#app-shell.sales-form-active #workspace-topbar-navigation .workspace-topbar-link,#app-shell.sales-form-active #workspace-topbar-navigation .workspace-topbar-current{min-height:36px;padding:8px 11px;border:1px solid rgba(255,255,255,.38);border-radius:6px;background:transparent;color:#f5fffb;font-size:11px;font-weight:600;line-height:1.2;box-shadow:none}
+#app-shell.sales-form-active #workspace-topbar-navigation .workspace-topbar-link:hover{border-color:rgba(255,255,255,.75);background:rgba(255,255,255,.12);color:#fff}
+#app-shell.sales-form-active #workspace-topbar-navigation .workspace-topbar-link.is-active{border-color:#fff;background:#fff;color:#006f54;font-weight:700}
+#app-shell.sales-form-active .topbar-tools .topbar-language{border-color:rgba(255,255,255,.45)}
+#sale-form-modal.sale-form-page .purchase-grand-total,#sale-form-modal.sale-form-page .purchase-notes-field{width:100%}
+@media(max-width:800px){#sale-form-modal.sale-form-page #sale-form{padding:12px 10px 16px}#sale-form-modal.sale-form-page #sale-form>.purchase-order-meta-grid{grid-template-columns:1fr 1fr;gap:10px;padding:12px}}
+@media(max-width:520px){#sale-form-modal.sale-form-page #sale-form>.purchase-order-meta-grid{grid-template-columns:1fr}}
+/* Keep transaction controls in two clean topbar rows instead of letting actions collide. */
+.app-shell.purchase-form-active .topbar,.app-shell.sales-form-active .topbar{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"navigation tools" "actions actions";align-items:center;justify-content:initial;gap:8px 14px;min-height:0;padding:10px 18px;margin-bottom:8px}
+.app-shell.purchase-form-active #workspace-topbar-navigation,.app-shell.sales-form-active #workspace-topbar-navigation{grid-area:navigation;order:0;min-width:0;width:max-content;max-width:100%;flex:0 1 auto;overflow:visible}
+.app-shell.purchase-form-active .topbar-tools,.app-shell.sales-form-active .topbar-tools{grid-area:tools;order:0;justify-self:end;min-width:0;margin:0}
+.app-shell.purchase-form-active #workspace-topbar-actions,.app-shell.sales-form-active #workspace-topbar-actions{grid-area:actions;order:0;display:flex;width:100%;min-width:0;max-width:100%;flex:0 0 auto;justify-content:flex-start;overflow:visible}
+.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-footer,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-footer{display:flex;width:100%;min-width:0;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0;background:transparent;box-shadow:none}
+.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-primary-actions,.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-document-actions,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-primary-actions,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-document-actions{display:flex;min-width:0;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:8px;margin:0}
+.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-document-actions,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-document-actions{margin-left:auto}
+.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-footer button,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-footer button{flex:0 0 auto;min-height:36px;padding:8px 12px;border:1px solid rgba(0,104,77,.16);border-radius:8px;font-size:11px;line-height:1.2;white-space:nowrap;box-shadow:0 2px 5px rgba(0,52,38,.08)}
+.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-footer .purchase-form-save,.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-footer .purchase-form-save-exit,.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-footer .purchase-form-confirm,.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-footer .purchase-form-print,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-footer .purchase-form-save,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-footer .purchase-form-save-exit,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-footer .purchase-form-confirm,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-footer .purchase-form-print{border-color:#fff;background:#fff;color:#006f54}
+.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-footer button:hover:not(:disabled),.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-footer button:hover:not(:disabled){border-color:#d8f0e6;background:#eaf7f1;color:#005b45}
+@media(max-width:900px){.app-shell.purchase-form-active .topbar,.app-shell.sales-form-active .topbar{grid-template-columns:minmax(0,1fr);grid-template-areas:"tools" "navigation" "actions";gap:8px;padding:10px 14px}.app-shell.purchase-form-active .topbar-tools,.app-shell.sales-form-active .topbar-tools{justify-self:end}.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-footer,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-footer{justify-content:flex-start}.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-document-actions,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-document-actions{margin-left:0}}
+@media(max-width:560px){.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-primary-actions,.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-document-actions,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-primary-actions,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-document-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.app-shell.purchase-form-active #workspace-topbar-actions .purchase-form-footer button,.app-shell.sales-form-active #workspace-topbar-actions .purchase-form-footer button{width:100%;white-space:normal}}
+@media(max-width:650px){.workspace-topbar-actions .purchase-form-footer{align-items:flex-start;flex-direction:column}.workspace-topbar-actions .purchase-form-primary-actions,.workspace-topbar-actions .purchase-form-document-actions{flex-wrap:wrap}.workspace-topbar-actions .purchase-form-footer button,.workspace-topbar-actions .dt-topbar-actions button,.workspace-topbar-actions .customer-registration-topbar-actions button,.workspace-grn-actions button,.workspace-topbar-subnavigation .workspace-promoted-menu-button{min-height:32px;padding:6px 8px}.workspace-topbar-actions,.workspace-topbar-actions .dt-topbar-actions,.workspace-topbar-actions .customer-registration-topbar-actions,.workspace-grn-actions{justify-content:flex-start;flex-wrap:wrap}.workspace-topbar-actions .customer-registration-topbar-actions .purchase-search{flex:1 1 180px;width:auto}}
+/* App drawer and flat workspace navigation. */
+#app-shell #sidebar{display:none;position:fixed;top:62px;left:12px;right:auto;z-index:100;width:min(300px,calc(100vw - 24px));height:auto;min-height:0;max-height:calc(100dvh - 74px);margin:0;padding:14px;overflow-y:auto;overflow-x:hidden;visibility:visible;transform:none;border-radius:10px;box-shadow:0 12px 30px rgba(0,45,33,.24)}
+#app-shell #sidebar.app-drawer-open{display:flex}
+#app-shell #sidebar .main-nav{display:grid;overflow:visible;flex:none;margin:0;padding:0}
+#app-shell #sidebar .brand-block{margin:0 0 10px;padding:0 5px 10px}
+#app-shell .topbar-menu-toggle{display:none!important}
+#app-shell .app-drawer-toggle{order:-1;display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;padding:0;border:0;border-radius:5px;background:transparent;color:#087b5e;cursor:pointer}
+#app-shell .app-drawer-toggle:hover,#app-shell .app-drawer-toggle[aria-expanded="true"]{background:rgba(0,143,105,.12)}
+#app-shell .app-drawer-toggle:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+#app-shell.purchase-form-active .app-drawer-toggle,#app-shell.sales-form-active .app-drawer-toggle,#app-shell.grn-form-active .app-drawer-toggle{color:#fff}
+#app-shell.purchase-form-active .app-drawer-toggle:hover,#app-shell.purchase-form-active .app-drawer-toggle[aria-expanded="true"],#app-shell.sales-form-active .app-drawer-toggle:hover,#app-shell.sales-form-active .app-drawer-toggle[aria-expanded="true"],#app-shell.grn-form-active .app-drawer-toggle:hover,#app-shell.grn-form-active .app-drawer-toggle[aria-expanded="true"]{background:rgba(255,255,255,.14)}
+#app-shell .main-content{width:100%;min-width:0}
+#app-shell .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-route,#product-list-topbar-actions,#report-topbar-navigation,#workspace-topbar-actions) button{min-height:36px;padding:8px 10px;border:0!important;border-radius:3px!important;background:transparent!important;color:#176351!important;font-size:12px;line-height:1.2;box-shadow:none!important;white-space:nowrap}
+#app-shell .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-route,#product-list-topbar-actions,#report-topbar-navigation,#workspace-topbar-actions) button:hover:not(:disabled),#app-shell .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-route,#product-list-topbar-actions,#report-topbar-navigation,#workspace-topbar-actions) button:focus-visible{background:rgba(0,143,105,.10)!important;color:#006b50!important;transform:none}
+#app-shell .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#report-topbar-navigation) button:is(.is-active,[aria-current="page"],[aria-selected="true"]){background:rgba(0,143,105,.12)!important;color:#006b50!important}
+#app-shell:is(.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-actions) button{color:#fff!important}
+#app-shell:is(.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-actions) button:hover:not(:disabled),#app-shell:is(.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation) button:is(.is-active,[aria-current="page"],[aria-selected="true"]){background:rgba(255,255,255,.14)!important;color:#fff!important}
+#app-shell:is(.purchase-form-active,.sales-form-active) .topbar{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;padding:8px 18px;min-height:54px}
+#app-shell:is(.purchase-form-active,.sales-form-active) #workspace-topbar-navigation{order:0;flex:0 0 auto;width:auto;max-width:35%;overflow-x:auto}
+#app-shell:is(.purchase-form-active,.sales-form-active) #workspace-topbar-actions{order:0;flex:1 1 auto;width:auto;min-width:0;overflow-x:auto;overflow-y:hidden}
+#app-shell:is(.purchase-form-active,.sales-form-active) #workspace-topbar-actions .purchase-form-footer{display:flex;width:max-content;min-width:max-content;flex-wrap:nowrap;justify-content:flex-start;gap:2px}
+#app-shell:is(.purchase-form-active,.sales-form-active) #workspace-topbar-actions :is(.purchase-form-primary-actions,.purchase-form-document-actions){display:flex;width:auto;flex:0 0 auto;flex-wrap:nowrap;gap:2px;margin:0}
+#app-shell:is(.purchase-form-active,.sales-form-active) #workspace-topbar-actions .purchase-form-footer button{width:auto;min-width:max-content;white-space:nowrap}
+#app-shell:is(.purchase-form-active,.sales-form-active) .topbar-tools{order:0;flex:0 0 auto;margin-left:auto}
+@media(max-width:900px){#app-shell:is(.purchase-form-active,.sales-form-active) .topbar{flex-wrap:wrap}#app-shell:is(.purchase-form-active,.sales-form-active) #workspace-topbar-navigation{order:1;max-width:100%;flex:1 1 auto}#app-shell:is(.purchase-form-active,.sales-form-active) .topbar-tools{order:2}#app-shell:is(.purchase-form-active,.sales-form-active) #workspace-topbar-actions{order:3;flex:1 0 100%;width:100%}}
+/* Compact white app dropdown, with a separate hover state for each item. */
+#app-shell #sidebar.app-drawer-open{width:min(220px,calc(100vw - 24px));padding:5px 0;background:#fff;color:#45545a;border:1px solid #dce5e1;border-radius:4px;box-shadow:0 8px 22px rgba(21,54,45,.16)}
+#app-shell #sidebar .brand-block,#app-shell #sidebar .nav-label{display:none!important}
+#app-shell #sidebar .main-nav{display:block;gap:0;margin:0;padding:0}
+#app-shell #sidebar .nav-group{margin:0;padding:0;border:0}
+#app-shell #sidebar .nav-item,#app-shell #sidebar .sidebar-signout{display:flex;align-items:center;gap:6px;width:100%;min-height:32px;margin:0;padding:7px 14px;border:0;border-radius:0;background:transparent!important;color:#49565c!important;font-size:13px;font-weight:400;line-height:1.3;text-align:left;box-shadow:none!important;transform:none}
+#app-shell #sidebar .nav-item>span:first-child{display:none!important}
+#app-shell #sidebar .nav-item:hover,#app-shell #sidebar .nav-item:focus-visible,#app-shell #sidebar .sidebar-signout:hover{background:#edf1ef!important;color:#173b32!important;transform:none;outline-offset:-2px}
+#app-shell #sidebar .nav-item.is-active,#app-shell #sidebar .dealer-nav-toggle.has-active-child{background:transparent!important;color:#176351!important;box-shadow:none!important}
+#app-shell #sidebar .nav-item.is-active:hover,#app-shell #sidebar .dealer-nav-toggle.has-active-child:hover{background:#edf1ef!important}
+#app-shell #sidebar .dealer-nav-toggle b{margin-left:auto;color:#75847d}
+#app-shell #sidebar .dealer-submenu{margin:0;padding:0 0 0 12px;border:0;background:transparent}
+#app-shell #sidebar .dealer-submenu .nav-item{padding-left:16px}
+/* Reference palette for the app bar and its dropdown. */
+#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar{background:#71639e!important;border-bottom-color:#62558e!important;box-shadow:0 2px 8px rgba(49,40,75,.12)}
+#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar .app-drawer-toggle{color:#fff!important}
+#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar .app-drawer-toggle:hover,#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar .app-drawer-toggle[aria-expanded="true"]{background:rgba(0,0,0,.15)!important}
+#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-route,#product-list-topbar-actions,#report-topbar-navigation,#workspace-topbar-actions,.settings-hub-navigation) button{background:transparent!important;color:#fff!important;border-color:transparent!important;box-shadow:none!important}
+#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-route,#product-list-topbar-actions,#report-topbar-navigation,#workspace-topbar-actions,.settings-hub-navigation) button:hover:not(:disabled),#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#report-topbar-navigation,.settings-hub-navigation) button:is(.is-active,[aria-current="page"],[aria-selected="true"]){background:rgba(0,0,0,.14)!important;color:#fff!important}
+#app-shell .topbar :is(.workspace-topbar-current,.workspace-page-title,.dashboard-topbar-copy h2,.dashboard-topbar-copy p){color:#fff!important}
+#app-shell #sidebar.app-drawer-open{background:#fff;border-color:#d9dee3}
+#app-shell #sidebar .nav-item:hover,#app-shell #sidebar .nav-item:focus-visible,#app-shell #sidebar .sidebar-signout:hover,#app-shell #sidebar .nav-item.is-active:hover,#app-shell #sidebar .dealer-nav-toggle.has-active-child:hover{background:#e9e9e9!important;color:#353b40!important}
+/* Larger, evenly spaced app-bar controls in the selected purple palette. */
+#app-shell .topbar .app-drawer-toggle{flex:0 0 48px;width:48px;height:48px;border-radius:5px}
+#app-shell .topbar .app-drawer-toggle svg{width:23px;height:23px}
+#app-shell .topbar :is(.workspace-topbar-links,.workspace-promoted-menu,.workspace-grn-actions,.purchase-form-primary-actions,.purchase-form-document-actions){gap:5px}
+#app-shell .topbar .workspace-topbar-subnavigation{gap:8px}
+#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-route,#product-list-topbar-actions,#report-topbar-navigation,#workspace-topbar-actions,.settings-hub-navigation) button{min-height:42px;padding:10px 13px;border-radius:5px!important;font-size:13px;font-weight:600;line-height:1.2}
+#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#report-topbar-navigation,.settings-hub-navigation) button:is(.is-active,[aria-current="page"],[aria-selected="true"]){background:rgba(40,30,65,.22)!important}
+#app-shell .topbar .dashboard-product-search-control{border-color:#ddd7ea;background:#fff}
+#app-shell .topbar .dashboard-product-search-control:focus-within{border-color:#aa9bc9;box-shadow:0 0 0 3px rgba(113,99,158,.18)}
+#app-shell .topbar .dashboard-product-search-control button{background:#71639e;color:#fff}
+#app-shell .topbar .dashboard-product-search-control button:hover{background:#5e528a}
+#app-shell .topbar .topbar-language button.is-active{background:#71639e;color:#fff}
+#app-shell.goods-receipt-topbar-active #workspace-topbar-navigation,#app-shell.goods-receipt-topbar-active #workspace-topbar-subnavigation{flex:0 1 auto;min-width:0;overflow-x:auto;scrollbar-width:thin}
+#app-shell.goods-receipt-topbar-active #dashboard-product-search{min-width:180px}
+@media(max-width:800px){#app-shell .topbar .app-drawer-toggle{flex-basis:44px;width:44px;height:44px}#app-shell.goods-receipt-topbar-active #workspace-topbar-navigation,#app-shell.goods-receipt-topbar-active #workspace-topbar-subnavigation{flex:1 0 100%;width:100%;max-width:100%}}
+/* Screen palette follows the purple and white workspace reference. */
+@media screen{
+  #app-shell{accent-color:#71639e;color:#332e40;background:#f6f6f8}
+  #app-shell .main-content,#app-shell.workspace-view-active .main-content{background:#f6f6f8}
+  #app-shell .topbar{position:sticky!important;top:0;z-index:40;min-height:50px;padding-top:4px;padding-bottom:4px}
+  #app-shell .topbar .app-drawer-toggle{width:42px;height:42px;flex-basis:42px}
+  #app-shell .topbar .app-drawer-toggle svg{width:20px;height:20px}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-route,#product-list-topbar-actions,#report-topbar-navigation,#workspace-topbar-actions,.settings-hub-navigation) button{min-height:36px;padding:7px 11px;font-size:12px}
+  #app-shell .topbar .dashboard-product-search-control{height:36px;min-height:36px;background:#fff}
+  #app-shell .topbar .dashboard-product-search-control button{min-height:28px}
+  #app-shell .topbar-tools .profile-chip{min-height:36px}
+  #app-shell :is(.card,.modal-card,.kpi,.table-wrap,.inventory-summary-card,.purchase-overview,.purchase-order-meta-grid,.sale-dealer-info-grid .field){border-color:#ddd9e7}
+  #app-shell :is(.card,.kpi,.purchase-order-meta-grid),body .modal-card{background:#fff}
+  #app-shell :is(h1,h2,h3,h4),body .modal-card :is(h1,h2,h3,h4){color:#332e40}
+  #app-shell :is(.eyebrow,.group-title){color:#71639e}
+  #app-shell :is(th,.line-item-table-header){background:#f1eff6;color:#554b70;border-color:#ddd9e7}
+  #app-shell :is(td,.table-wrap,th){border-color:#e5e2eb}
+  #app-shell :is(.field input,.field select,.field textarea,input[type="search"]),body .modal-card :is(input,select,textarea){border-color:#d8d4e3;color:#332e40;background-color:#fff;accent-color:#71639e}
+  #app-shell :is(input,select,textarea):focus,body .modal-card :is(input,select,textarea):focus{border-color:#8b7db7;outline-color:#bfb4d8}
+  #app-shell #app-view .primary-button,body .modal-card .primary-button{background:#71639e!important;border-color:#71639e!important;color:#fff!important}
+  #app-shell #app-view .primary-button:hover:not(:disabled),body .modal-card .primary-button:hover:not(:disabled){background:#5e528a!important;border-color:#5e528a!important}
+  #app-shell #app-view .secondary-button,body .modal-card .secondary-button{background:#f1eff6;color:#554b70;border-color:#ddd9e7}
+  #app-shell #app-view .secondary-button:hover:not(:disabled),body .modal-card .secondary-button:hover:not(:disabled){background:#e6e1f0;color:#493e64}
+  #app-shell :is(.notice,.purchase-grand-total,.purchase-total-row,.inventory-summary-card,.sale-dealer-info-grid .field,.directory-empty-icon){background:#f5f3f9;border-color:#ddd9e7;color:#554b70}
+  #app-shell :is(.purchase-line-item-header,.sale-line-item-header,.purchase-item-row .item-serial,.sale-entry-modal .item-serial){border-color:#ddd9e7}
+  #app-shell :is(.purchase-item-row .item-serial,.sale-entry-modal .item-serial){background-color:#71639e;color:#fff}
+  #app-shell #sidebar .nav-item.is-active,#app-shell #sidebar .dealer-nav-toggle.has-active-child{color:#71639e!important}
+  #app-shell .product-config-page-host,#app-shell .product-config-page-frame{background:#f6f6f8}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.goods-receipt-topbar-active,.sales-register-topbar-active) .topbar{min-height:50px;padding-top:4px;padding-bottom:4px}
+  #app-shell .topbar .dashboard-product-search{height:36px}
+  #app-shell :is(.inventory-filters,.inventory-summary .kpi,.purchase-overview,.grn-pending-filters,.grn-register-controls){background:#f7f6fa;border-color:#ddd9e7}
+  #app-shell :is(#purchase-form-modal.purchase-form-page>.purchase-modal,#sale-form-modal.sale-form-page>.purchase-modal,#goods-receipt-form-modal.grn-form-page .grn-modal){background:#fff;border-color:#ddd9e7}
+  #app-shell :is(.purchase-total-row strong,.purchase-grand-total strong,.inventory-summary .kpi strong){color:#554b70}
+  #app-shell #purchase-quick-selection .purchase-quick-category-option{background:#fff;color:#554b70;border-color:#ddd9e7}
+  #app-shell #purchase-quick-selection .purchase-quick-category-option:has(input:checked){background:#71639e;color:#fff;border-color:#71639e}
+  #app-shell #app-view :is(#add-purchase-item,#add-sale-item){background:#71639e!important;border-color:#71639e!important;color:#fff!important}
+  #app-shell :is(.accounting-kpis>div,.accounting-notice,.accounting-roadmap,.accounting-form,.accounting-register){border-color:#ddd9e7}
+  #app-shell :is(.accounting-kpis>div,.accounting-notice,.accounting-roadmap){background:#f7f6fa;color:#493f60}
+  #app-shell .accounting-register-search{width:min(100%,380px);margin:0 0 12px}
+  #app-shell :is(.hr-kpis>div,.dt-kpis>div,.hr-profile-panel,.hr-payslip-printbar,.hr-payslip-help,.dt-filters,.hr-sales-history-filters){background:#f7f6fa;border-color:#ddd9e7;color:#493f60}
+  #app-shell :is(.hr-tabs,.hr-profile-tabs,.hr-photo-meta-tabs,.dt-tabs,.accounting-tabs) button.is-active{background:#71639e!important;border-color:#71639e!important;color:#fff!important}
+}
+/* Accounting workspace: compact, left-aligned menus and neutral document surfaces. */
+@media screen{
+  #app-shell:has(.accounting-page) .topbar{justify-content:flex-start;gap:4px}
+  #app-shell:has(.accounting-page) #workspace-topbar-navigation{flex:0 0 auto;width:auto;overflow:visible}
+  #app-shell:has(.accounting-page) #workspace-topbar-navigation .workspace-topbar-current{display:block;padding:0 12px 0 4px;font-size:15px;font-weight:600;color:#fff}
+  #app-shell:has(.accounting-page) #workspace-topbar-subnavigation{flex:0 1 auto;min-width:0;max-width:none;justify-content:flex-start;overflow:visible}
+  #app-shell:has(.accounting-page) .topbar-tools{margin-left:auto}
+  #app-shell:has(.accounting-page) .workspace-promoted-menu.accounting-tabs{display:flex;align-items:center;justify-content:flex-start;gap:0;min-width:0;margin:0;padding:0;border:0;background:transparent;overflow:visible}
+  #app-shell:has(.accounting-page) .accounting-menu-group{position:relative;flex:0 0 auto}
+  #app-shell:has(.accounting-page) .accounting-menu-group summary{display:flex;min-height:40px;align-items:center;gap:6px;padding:0 12px;list-style:none;border-radius:3px;color:#fff;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer}
+  #app-shell:has(.accounting-page) .accounting-menu-group summary::-webkit-details-marker{display:none}
+  #app-shell:has(.accounting-page) .accounting-menu-group summary:after{content:'▾';font-size:9px;opacity:.8}
+  #app-shell:has(.accounting-page) .accounting-menu-group summary:hover,#app-shell:has(.accounting-page) .accounting-menu-group[open] summary,#app-shell:has(.accounting-page) .accounting-menu-group[data-active="true"] summary{background:rgba(0,0,0,.14)}
+  #app-shell:has(.accounting-page) .accounting-menu-group summary:focus-visible{outline:2px solid #fff;outline-offset:-3px}
+  #app-shell:has(.accounting-page) .accounting-menu-dropdown{position:absolute;top:100%;left:0;z-index:90;display:flex;min-width:205px;flex-direction:column;align-items:stretch;padding:4px 0;border:1px solid #d8dce2;border-radius:3px;background:#fff;box-shadow:0 8px 20px rgba(30,25,40,.16)}
+  #app-shell:has(.accounting-page) .topbar #workspace-topbar-subnavigation .accounting-menu-dropdown button{display:block;width:100%;min-height:34px;padding:8px 14px;border:0!important;border-radius:0!important;background:#fff!important;color:#48505a!important;font-size:12px;font-weight:400;line-height:1.25;text-align:left;white-space:nowrap}
+  #app-shell:has(.accounting-page) .topbar #workspace-topbar-subnavigation .accounting-menu-dropdown button:hover,#app-shell:has(.accounting-page) .topbar #workspace-topbar-subnavigation .accounting-menu-dropdown button:focus-visible,#app-shell:has(.accounting-page) .topbar #workspace-topbar-subnavigation .accounting-menu-dropdown button.is-active{background:#efedf3!important;color:#3f3459!important}
+  #app-shell .accounting-page{width:100%;min-width:0;padding:0;text-align:left}
+  #app-shell .accounting-workspace-heading{display:flex;min-height:52px;align-items:center;justify-content:flex-start;padding:10px 16px;background:#fff;border:1px solid #dce0e6;border-bottom:0}
+  #app-shell .accounting-workspace-heading h1{margin:0;color:#34313b;font-size:18px;font-weight:600;line-height:1.3}
+  #app-shell #accounting-content{min-width:0;padding:16px;background:#fff;border:1px solid #dce0e6;color:#3d3c43;text-align:left}
+  #app-shell #accounting-content :is(.accounting-form,.accounting-register,.accounting-roadmap,.accounting-kpis>div){border:1px solid #dce0e6;border-radius:3px;background:#fff;box-shadow:none}
+  #app-shell #accounting-content .accounting-notice{border-color:#bcb0d3;background:#f5f3f8;color:#413b4b}
+  #app-shell #accounting-content :is(.accounting-form,.accounting-register){padding:14px}
+  #app-shell #accounting-content :is(h2,h3,h4,.field label){color:#36323c;text-align:left}
+  #app-shell #accounting-content :is(.field input,.field select,.field textarea,.accounting-journal-line input,.accounting-journal-line select){min-height:36px;border:1px solid #d3d7df;border-radius:3px;background:#fff;color:#34313b}
+  #app-shell #accounting-content :is(.field input,.field select,.field textarea,.accounting-journal-line input,.accounting-journal-line select):focus{border-color:#71639e;outline:2px solid rgba(113,99,158,.18)}
+  #app-shell #accounting-content :is(.primary-button,.secondary-button){min-height:34px;border-radius:3px;box-shadow:none;font-size:12px}
+  #app-shell #accounting-content .table-wrap{border:1px solid #dce0e6;border-radius:3px;box-shadow:none}
+  #app-shell #accounting-content th{background:#f5f6f8;color:#35323b;border-color:#dce0e6;text-align:left}
+  #app-shell #accounting-content td{border-color:#e5e7eb;color:#44434a;text-align:left}
+  #app-shell #accounting-content tbody tr:hover td{background:#f8f7fa}
+  @media(max-width:800px){#app-shell:has(.accounting-page) .topbar{flex-wrap:wrap}#app-shell:has(.accounting-page) #workspace-topbar-subnavigation{order:3;flex:1 0 100%;width:100%}#app-shell:has(.accounting-page) .topbar-tools{margin-left:auto}#app-shell #accounting-content{padding:12px}#app-shell .accounting-workspace-heading{padding:9px 12px}}
+}
+/* Keep page searches with their own records, outside the global menu bar. */
+@media screen{
+  #app-shell #dashboard-product-search{display:none!important}
+  #app-shell .module-body-search{width:min(100%,380px);max-width:100%;margin:0 0 12px}
+  #app-shell .inventory-body-product-picker{position:relative;display:inline-flex;margin:0 0 12px;z-index:12}
+  #app-shell .inventory-body-product-picker .inventory-product-picker{left:0;right:auto}
+}
+/* Compact categorized Human Resources navigation. */
+@media screen{
+  #app-shell:has(.hr-topbar-tabs) .topbar{min-height:46px;padding-top:3px;padding-bottom:3px;gap:6px}
+  #app-shell:has(.hr-topbar-tabs) .topbar .app-drawer-toggle{width:38px;height:38px;flex-basis:38px}
+  #app-shell:has(.hr-topbar-tabs) .topbar .app-drawer-toggle svg{width:19px;height:19px}
+  #app-shell:has(.hr-topbar-tabs) .topbar-tools .profile-chip{min-height:34px}
+  #app-shell:has(.hr-topbar-tabs) .topbar-tools .profile-avatar{width:26px;height:26px;flex-basis:26px}
+  #app-shell:has(.hr-topbar-tabs) #workspace-topbar-navigation{flex:0 1 auto;min-width:0;overflow:visible}
+  #app-shell #workspace-topbar-navigation .hr-topbar-tabs{display:flex;align-items:center;justify-content:flex-start;gap:0;min-width:0;max-width:none;margin:0;padding:0;border:0;background:transparent;overflow:visible;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+  #app-shell #workspace-topbar-navigation .hr-menu-group{position:relative;flex:0 0 auto}
+  #app-shell #workspace-topbar-navigation .hr-menu-group summary{display:flex;min-height:38px;align-items:center;gap:6px;padding:0 12px;border-radius:3px;color:#fff;font-size:13px;font-weight:500;line-height:1.2;list-style:none;white-space:nowrap;cursor:pointer}
+  #app-shell #workspace-topbar-navigation .hr-menu-group summary::-webkit-details-marker{display:none}
+  #app-shell #workspace-topbar-navigation .hr-menu-group summary:after{content:'▾';font-size:9px;opacity:.8}
+  #app-shell #workspace-topbar-navigation .hr-menu-group summary:hover,#app-shell #workspace-topbar-navigation .hr-menu-group[open] summary,#app-shell #workspace-topbar-navigation .hr-menu-group[data-active="true"] summary{background:rgba(0,0,0,.14)}
+  #app-shell #workspace-topbar-navigation .hr-menu-group summary:focus-visible{outline:2px solid #fff;outline-offset:-3px}
+  #app-shell #workspace-topbar-navigation .hr-menu-dropdown{position:absolute;top:100%;left:0;z-index:90;display:flex;min-width:215px;max-width:calc(100vw - 20px);flex-direction:column;align-items:stretch;padding:4px 0;border:1px solid #d8dce2;border-radius:3px;background:#fff;box-shadow:0 8px 20px rgba(30,25,40,.16)}
+  #app-shell #workspace-topbar-navigation .hr-menu-group:not([open]) .hr-menu-dropdown,#app-shell #workspace-topbar-subnavigation .accounting-menu-group:not([open]) .accounting-menu-dropdown{display:none}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-navigation .hr-menu-dropdown button{display:block;width:100%;min-height:34px;margin:0;padding:8px 14px;border:0!important;border-radius:0!important;background:#fff!important;color:#48505a!important;font-family:inherit;font-size:13px;font-weight:400;line-height:1.25;text-align:left;white-space:normal;box-shadow:none!important;transform:none}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-navigation .hr-menu-dropdown button:is(:hover,:focus-visible,.is-active){background:#efedf3!important;color:#3f3459!important}
+  #app-shell #workspace-topbar-navigation .hr-back-link{margin-right:4px}
+  @media(max-width:700px){#app-shell:has(.hr-topbar-tabs) .topbar{flex-wrap:wrap}#app-shell:has(.hr-topbar-tabs) #workspace-topbar-navigation{order:3;flex:1 0 100%;width:100%}#app-shell #workspace-topbar-navigation .hr-topbar-tabs{flex-wrap:wrap}#app-shell #workspace-topbar-navigation .hr-menu-group summary{padding:0 9px}}
+}
+/* Enlarge the app launcher evenly while keeping its nine-square mark. */
+#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active):has(.topbar) .topbar .app-drawer-toggle{width:calc(28px + .5cm);height:calc(28px + .5cm);flex-basis:calc(28px + .5cm);border-radius:50%}
+#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active):has(.topbar) .topbar .app-drawer-toggle svg{width:calc(20px + .5cm);height:calc(20px + .5cm)}
+/* Inventory controls share the workspace bar; the product search stays in the page. */
+@media screen{
+  #app-shell.inventory-view-active .topbar{justify-content:flex-start;gap:6px}
+  #app-shell.inventory-view-active .inventory-topbar-module{flex:0 1 auto;min-width:0;gap:10px}
+  #app-shell.inventory-view-active .inventory-topbar-title{color:#fff;font-size:15px;font-weight:600;letter-spacing:0;white-space:nowrap}
+  #app-shell.inventory-view-active .topbar .inventory-view-tabs{display:flex;gap:4px;margin:0;padding:0;border:0;border-radius:0;background:transparent}
+  #app-shell.inventory-view-active .topbar .inventory-view-tab{min-height:36px;padding:8px 11px;border:0;border-radius:4px;background:transparent;color:#fff;font-size:12px;font-weight:600;box-shadow:none;white-space:nowrap}
+  #app-shell.inventory-view-active .topbar .inventory-view-tab:hover,#app-shell.inventory-view-active .topbar .inventory-view-tab[aria-selected="true"]{background:rgba(0,0,0,.15);color:#fff}
+  #app-shell.inventory-view-active .inventory-topbar-category-wrap{flex:0 0 auto;min-width:0}
+  #app-shell.inventory-view-active .inventory-topbar-category-wrap label{color:#fff;font-size:9px}
+  #app-shell.inventory-view-active .inventory-topbar-category-wrap select{width:145px;min-height:34px;border-color:#ddd9e7;background:#fff;color:#393149;font-size:11px}
+  #app-shell.inventory-view-active .topbar #inventory-product-picker-toggle{flex:0 0 auto;min-height:36px;max-width:180px;padding:8px 11px;border:0;border-radius:4px;background:transparent;color:#fff;font-size:12px;box-shadow:none}
+  #app-shell.inventory-view-active .topbar #inventory-product-picker-toggle:hover,#app-shell.inventory-view-active .topbar #inventory-product-picker-toggle[aria-expanded="true"]{background:rgba(0,0,0,.15);color:#fff}
+  #app-shell.inventory-view-active .topbar #inventory-product-picker-toggle .inventory-picker-caret{color:#fff}
+  #app-shell.inventory-view-active .topbar-tools{margin-left:auto}
+  #app-shell .inventory-body-product-picker{display:block;width:0;height:0;margin:0;z-index:45}
+  #app-shell .inventory-body-product-picker .inventory-product-picker{left:0;right:auto}
+  #app-shell #inventory-stock-panel .inventory-selected-summary{background:#f7f6fa;border-color:#ddd9e7}
+  #app-shell #inventory-stock-panel .inventory-selected-summary-grid>div{background:#fff;border-color:#ddd9e7;border-top-color:#71639e!important}
+  #app-shell #inventory-stock-panel .inventory-selected-summary :is(strong,small,span){color:#493f60}
+  @media(max-width:800px){#app-shell.inventory-view-active .topbar{flex-wrap:wrap}#app-shell.inventory-view-active .inventory-topbar-module{flex:1 1 auto;max-width:100%}#app-shell.inventory-view-active .topbar-tools{flex:0 1 auto;max-width:100%}#app-shell.inventory-view-active .inventory-topbar-category-wrap select{width:120px}}
+}
+/* Supplier entry and profile use the regular workspace instead of a modal. */
+@media screen{
+  #app-shell .supplier-workspace-page{position:relative;display:block;width:100%;min-width:0;padding:0;background:transparent}
+  #app-shell .supplier-workspace-page>.modal-card{display:block;box-sizing:border-box;width:100%;max-width:none;max-height:none;overflow:visible;margin:0;padding:20px 22px;border:1px solid #ddd9e7;border-radius:8px;background:#fff;box-shadow:0 4px 16px rgba(49,40,75,.06)}
+  #app-shell .supplier-workspace-page .modal-card-header{align-items:center;margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid #e5e2eb}
+  #app-shell .supplier-workspace-page .modal-card-header h2{color:#332e40;font-size:20px}
+  #app-shell .supplier-workspace-page :is(.supplier-form-modal,.supplier-profile-edit-modal) .form-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  #app-shell .supplier-workspace-page .supplier-deposit-section{background:#f7f6fa;border-color:#ddd9e7}
+  #app-shell.supplier-workspace-active #workspace-topbar-actions{min-width:0;overflow-x:auto;overflow-y:hidden;justify-content:flex-start}
+  #app-shell .supplier-workspace-actions{display:flex;align-items:center;gap:4px;min-width:max-content;white-space:nowrap}
+  #app-shell .supplier-workspace-actions .supplier-workspace-current{padding:8px 10px;color:#fff;font-size:12px;font-weight:600;background:rgba(0,0,0,.13);border-radius:3px}
+  @media(max-width:760px){#app-shell .supplier-workspace-page>.modal-card{padding:16px}#app-shell .supplier-workspace-page :is(.supplier-form-modal,.supplier-profile-edit-modal) .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:520px){#app-shell .supplier-workspace-page>.modal-card{padding:12px}#app-shell .supplier-workspace-page :is(.supplier-form-modal,.supplier-profile-edit-modal) .form-grid{grid-template-columns:1fr}}
+}
+/* Compact workspace header and categorized Purchase / Sales menus. */
+@media screen{
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.goods-receipt-topbar-active,.sales-register-topbar-active) .topbar{min-height:40px;padding-top:2px;padding-bottom:2px;gap:5px}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active):has(.topbar) .topbar .app-drawer-toggle{width:36px;height:36px;flex-basis:36px}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active):has(.topbar) .topbar .app-drawer-toggle svg{width:30px;height:30px}
+  #app-shell .topbar-tools .profile-chip{min-height:34px;padding-top:2px;padding-bottom:2px}
+  #app-shell .topbar-tools .profile-avatar{width:25px;height:25px;flex-basis:25px}
+  #app-shell .topbar .topbar-language button{min-height:24px}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-route,#product-list-topbar-actions,#report-topbar-navigation,#workspace-topbar-actions,.settings-hub-navigation) button{min-height:34px;padding:7px 10px;font-size:12px}
+  #app-shell:has(.commerce-navigation) .topbar{justify-content:flex-start;gap:4px}
+  #app-shell:has(.commerce-navigation) #workspace-topbar-navigation{display:flex;flex:0 1 auto;width:auto;min-width:0;max-width:none;overflow:visible}
+  #app-shell:has(.commerce-navigation) .topbar-tools{margin-left:auto}
+  #app-shell .commerce-navigation{display:flex;align-items:center;justify-content:flex-start;gap:0;min-width:0;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+  #app-shell .commerce-module-title{flex:0 0 auto;padding:0 9px;color:#fff;font-size:15px;font-weight:600;white-space:nowrap}
+  #app-shell .commerce-menu-group{position:relative;flex:0 0 auto}
+  #app-shell .commerce-menu-group summary{display:flex;align-items:center;gap:5px;min-height:36px;padding:0 10px;border-radius:3px;color:#fff;font-size:12px;font-weight:500;line-height:1.2;list-style:none;white-space:nowrap;cursor:pointer}
+  #app-shell .commerce-menu-group summary::-webkit-details-marker{display:none}
+  #app-shell .commerce-menu-group summary:after{content:'▾';font-size:9px;opacity:.8}
+  #app-shell .commerce-menu-group summary:hover,#app-shell .commerce-menu-group[open] summary,#app-shell .commerce-menu-group[data-active="true"] summary{background:rgba(0,0,0,.14)}
+  #app-shell .commerce-menu-group summary:focus-visible{outline:2px solid #fff;outline-offset:-3px}
+  #app-shell .commerce-menu-dropdown{position:absolute;top:100%;left:0;z-index:90;display:flex;min-width:210px;max-width:calc(100vw - 20px);flex-direction:column;align-items:stretch;padding:4px 0;border:1px solid #d8dce2;border-radius:3px;background:#fff;box-shadow:0 8px 20px rgba(30,25,40,.16)}
+  #app-shell .commerce-menu-group:not([open]) .commerce-menu-dropdown{display:none}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-navigation .commerce-menu-dropdown button{display:block;width:100%;min-height:34px;margin:0;padding:8px 14px;border:0!important;border-radius:0!important;background:#fff!important;color:#48505a!important;font-family:inherit;font-size:12px;font-weight:400;line-height:1.25;text-align:left;white-space:normal;box-shadow:none!important;transform:none}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-navigation .commerce-menu-dropdown button:hover,#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-navigation .commerce-menu-dropdown button:focus-visible{background:#efedf3!important;color:#3f3459!important}
+  @media(max-width:1100px){#app-shell:has(.commerce-navigation) .topbar{flex-wrap:wrap}#app-shell:has(.commerce-navigation) #workspace-topbar-navigation{max-width:100%;flex:1 1 auto}#app-shell:has(.commerce-navigation) .commerce-navigation{flex-wrap:wrap}#app-shell:has(.commerce-navigation) .commerce-menu-group summary{padding:0 8px}}
+}
+@media screen{
+  #app-shell:is(.commerce-purchase-active,.commerce-sales-active):not(.purchase-form-active):not(.sales-form-active) #app-view>.card{border:1px solid #dce0e6;border-radius:3px;background:#fff;box-shadow:none}
+  #app-shell:is(.commerce-purchase-active,.commerce-sales-active):not(.purchase-form-active):not(.sales-form-active) #app-view :is(h2,h3){color:#34313b;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-weight:600}
+  #app-shell:is(.commerce-purchase-active,.commerce-sales-active):not(.purchase-form-active):not(.sales-form-active) #app-view :is(.purchase-insight-filters,.purchase-smart-summary){border-color:#dce0e6;border-radius:3px;background:#fff;box-shadow:none}
+  #app-shell:is(.commerce-purchase-active,.commerce-sales-active):not(.purchase-form-active):not(.sales-form-active) #app-view .table-wrap{border:1px solid #dce0e6;border-radius:3px;box-shadow:none}
+  #app-shell:is(.commerce-purchase-active,.commerce-sales-active):not(.purchase-form-active):not(.sales-form-active) #app-view th{background:#f5f6f8;color:#35323b;border-color:#dce0e6}
+  #app-shell:is(.commerce-purchase-active,.commerce-sales-active):not(.purchase-form-active):not(.sales-form-active) #app-view td{border-color:#e5e7eb;color:#44434a}
+  #app-shell:is(.commerce-purchase-active,.commerce-sales-active):not(.purchase-form-active):not(.sales-form-active) #app-view tbody tr:hover td{background:#f8f7fa}
+}
+/* Compact Inventory navigation and dashboard. */
+@media screen{
+  #app-shell.inventory-view-active .inventory-topbar-module{display:flex;align-items:center;gap:12px;overflow:visible}
+  #app-shell.inventory-view-active .inventory-navigation{display:flex;align-items:center;gap:0;min-width:0}
+  #app-shell.inventory-view-active .inventory-navigation>.inventory-nav-link{min-height:40px;padding:0 11px;border:0;border-radius:3px;background:transparent;color:#fff;font:500 13px system-ui,-apple-system,"Segoe UI",sans-serif;white-space:nowrap;box-shadow:none}
+  #app-shell.inventory-view-active .inventory-navigation>.inventory-nav-link:hover,#app-shell.inventory-view-active .inventory-navigation>.inventory-nav-link[aria-selected="true"]{background:rgba(0,0,0,.15)}
+  #app-shell.inventory-view-active .inventory-menu-group summary{font-size:13px}
+  #app-shell.inventory-view-active .inventory-menu-group .commerce-menu-dropdown button{display:block;width:100%;min-height:34px;padding:8px 14px;border:0;border-radius:0;background:#fff;color:#48505a;font:400 13px system-ui,-apple-system,"Segoe UI",sans-serif;text-align:left;white-space:nowrap;box-shadow:none}
+  #app-shell.inventory-view-active .inventory-menu-group .commerce-menu-dropdown button:hover,#app-shell.inventory-view-active .inventory-menu-group .commerce-menu-dropdown button:focus-visible{background:#efedf3;color:#3f3459}
+  #app-shell.inventory-view-active .inventory-menu-group .commerce-menu-dropdown button[aria-selected="true"]{font-weight:600;color:#5e518c}
+  #app-shell .inventory-dashboard-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px;border:1px solid #dee2eb;border-radius:15px;background:#fff;box-shadow:0 4px 16px rgba(38,33,55,.06)}
+  #app-shell .inventory-dashboard-header h2{margin:0;color:#222b39;font-size:23px;line-height:1.25}
+  #app-shell .inventory-dashboard-header p{margin:5px 0 0;color:#68758b;font-size:12px}
+  #app-shell .inventory-dashboard-periods{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px}
+  #app-shell .inventory-dashboard-periods button,#app-shell .inventory-dashboard-custom button{min-height:36px;padding:0 14px;border:1px solid #dce1e9;border-radius:20px;background:#f8f9fb;color:#40516b;font-size:12px;white-space:nowrap;box-shadow:none}
+  #app-shell .inventory-dashboard-periods button:hover{background:#efedf6}
+  #app-shell .inventory-dashboard-periods button[aria-pressed="true"]{border-color:#71639e;background:#71639e;color:#fff}
+  #app-shell .inventory-dashboard-custom{display:flex;align-items:end;gap:10px;flex-wrap:wrap;margin-top:12px}
+  #app-shell .inventory-dashboard-custom label{display:grid;gap:4px;color:#535067;font-size:12px}
+  #app-shell .inventory-dashboard-custom input{min-height:34px;border:1px solid #dadce6;border-radius:5px;padding:5px 8px;background:#fff}
+  #app-shell #inventory-dashboard-error{margin:8px 0;color:#a93e45;font-size:12px}
+  #app-shell #inventory-dashboard-error:empty{display:none}
+  #app-shell .inventory-dashboard-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px}
+  #app-shell .inventory-dashboard-metrics>div{padding:16px 18px;border:1px solid #e0e1e9;border-top:3px solid #71639e;border-radius:8px;background:#fff}
+  #app-shell .inventory-dashboard-metrics small{display:block;color:#6b7180;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+  #app-shell .inventory-dashboard-metrics strong{display:block;margin-top:6px;color:#302b3b;font-size:20px}
+  #app-shell .inventory-dashboard-note{color:#68758b;font-size:13px}
+  @media(max-width:1200px){#app-shell .inventory-dashboard-header{align-items:flex-start;flex-direction:column}#app-shell .inventory-dashboard-periods{justify-content:flex-start}}
+  @media(max-width:1000px){#app-shell.inventory-view-active .topbar{flex-wrap:wrap}#app-shell.inventory-view-active .inventory-topbar-module{flex-wrap:wrap;max-width:100%}#app-shell.inventory-view-active .inventory-navigation{flex-wrap:wrap}}
+}
+/* Keep the Accounting header as slim as the reference while retaining its controls. */
+@media screen and (min-width:801px){
+  #app-shell:has(.accounting-page) .topbar{height:50px;min-height:50px;padding-top:0;padding-bottom:0;margin-bottom:10px;border-radius:0;align-items:center}
+  #app-shell:has(.accounting-page) .topbar .app-drawer-toggle{height:40px;width:40px;flex-basis:40px}
+  #app-shell:has(.accounting-page) .topbar-tools .profile-chip{height:36px;min-height:36px;padding-top:2px;padding-bottom:2px}
+  #app-shell:has(.accounting-page) .accounting-menu-group summary{min-height:38px}
+}
+@media screen and (max-width:800px){
+  #app-shell:has(.accounting-page) .topbar{height:auto;min-height:50px}
+}
+/* A consistent, compact top bar with a simple profile menu. */
+@media screen{
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar{height:auto;min-height:50px;padding-top:2px;padding-bottom:2px;border-radius:0;align-items:center}
+  #app-shell .topbar .topbar-tools .profile-chip{height:36px;min-height:36px;padding-top:2px;padding-bottom:2px}
+  #app-shell .topbar .topbar-tools .version{height:auto}
+  #app-shell .topbar #profile-menu{position:absolute;top:calc(100% + 4px);right:0;left:auto;width:210px;max-width:calc(100vw - 20px);max-height:calc(100dvh - 60px);overflow-y:auto;padding:5px 0;border:1px solid #d8dce2;border-radius:3px;background:#fff;box-shadow:0 8px 20px rgba(30,25,40,.16)}
+  #app-shell .topbar #profile-menu .profile-menu-summary{display:none}
+  #app-shell .topbar #profile-menu .profile-menu-item{display:flex;width:100%;min-height:34px;margin:0;padding:7px 20px;border:0;border-radius:0;background:#fff;color:#48505a;font:400 13px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;text-align:left;box-shadow:none}
+  #app-shell .topbar #profile-menu .profile-menu-item>span:first-child{display:none}
+  #app-shell .topbar #profile-menu .profile-menu-item:hover,#app-shell .topbar #profile-menu .profile-menu-item:focus-visible{background:#ebebed;color:#34313b}
+  #app-shell .topbar #profile-menu .profile-menu-divider{height:1px;margin:5px 0;background:#e0e1e5}
+  @media(max-width:800px){#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar{height:auto;min-height:50px}#app-shell .topbar #profile-menu{width:min(210px,calc(100vw - 20px))}}
+}
+/* Start the shared top bar at the top of the app viewport. */
+@media screen{
+  #app-shell .main-content,#app-shell.workspace-view-active .main-content{padding-top:0}
+  #app-shell .main-content>.topbar{margin-top:0;border-top:0}
+}
+/* Match the compact reference icon and keep header labels fully readable. */
+@media screen{
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active):has(.topbar) .topbar .app-drawer-toggle svg{width:calc(30px - .2cm);height:calc(30px - .2cm);flex:none}
+  #app-shell .topbar .dashboard-topbar-context{min-width:0;flex:1 1 auto;align-self:center}
+  #app-shell .topbar .dashboard-topbar-copy{flex:0 1 auto;min-width:0;max-width:100%}
+  #app-shell .topbar .dashboard-topbar-copy p{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:9px;line-height:1.25;white-space:normal;overflow:visible}
+  #app-shell .topbar .dashboard-topbar-copy h2{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:14px;font-weight:500;line-height:1.3;white-space:normal;overflow:visible;overflow-wrap:anywhere;text-overflow:clip}
+  #app-shell .topbar :is(.workspace-topbar-current,.inventory-topbar-title){font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:16px;font-weight:500;line-height:1.3}
+  #app-shell .topbar :is(.workspace-topbar-links>.workspace-topbar-link,.commerce-navigation>.commerce-nav-link,.inventory-navigation>.inventory-nav-link,.accounting-tabs>.accounting-nav-link,.commerce-menu-group>summary,.accounting-menu-group>summary,.hr-menu-group>summary){font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:14px;font-weight:400;line-height:1.3}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-navigation :is(.workspace-topbar-links>.workspace-topbar-link,.commerce-navigation>.commerce-nav-link),#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-subnavigation .accounting-tabs>.accounting-nav-link{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:14px;font-weight:400;line-height:1.3}
+  @media(max-width:800px){#app-shell .topbar .dashboard-topbar-context{flex:1 1 160px;align-items:center;padding:0}#app-shell .topbar .dashboard-topbar-copy h2{font-size:13px}}
+}
+/* Navigation highlights follow the pointer or keyboard focus, not the saved page. */
+@media screen{
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#workspace-topbar-route,#product-list-topbar-actions,#report-topbar-navigation,.settings-hub-navigation) button:is(.is-active,[aria-current="page"],[aria-selected="true"]):not(:hover):not(:focus-visible){background:transparent!important;color:#fff!important;box-shadow:none!important}
+  #app-shell.inventory-view-active .topbar .inventory-navigation>.inventory-nav-link[aria-selected="true"]:not(:hover):not(:focus-visible),#app-shell.inventory-view-active .topbar .inventory-view-tab[aria-selected="true"]:not(:hover):not(:focus-visible){background:transparent;color:#fff}
+  #app-shell .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#inventory-topbar-module) :is(.commerce-menu-group,.accounting-menu-group,.hr-menu-group):is([open],[data-active="true"])>summary:not(:hover):not(:focus-visible){background:transparent}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#workspace-topbar-navigation,#workspace-topbar-subnavigation,#inventory-topbar-module) :is(.commerce-menu-dropdown,.accounting-menu-dropdown,.hr-menu-dropdown) button:is(.is-active,[aria-selected="true"],[aria-current="page"]):not(:hover):not(:focus-visible){background:#fff!important;color:#48505a!important;box-shadow:none!important}
+  #app-shell #sidebar :is(.nav-item.is-active,.dealer-nav-toggle.has-active-child):not(:hover):not(:focus-visible){background:transparent!important;color:#49565c!important;box-shadow:none!important}
+}
+/* One screen font across the ERP; Bengali glyphs use the same fallback in every module. */
+@media screen{
+  html,body,body *{font-family:"Segoe UI","Nirmala UI",Arial,sans-serif!important}
+}
+/* Categorized app and report navigation. */
+@media screen{
+  #app-shell #sidebar .drawer-category>summary{display:flex;align-items:center;justify-content:space-between;min-height:34px;padding:7px 14px;color:#49565c;font-size:13px;line-height:1.35;list-style:none;cursor:pointer}
+  #app-shell #sidebar .drawer-category>summary::-webkit-details-marker{display:none}
+  #app-shell #sidebar .drawer-category>summary:after{content:'▸';color:#75847d;font-size:12px}
+  #app-shell #sidebar .drawer-category[open]>summary:after{content:'▾'}
+  #app-shell #sidebar .drawer-category>summary:hover,#app-shell #sidebar .drawer-category>summary:focus-visible{background:#e9e9e9;color:#353b40}
+  #app-shell #sidebar .drawer-category>.nav-item{padding-left:27px}
+  #app-shell #sidebar .drawer-category>.dealer-submenu{padding-left:22px}
+  #app-shell.reports-view-active #report-topbar-navigation{flex:0 1 auto;min-width:0;max-width:100%;overflow:visible}
+  #app-shell .report-category-navigation{display:flex;align-items:center;gap:0;min-width:0}
+  #app-shell .report-category-navigation .commerce-module-title{flex:0 0 auto;margin-right:6px}
+  #app-shell .report-category-navigation .report-menu-group>summary{font-size:14px;font-weight:400}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #report-topbar-navigation .report-menu-group .commerce-menu-dropdown button{display:block;width:100%;min-height:34px;margin:0;padding:8px 14px;border:0!important;border-radius:0!important;background:#fff!important;color:#48505a!important;font-size:13px;font-weight:400;line-height:1.3;text-align:left;white-space:normal;box-shadow:none!important}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #report-topbar-navigation .report-menu-group .commerce-menu-dropdown button:hover,#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #report-topbar-navigation .report-menu-group .commerce-menu-dropdown button:focus-visible{background:#efedf3!important;color:#3f3459!important}
+  #app-shell #report-topbar-navigation .report-menu-group:is([open],[data-active="true"])>summary:not(:hover):not(:focus-visible){background:transparent}
+  #app-shell .report-catalog-group{margin:0 0 20px}
+  #app-shell .report-catalog-group>h2{margin:0 0 10px;color:#393149;font-size:16px;font-weight:600}
+  @media(max-width:800px){#app-shell.reports-view-active #report-topbar-navigation{order:3;flex:1 0 100%;width:100%}#app-shell .report-category-navigation{flex-wrap:wrap}#app-shell .report-category-navigation .commerce-menu-dropdown{max-width:calc(100vw - 30px)}}
+}
+/* Page-level tabs stay connected to their existing handlers inside grouped menus. */
+@media screen{
+  #app-shell .topbar #workspace-topbar-subnavigation{overflow:visible}
+  #app-shell .topbar .workspace-page-menu-group:has(.workspace-promoted-menu.is-hidden){display:none}
+  #app-shell .topbar .workspace-page-menu-group .workspace-promoted-menu{display:flex;flex-direction:column;align-items:stretch;min-width:205px;width:100%;margin:0;padding:0;gap:0;border:0;background:#fff;white-space:normal}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-subnavigation .workspace-page-menu-group .workspace-promoted-menu-button{display:block;width:100%;min-height:34px;margin:0;padding:8px 14px;border:0!important;border-radius:0!important;background:#fff!important;color:#48505a!important;font-size:13px;font-weight:400;line-height:1.3;text-align:left;white-space:normal;box-shadow:none!important}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-subnavigation .workspace-page-menu-group .workspace-promoted-menu-button:hover,#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-subnavigation .workspace-page-menu-group .workspace-promoted-menu-button:focus-visible{background:#efedf3!important;color:#3f3459!important}
+}
+@media screen{
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #report-topbar-navigation .report-menu-group .commerce-menu-dropdown button:is(.is-active,[aria-current="page"],[aria-selected="true"]):not(:hover):not(:focus-visible),
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-subnavigation .workspace-page-menu-group .workspace-promoted-menu-button:is(.is-active,[aria-current="page"],[aria-selected="true"]):not(:hover):not(:focus-visible){background:#fff!important;color:#48505a!important;box-shadow:none!important}
+}
+/* The app drawer contains direct module links; related actions belong in each header. */
+@media screen{
+  #app-shell #sidebar .main-nav>.nav-item{padding-left:14px}
+  #app-shell .topbar .settings-hub-navigation{display:flex;align-items:center;gap:5px;overflow:visible}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar .settings-hub-navigation .settings-menu-group .commerce-menu-dropdown .settings-hub-tab{display:block;width:100%;min-height:34px;margin:0;padding:8px 14px;border:0!important;border-radius:0!important;background:#fff!important;color:#48505a!important;font-size:13px;font-weight:400;text-align:left;white-space:normal;box-shadow:none!important}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar .settings-hub-navigation .settings-menu-group .commerce-menu-dropdown .settings-hub-tab:hover,#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar .settings-hub-navigation .settings-menu-group .commerce-menu-dropdown .settings-hub-tab:focus-visible{background:#efedf3!important;color:#3f3459!important}
+}
+/* Existing receipt tabs live inside Purchase Order, not as extra top-level menus. */
+@media screen{
+  #app-shell #purchase-order-menu .purchase-receipt-menu-section{padding-top:4px;border-top:1px solid #e0e1e5}
+  #app-shell #purchase-order-menu .purchase-receipt-menu-section:has(.workspace-promoted-menu.is-hidden){display:none}
+  #app-shell #purchase-order-menu .purchase-receipt-menu-section>strong{display:block;padding:7px 14px 3px;color:#7a8088;font-size:11px;font-weight:600}
+  #app-shell #purchase-order-menu .purchase-receipt-menu-section .workspace-promoted-menu{display:flex;flex-direction:column;align-items:stretch;width:100%;min-width:0;margin:0;padding:0;border:0;border-radius:0;background:#fff;box-shadow:none}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-navigation #purchase-order-menu .purchase-receipt-menu-section button{display:block;width:100%;min-height:34px;margin:0;padding:8px 14px;border:0!important;border-radius:0!important;background:#fff!important;color:#48505a!important;font-size:13px;font-weight:400;line-height:1.3;text-align:left;box-shadow:none!important}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-navigation #purchase-order-menu .purchase-receipt-menu-section button:hover,#app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar #workspace-topbar-navigation #purchase-order-menu .purchase-receipt-menu-section button:focus-visible{background:#efedf3!important;color:#3f3459!important}
+}
+/* Sales navigation uses one type scale, including the existing page actions. */
+@media screen{
+  #app-shell .topbar .commerce-navigation[aria-label="Sales menu"] :is(.commerce-module-title,.commerce-menu-group>summary){font-family:inherit;font-size:14px;font-weight:500;line-height:1.3}
+  #app-shell .topbar #sales-customers-menu .purchase-receipt-menu-section{padding-top:4px;border-top:1px solid #e0e1e5}
+  #app-shell .topbar #sales-customers-menu .purchase-receipt-menu-section>strong{display:block;padding:7px 14px 3px;color:#7a8088;font-size:11px;font-weight:600}
+  #app-shell .topbar #sales-customers-menu .workspace-promoted-menu{display:flex;flex-direction:column;align-items:stretch;width:100%;margin:0;padding:0;border:0;background:#fff;box-shadow:none}
+  #app-shell .topbar #sales-customers-menu :is(.dt-topbar-actions,.customer-registration-topbar-actions){display:flex;flex-direction:column;align-items:stretch;width:100%;margin:0;padding:0;border-top:1px solid #e0e1e5;background:#fff}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#sales-orders-menu,#sales-customers-menu) .commerce-menu-dropdown button{display:block;width:100%;min-height:34px;margin:0;padding:8px 14px;border:0!important;border-radius:0!important;background:#fff!important;color:#48505a!important;font-family:inherit;font-size:13px;font-weight:400;line-height:1.3;text-align:left;white-space:normal;box-shadow:none!important}
+  #app-shell:is(.app-shell,.purchase-form-active,.sales-form-active,.grn-form-active) .topbar :is(#sales-orders-menu,#sales-customers-menu) .commerce-menu-dropdown button:is(:hover,:focus-visible){background:#efedf3!important;color:#3f3459!important}
+}
 </style>

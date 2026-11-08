@@ -109,7 +109,7 @@ window.installDealerTargets = function (app) {
   function render(){
     var filters=state.dealerTargetFilters||(state.dealerTargetFilters=defaults()),page=document.createElement('div');
     page.className='card dealer-register-card dt-page';activePage=page;
-    page.innerHTML='<div class="dt-heading"><div><p class="eyebrow">Dealer · Monthly performance</p><h2>Dealer Incentive</h2><p class="dt-help">Target vs Achievement · Incentive % · Cash & Gifts</p></div><div class="dt-actions"><button type="button" class="secondary-button" id="dt-refresh">Refresh</button><button type="button" class="primary-button" id="dt-setup-button">Configure Target & Incentive</button></div></div>'+
+    page.innerHTML='<div class="dt-topbar-actions"><button type="button" class="secondary-button" id="dt-refresh">Refresh</button><button type="button" class="primary-button" id="dt-setup-button">Configure Target & Incentive</button><button type="button" class="secondary-button" id="dt-print-summary">Target Summary / PDF</button><button type="button" class="secondary-button" id="print-dealer-register">Print Dealer List / PDF</button></div>'+
       '<div class="dt-filters">'+field('dt-month','Target month','<input id="dt-month" type="month" min="2000-01" max="2099-12" value="'+esc(filters.Month)+'">')+
       field('dt-period','Sales period','<select id="dt-period">'+['DAILY','WEEKLY','MONTHLY','CUSTOM'].map(function(p){return '<option value="'+p+'"'+selected(p,filters.Period)+'>'+p.charAt(0)+p.slice(1).toLowerCase()+'</option>';}).join('')+'</select>')+
       field('dt-date','Date in selected week / day','<input id="dt-date" type="date" value="'+esc(filters.Date)+'">')+
@@ -120,7 +120,7 @@ window.installDealerTargets = function (app) {
       field('dt-target-status','Achievement','<select id="dt-target-status"><option value="">All targets</option>'+['ACHIEVED','IN_PROGRESS','NOT_SET','PAUSED'].map(function(s){return '<option value="'+s+'"'+selected(s,filters.TargetStatus)+'>'+statusLabel(s)+'</option>';}).join('')+'</select>')+
       field('dealer-search','Search dealer / code / phone','<input id="dealer-search" type="search" placeholder="Search dealers" value="'+esc(filters.Search)+'">')+'</div>'+
       '<div id="dt-feedback" role="status" class="dt-help">Loading target achievement…</div><div id="dt-kpis" class="dt-kpis"></div>'+
-      '<div class="dt-results-heading"><div class="dt-tabs" role="group" aria-label="Dealer view"><button type="button" class="secondary-button" data-dt-tab="targets">Targets & Offers</button><button type="button" class="secondary-button" data-dt-tab="register">Dealer Details</button></div><div class="dt-actions"><button type="button" class="secondary-button" id="dt-print-summary">Target Summary / PDF</button><button type="button" class="secondary-button" id="print-dealer-register">Print Dealer List / PDF</button></div></div>'+
+      '<div class="dt-tabs" role="group" aria-label="Dealer view"><button type="button" class="secondary-button" data-dt-tab="targets">Targets & Offers</button><button type="button" class="secondary-button" data-dt-tab="register">Dealer Details</button></div>'+
       '<div id="dealer-history">Loading dealer register…</div>';
     el('app-view').replaceChildren(page);
     var data=null,filtered=[],request=0;
@@ -138,7 +138,7 @@ window.installDealerTargets = function (app) {
     }
     function fetchData(){
       if(!filters.Month)return;var token=++request;data=null;filtered=[];
-      q('#dt-feedback').textContent='Loading target achievement…';q('#dt-kpis').innerHTML='';q('#dealer-history').textContent='Loading…';q('#print-dealer-register').disabled=true;q('#dt-print-summary').disabled=true;
+      q('#dt-feedback').textContent='Loading target achievement…';q('#dt-kpis').innerHTML='';q('#dealer-history').textContent='Loading…';document.getElementById('print-dealer-register').disabled=true;document.getElementById('dt-print-summary').disabled=true;
       periodFields();
       run('getDealerTargetDashboard',[filters],function(result){if(!current()||token!==request)return;data=result;
         q('#dt-dealer').innerHTML='<option value="">All dealers</option>'+result.Rows.map(function(d){return '<option value="'+esc(d.DealerID)+'"'+selected(d.DealerID,filters.DealerID)+'>'+esc(d.DealerName+' · '+(d.DealerCode||d.DealerID))+'</option>';}).join('');
@@ -153,9 +153,9 @@ window.installDealerTargets = function (app) {
       var sum=function(key,rows){return (rows||filtered).reduce(function(n,r){return n+Number(r[key]||0);},0);},targetRows=filtered.filter(function(r){return r.EffectiveTarget>0;}),target=sum('EffectiveTarget'),net=sum('MonthlyNetSales',targetRows),remaining=sum('Remaining',targetRows),achieved=targetRows.filter(function(r){return r.TargetStatus==='ACHIEVED';}).length,percent=target>0?Math.max(0,net)/target*100:0;
       q('#dt-feedback').textContent='Period: '+app.purchaseDate(data.Range.From)+' – '+app.purchaseDate(data.Range.To)+'. Targets and offer eligibility always use the whole '+filters.Month+' calendar month. Returns are deducted in their return month when enabled. Offers shown are not yet paid or issued.'+(data.LegacyDateGroups?' Older records without delivery evidence use invoice date.':'');
       q('#dt-kpis').innerHTML=[['Monthly Target','৳ '+money(target),targetRows.length+' of '+filtered.length+' dealers configured'],['Period Net Sales','৳ '+money(sum('PeriodNetSales')),'Sales ৳ '+money(sum('PeriodSales'))+' · Returns ৳ '+money(sum('PeriodReturns'))],['Monthly Achievement',percent.toFixed(1)+'%','৳ '+money(net)+' against configured targets'],['Target Met',achieved+' / '+targetRows.length,'Remaining ৳ '+money(remaining)],['Eligible Cash','৳ '+money(sum('EligibleCash')),filtered.filter(function(r){return r.EligibleGifts.length;}).length+' dealers eligible for gifts']].map(function(k){return '<div class="dt-kpi"><span>'+k[0]+'</span><strong>'+k[1]+'</strong><small>'+esc(k[2])+'</small></div>';}).join('');
-      page.querySelectorAll('[data-dt-tab]').forEach(function(b){b.classList.toggle('is-active',b.dataset.dtTab===filters.Tab);b.setAttribute('aria-pressed',b.dataset.dtTab===filters.Tab?'true':'false');});
-      q('#print-dealer-register').disabled=!filtered.length;
-      q('#dt-print-summary').disabled=!filtered.length;
+      document.querySelectorAll('[data-dt-tab]').forEach(function(b){b.classList.toggle('is-active',b.dataset.dtTab===filters.Tab);b.setAttribute('aria-pressed',b.dataset.dtTab===filters.Tab?'true':'false');});
+      document.getElementById('print-dealer-register').disabled=!filtered.length;
+      document.getElementById('dt-print-summary').disabled=!filtered.length;
       if(filters.Tab==='register')drawRegister();else drawTargets();
     }
     function detailLink(row){return '<button type="button" class="dt-dealer-link" data-dealer-details="'+esc(row.DealerID)+'">'+esc(row.DealerName)+'</button>'}
@@ -172,7 +172,7 @@ window.installDealerTargets = function (app) {
     }
     q('#print-dealer-register').addEventListener('click',function(){app.printDealerRegister(filtered,'Target month: '+filters.Month+' · '+(filters.Area||'All areas')+' · '+(filters.TargetStatus?statusLabel(filters.TargetStatus):'All targets')+' · Search: '+(filters.Search||'All'));});
     q('#dt-print-summary').addEventListener('click',function(){if(data)printSummary(filtered,data.Range,(filters.Area||'All areas')+' · '+(filters.TargetStatus?statusLabel(filters.TargetStatus):'All targets')+' · Search: '+(filters.Search||'All'));});
-    page.querySelectorAll('[data-dt-tab]').forEach(function(b){b.addEventListener('click',function(){filters.Tab=b.dataset.dtTab;draw();});});
+    document.querySelectorAll('[data-dt-tab]').forEach(function(b){b.addEventListener('click',function(){filters.Tab=b.dataset.dtTab;draw();});});
     [['dt-dealer','DealerID'],['dt-area','Area'],['dt-target-status','TargetStatus']].forEach(function(pair){q('#'+pair[0]).addEventListener('change',function(){filters[pair[1]]=this.value;draw();});});
     q('#dealer-search').addEventListener('input',function(){filters.Search=this.value;draw();});
     [['dt-period','Period'],['dt-date','Date'],['dt-week-start','WeekStart'],['dt-from','From'],['dt-to','To']].forEach(function(pair){q('#'+pair[0]).addEventListener('change',function(){filters[pair[1]]=this.value;fetchData();});});
