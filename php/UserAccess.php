@@ -13,6 +13,7 @@ trait UserAccess
 {
     private function ensureUserAccessSchema(): void
     {
+        if ($this->schemaReady) return;
         $hasDealerId = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Users" AND COLUMN_NAME="DealerID"');
         if (!$hasDealerId) {
             $this->db->exec('ALTER TABLE Users ADD COLUMN DealerID VARCHAR(20) NULL AFTER Role');

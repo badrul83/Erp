@@ -10,6 +10,7 @@ trait DealerSalesForce
 {
     private function ensureDealerSalesForceSchema(): void
     {
+        if ($this->schemaReady) return;
         $this->db->exec('CREATE TABLE IF NOT EXISTS DealerSalesRepresentatives (
             SRID VARCHAR(20) PRIMARY KEY,
             DealerID VARCHAR(20) NOT NULL,

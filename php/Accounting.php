@@ -6,6 +6,7 @@ trait Accounting
 {
     private function ensureAccounting(): void
     {
+        if ($this->schemaReady) return;
         try { $this->db->query('SELECT 1 FROM ChartOfAccounts LIMIT 0'); }
         catch (PDOException $error) {
             if ($error->getCode() !== '42S02') throw $error;

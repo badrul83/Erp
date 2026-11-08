@@ -5,6 +5,7 @@ trait HumanResources
 {
     private function ensureHRSchema(): void
     {
+        if ($this->schemaReady) return;
         $this->db->exec('CREATE TABLE IF NOT EXISTS Employees (
             EmployeeID VARCHAR(20) PRIMARY KEY, EmployeeCode VARCHAR(30) NOT NULL UNIQUE, UserID VARCHAR(20) NULL UNIQUE,
             DealerID VARCHAR(20) NULL, FullName VARCHAR(160) NOT NULL, Phone VARCHAR(40) NULL,
