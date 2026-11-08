@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home2/hbhventurellc/erp.hbhventurellc.com/
+    - git -C "$DEPLOYPATH" archive --format=tar HEAD -- . ':(exclude)config.php' ':(exclude).tmp' | tar -xf - -C "$DEPLOYPATH"

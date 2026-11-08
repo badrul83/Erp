@@ -1,7 +1,12 @@
 Options -Indexes
 DirectoryIndex index.php
 
-<FilesMatch "^(config\.php|config\.example\.php|.*\.(gs|html|sql|md))$">
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^\.tmp(?:/|$) - [F,L]
+</IfModule>
+
+<FilesMatch "^(\.cpanel\.yml|config\.php|config\.example\.php|.*\.(gs|html|sql|md))$">
   Require all denied
 </FilesMatch>
 

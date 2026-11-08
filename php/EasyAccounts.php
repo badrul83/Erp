@@ -11,7 +11,6 @@ trait EasyAccounts
 {
     private function ensureEasyAccounts(): void
     {
-        if ($this->schemaReady) return;
         $this->ensureAccounting();
         $this->db->exec('CREATE TABLE IF NOT EXISTS EasyAccountEntries (
             EasyEntryID VARCHAR(20) PRIMARY KEY,

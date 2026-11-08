@@ -25,37 +25,45 @@
         </div>
         <nav class="main-nav">
           <button class="nav-item is-active" data-view="dashboard"><span>⌂</span>Dashboard</button>
-          <button class="nav-item" data-view="agreements"><span>▣</span>Suppliers</button>
-          <button class="nav-item" id="purchase-module-nav" data-view="purchases"><span>⇩</span>Purchase<b class="nav-badge is-hidden" id="goods-receipt-badge" aria-label="Pending Goods Receipts">0</b></button>
-          <button class="nav-item" data-view="product-config"><span>▦</span>Product List</button>
-          <button class="nav-item" data-view="products"><span>▦</span>Inventory</button>
-          <button class="nav-item" id="sales-module-nav" data-view="sales"><span>▤</span>Sales</button>
-          <button class="nav-item" id="hr-module-nav" data-view="hr"><span>♙</span>Human Resources</button>
-          <button class="nav-item" data-view="employee-profile"><span>♙</span>My Employee Profile</button>
-          <button class="nav-item" data-view="reports"><span>▥</span>Reports</button>
-          <button class="nav-item" data-view="easy-accounts"><span>☷</span>Easy Accounts</button>
-          <button class="nav-item" data-view="payments"><span>☷</span>Payment Register</button>
-          <button class="nav-item" data-view="accounting"><span>▤</span>Accounting</button>
-          <button class="nav-item admin-profile-item is-hidden" data-view="settings"><span>⚙</span>Settings</button>
+          <div class="nav-group"><div class="nav-label">Operations</div>
+            <button class="nav-item" data-view="agreements"><span>▣</span>Supplier</button>
+            <button class="nav-item" data-view="purchases"><span>⇩</span>Purchase</button>
+            <button class="nav-item" data-view="product-config"><span>⚙</span>Product Configuration</button>
+            <button class="nav-item nav-subitem" data-view="goods-receipts"><span>↳</span>Goods Receipt (GRN)<b class="nav-badge is-hidden" id="goods-receipt-badge" aria-label="Pending Goods Receipts">0</b></button>
+            <button class="nav-item" data-view="products"><span>▦</span>Inventory</button>
+            <button type="button" class="nav-item dealer-nav-toggle" id="dealer-nav-toggle" aria-expanded="false" aria-controls="dealer-submenu"><span>♙</span>Customer<b aria-hidden="true">⌄</b></button>
+            <div id="dealer-submenu" class="dealer-submenu is-hidden">
+              <button class="nav-item nav-subitem" data-view="dealers"><span>↳</span>Dealer Register</button>
+              <button class="nav-item nav-subitem" data-view="dealer-incentive"><span>↳</span>Dealer Incentive</button>
+
+              <button class="nav-item nav-subitem dealer-portal-nav" data-view="dealer-portal"><span>↳</span>My Orders &amp; Invoices</button>
+            </div>
+            <button class="nav-item" data-view="sales"><span>▤</span>Sales</button>
+            <button class="nav-item" data-view="returns"><span>↩</span>Returns</button>
+            <button class="nav-item" data-view="hr"><span>♙</span>Human Resources</button>
+          </div>
+          <div class="nav-group"><div class="nav-label">Reports</div>
+            <button class="nav-item" data-view="reports"><span>▥</span>Reports</button>
+          </div>
+          <div class="nav-group"><div class="nav-label">Accounting</div>
+            <button class="nav-item" data-view="easy-accounts"><span>☷</span>Easy Accounts</button>
+            <button class="nav-item" data-view="accounting"><span>▤</span>Accounting</button>
+          </div>
+          <div class="nav-group admin-profile-item is-hidden"><button class="nav-item" data-view="settings"><span>⚙</span>Settings</button></div>
         </nav>
       </aside>
       <main class="main-content">
         <header class="topbar">
-          <button type="button" id="app-drawer-toggle" class="app-drawer-toggle" aria-label="Open apps menu" aria-expanded="false" aria-controls="sidebar" title="Apps"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M2 2h5v5H2zm7 0h5v5H9zm7 0h5v5h-5zM2 9h5v5H2zm7 0h5v5H9zm7 0h5v5h-5zM2 16h5v5H2zm7 0h5v5H9zm7 0h5v5h-5z"/></svg></button>
           <button class="mobile-toggle topbar-menu-toggle" id="mobile-toggle" type="button" aria-label="Open navigation" title="Open navigation">☰</button>
           <div class="workspace-topbar-brand is-hidden" id="workspace-topbar-brand" aria-label="Company workspace">
             <span class="workspace-topbar-mark" id="workspace-topbar-mark" aria-hidden="true">A</span>
             <span class="workspace-topbar-copy"><strong id="workspace-company-name">Business workspace</strong><small><i aria-hidden="true"></i><span id="workspace-software-name">ERP</span></small></span>
           </div>
-          <div class="workspace-topbar-route is-hidden" id="workspace-topbar-route"><small>WORKSPACE MODULE</small><button type="button" id="workspace-current-view" class="workspace-topbar-link product-list-title-button" data-topbar-view="product-config" aria-label="Open Product List page">Goods Receipt (GRN)</button><div id="product-list-topbar-actions" class="product-list-topbar-actions is-hidden"><button type="button" class="workspace-topbar-link" data-topbar-action="new-product">+ New</button><button type="button" class="workspace-topbar-link" data-topbar-action="print-products">Print</button></div></div>
+          <div class="workspace-topbar-route is-hidden" id="workspace-topbar-route"><small>WORKSPACE MODULE</small><strong id="workspace-current-view">Goods Receipt (GRN)</strong></div>
           <nav id="workspace-topbar-navigation" class="workspace-topbar-navigation is-hidden" aria-label="Workspace sections"></nav>
-          <nav id="workspace-topbar-subnavigation" class="workspace-topbar-subnavigation is-hidden" aria-label="Page sections"></nav>
           <div id="purchase-quick-selection" class="purchase-quick-selection is-hidden" aria-label="Purchase product quick selection"></div>
-          <div id="workspace-topbar-actions" class="workspace-topbar-actions is-hidden" aria-label="Page actions"></div>
           <nav id="report-topbar-navigation" class="report-topbar-navigation is-hidden" aria-label="Reports"></nav>
           <div id="inventory-topbar-module" class="inventory-topbar-module is-hidden" aria-label="Inventory views"></div>
-          <div id="inventory-topbar-category-wrap" class="inventory-topbar-category-wrap is-hidden"><label for="inventory-category">Category</label><select id="inventory-category" aria-label="Filter inventory by category"><option value="">All categories</option></select></div>
-          <button type="button" id="inventory-product-picker-toggle" class="inventory-product-picker-toggle is-hidden" aria-haspopup="true" aria-expanded="false" aria-controls="inventory-product-picker"><span aria-hidden="true">☷</span><span id="inventory-selection-count">All products</span><span class="inventory-picker-caret" aria-hidden="true">⌄</span></button>
           <section class="dashboard-topbar-context is-hidden" id="dashboard-topbar-context" aria-label="Business overview">
             <div class="dashboard-topbar-copy"><p>Business overview</p><h2 id="dashboard-welcome-title">Welcome to Distribution ERP</h2><span>Sales, purchases, dealer collections and live inventory in one view.</span></div>
             <div class="dashboard-date-box"><label for="dashboard-date">Activity date</label><input id="dashboard-date" type="date"><small>Updates sales, purchase and collection totals</small></div>
@@ -68,10 +76,11 @@
             <div class="topbar-language" role="group" aria-label="Language"><button type="button" class="is-active" data-interface-language="en" aria-pressed="true">EN</button><button type="button" data-interface-language="bn" aria-pressed="false">বাংলা</button></div>
             <button type="button" id="online-user-indicator" class="online-user-indicator admin-profile-item is-hidden" title="Show active sessions">0 online</button>
             <span class="version" id="app-version"></span>
-            <div class="profile-menu-wrap topbar-profile-wrap"><button class="profile-chip" id="profile-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profile-menu"><span id="current-user-avatar" class="profile-avatar" aria-hidden="true">A</span><span class="profile-copy"><span id="current-user" class="current-user"></span><small id="current-user-role" class="profile-role"></small></span><span class="profile-caret" aria-hidden="true">⌄</span></button><div class="profile-menu is-hidden" id="profile-menu" role="menu"><div class="profile-menu-summary"><span id="profile-menu-avatar" class="profile-menu-avatar" aria-hidden="true">A</span><div><strong id="profile-menu-name"></strong><span id="profile-menu-phone"></span><small id="profile-menu-id"></small></div></div><button type="button" class="profile-menu-item" data-profile-action="account" role="menuitem"><span>♙</span><span>My Profile</span></button><button type="button" class="profile-menu-item" data-profile-action="change-password" role="menuitem"><span>♙</span><span>Change password</span></button><button type="button" class="profile-menu-item" data-profile-action="login-history" role="menuitem"><span>◷</span><span>Login history</span></button><div class="profile-menu-divider"></div><button type="button" class="profile-menu-item profile-signout" id="logout-button" role="menuitem"><span>↪</span><span>Log out</span></button></div></div>
+            <div id="inventory-topbar-category-wrap" class="inventory-topbar-category-wrap is-hidden"><label for="inventory-category">Category</label><select id="inventory-category" aria-label="Filter inventory by category"><option value="">All categories</option></select></div>
+            <div id="inventory-product-picker-wrap" class="inventory-product-picker-wrap is-hidden"><button type="button" id="inventory-product-picker-toggle" class="inventory-product-picker-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="inventory-product-picker"><span aria-hidden="true">☷</span><span id="inventory-selection-count">All products</span><span class="inventory-picker-caret" aria-hidden="true">⌄</span></button><div id="inventory-product-picker" class="inventory-product-picker is-hidden"><div class="inventory-product-sidebar-heading"><strong>Select Products</strong><span>Filter the stock list</span></div><div class="inventory-sidebar-filters"><div class="field"><label for="inventory-search">Search product</label><input id="inventory-search" type="search" placeholder="Search product or variant"></div></div><label class="inventory-all-option"><input type="checkbox" id="inventory-select-all"><span><strong>All products</strong><small>Select or clear the full product list</small></span></label><div id="inventory-product-options" class="inventory-product-options" aria-label="Inventory product selection">Loading products...</div></div></div>
+            <div class="profile-menu-wrap topbar-profile-wrap"><button class="profile-chip" id="profile-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profile-menu"><span id="current-user-avatar" class="profile-avatar" aria-hidden="true">A</span><span class="profile-copy"><span id="current-user" class="current-user"></span><small id="current-user-role" class="profile-role"></small></span><span class="profile-caret" aria-hidden="true">⌄</span></button><div class="profile-menu is-hidden" id="profile-menu" role="menu"><div class="profile-menu-summary"><span id="profile-menu-avatar" class="profile-menu-avatar" aria-hidden="true">A</span><div><strong id="profile-menu-name"></strong><span id="profile-menu-phone"></span><small id="profile-menu-id"></small></div></div><button type="button" class="profile-menu-item" data-profile-action="account" role="menuitem"><span>♙</span><span>My account</span></button><button type="button" class="profile-menu-item" data-profile-action="change-password" role="menuitem"><span>♙</span><span>Change password</span></button><button type="button" class="profile-menu-item" data-profile-action="login-history" role="menuitem"><span>◷</span><span>Login history</span></button><div class="profile-menu-divider"></div><button type="button" class="profile-menu-item profile-signout" id="logout-button" role="menuitem"><span>↪</span><span>User Logout</span></button></div></div>
           </div>
         </header>
-            <div id="inventory-product-picker-wrap" class="inventory-product-picker-wrap inventory-body-product-picker is-hidden"><div id="inventory-product-picker" class="inventory-product-picker is-hidden"><div class="inventory-product-sidebar-heading"><strong>Select Products</strong><span>Filter the stock list</span></div><div class="inventory-sidebar-filters"><div class="field"><label for="inventory-search">Search product</label><input id="inventory-search" type="search" placeholder="Search product or variant"></div></div><label class="inventory-all-option"><input type="checkbox" id="inventory-select-all"><span><strong>All products</strong><small>Select or clear the full product list</small></span></label><div id="inventory-product-options" class="inventory-product-options" aria-label="Inventory product selection">Loading products...</div></div></div>
         <div id="message" class="message is-hidden"></div>
         <div id="app-view"></div>
       </main>

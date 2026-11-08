@@ -16,11 +16,9 @@ final class DepoAuthException extends RuntimeException {}
  */
 final class DepoApp
 {
-    private const SCHEMA_VERSION = 1;
     use DealerTargets, DealerSalesForce, Accounting, EasyAccounts, UserAccess, HumanResources;
     private PDO $db;
     private array $config;
-    private bool $schemaReady = false;
 
     public function __construct(array $config)
     {
@@ -37,63 +35,27 @@ final class DepoApp
             (string) ($d['user'] ?? ''), (string) ($d['pass'] ?? ''),
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_EMULATE_PREPARES => false]
         );
-        $this->ensureApplicationSchema();
-    }
-
-    private function ensureApplicationSchema(): void
-    {
-        try {
-            $current = (int) $this->value('SELECT Version FROM AppSchemaMigrations WHERE MigrationKey=? LIMIT 1', ['application']);
-        } catch (PDOException $error) {
-            if ($error->getCode() !== '42S02') throw $error;
-            $this->db->exec('CREATE TABLE IF NOT EXISTS AppSchemaMigrations (
-                MigrationKey VARCHAR(80) NOT NULL PRIMARY KEY,
-                Version INT UNSIGNED NOT NULL,
-                AppliedAt DATETIME NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
-            $current = 0;
-        }
-        if ($current >= self::SCHEMA_VERSION) {
-            $this->schemaReady = true;
-            return;
-        }
-        $lockName = 'depo_erp_schema_migration';
-        if ((int) $this->value('SELECT GET_LOCK(?, 15)', [$lockName]) !== 1) {
-            throw new RuntimeException('ERP database schema is busy. Please retry the request.');
-        }
-        try {
-            $current = (int) $this->value('SELECT Version FROM AppSchemaMigrations WHERE MigrationKey=? LIMIT 1', ['application']);
-            if ($current < self::SCHEMA_VERSION) {
-                $this->ensureDealerPhotoColumn();
-                $this->ensureCustomerRegistrationSchema();
-                $this->ensureDealerSalesFinanceSchema();
-                $this->ensureProductOptionTypeSchema();
-                $this->ensureProductPromotionSchema();
-                $this->ensureTransactionPromotionSchema();
-                $this->ensureProductImageSchema();
-                $this->ensureProductColorSchema();
-                $this->ensureProductPackageSizeSchema();
-                $this->ensureSupplierProfileSchema();
-                $this->ensureUserAccessSchema();
-                $this->ensureDealerSalesForceSchema();
-                $this->ensureEasyAccounts();
-                $this->ensureHRSchema();
-                $this->ensureRecordLifecycleSchema();
-                $this->ensureGoodsReceiptReturnSchema();
-                $this->ensurePurchaseDiscountSchema();
-                $this->ensureSettingsTable();
-                $statement = $this->db->prepare('INSERT INTO AppSchemaMigrations (MigrationKey,Version,AppliedAt) VALUES (?,?,?) ON DUPLICATE KEY UPDATE Version=VALUES(Version),AppliedAt=VALUES(AppliedAt)');
-                $statement->execute(['application', self::SCHEMA_VERSION, $this->now()]);
-            }
-            $this->schemaReady = true;
-        } finally {
-            $this->db->prepare('SELECT RELEASE_LOCK(?)')->execute([$lockName]);
-        }
+        $this->ensureDealerPhotoColumn();
+        $this->ensureCustomerRegistrationSchema();
+        $this->ensureDealerSalesFinanceSchema();
+        $this->ensureProductOptionTypeSchema();
+        $this->ensureProductPromotionSchema();
+        $this->ensureTransactionPromotionSchema();
+        $this->ensureProductImageSchema();
+        $this->ensureProductColorSchema();
+        $this->ensureProductPackageSizeSchema();
+        $this->ensureSupplierProfileSchema();
+        $this->ensureUserAccessSchema();
+        $this->ensureDealerSalesForceSchema();
+        $this->ensureEasyAccounts();
+        $this->ensureHRSchema();
+        $this->ensureRecordLifecycleSchema();
+        $this->ensureGoodsReceiptReturnSchema();
+        $this->ensurePurchaseDiscountSchema();
     }
 
     private function ensurePurchaseDiscountSchema(): void
     {
-        if ($this->schemaReady) return;
         $columns = [
             'SubtotalAmount' => 'DECIMAL(16,2) NOT NULL DEFAULT 0',
             'DiscountPercent' => 'DECIMAL(5,2) NOT NULL DEFAULT 0',
@@ -110,7 +72,6 @@ final class DepoApp
 
     private function ensureGoodsReceiptReturnSchema(): void
     {
-        if ($this->schemaReady) return;
         foreach ([['ProductReturns', 'SourceGRNID', 'VARCHAR(20) NULL'], ['ProductReturnItems', 'SourceGRNItemID', 'VARCHAR(20) NULL']] as [$table, $column, $definition]) {
             $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=? AND COLUMN_NAME=?', [$table, $column]);
             if (!$exists) $this->db->exec('ALTER TABLE `' . $table . '` ADD COLUMN `' . $column . '` ' . $definition);
@@ -119,7 +80,6 @@ final class DepoApp
 
     private function ensureRecordLifecycleSchema(): void
     {
-        if ($this->schemaReady) return;
         $this->db->exec('CREATE TABLE IF NOT EXISTS RecordChangeHistory (
             ChangeID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, TableName VARCHAR(80) NOT NULL,
             RecordID VARCHAR(80) NOT NULL, ChangedAt DATETIME NOT NULL, ChangedBy VARCHAR(120) NOT NULL,
@@ -150,7 +110,6 @@ final class DepoApp
 
     private function ensureSupplierProfileSchema(): void
     {
-        if ($this->schemaReady) return;
         $columns = [
             'ContactPerson' => 'VARCHAR(160) NULL',
             'Phone' => 'VARCHAR(60) NULL',
@@ -172,7 +131,6 @@ final class DepoApp
 
     private function ensureDealerPhotoColumn(): void
     {
-        if ($this->schemaReady) return;
         $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Dealers" AND COLUMN_NAME="DealerPhotoDataUrl"');
         if (!$exists) {
             $this->db->exec('ALTER TABLE Dealers ADD COLUMN DealerPhotoDataUrl MEDIUMTEXT NULL AFTER DealerCode');
@@ -181,7 +139,6 @@ final class DepoApp
 
     private function ensureCustomerRegistrationSchema(): void
     {
-        if ($this->schemaReady) return;
         $columns = [
             'DealerClass' => 'VARCHAR(20) NOT NULL DEFAULT "REGISTERED"',
             'CommissionRate' => 'DECIMAL(7,2) NULL',
@@ -201,7 +158,6 @@ final class DepoApp
 
     private function ensureDealerSalesFinanceSchema(): void
     {
-        if ($this->schemaReady) return;
         $columns = [
             'PaymentMode' => 'VARCHAR(10) NOT NULL DEFAULT "DUE"',
             'CommissionRate' => 'DECIMAL(7,2) NULL',
@@ -215,13 +171,11 @@ final class DepoApp
 
     private function ensureProductOptionTypeSchema(): void
     {
-        if ($this->schemaReady) return;
         $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME="OptionType"');
         if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN OptionType VARCHAR(20) NOT NULL DEFAULT "VARIANT" AFTER Variant');
     }
     private function ensureProductPromotionSchema(): void
     {
-        if ($this->schemaReady) return;
         $columns = [
             'PromotionType' => 'VARCHAR(20) NOT NULL DEFAULT \'NON_CP\' AFTER OptionType',
             'PromotionGifts' => 'TEXT NULL AFTER PromotionType',
@@ -233,7 +187,6 @@ final class DepoApp
     }
     private function ensureTransactionPromotionSchema(): void
     {
-        if ($this->schemaReady) return;
         foreach (['CompanySupplyItems', 'DealerSaleItems'] as $table) {
             $promotionTypeAdded = false;
             $columns = [
@@ -262,19 +215,16 @@ final class DepoApp
     }
     private function ensureProductImageSchema(): void
     {
-        if ($this->schemaReady) return;
         $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME="ProductImageDataUrl"');
         if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN ProductImageDataUrl MEDIUMTEXT NULL AFTER ProductName');
     }
     private function ensureProductColorSchema(): void
     {
-        if ($this->schemaReady) return;
         $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME="ProductColor"');
         if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN ProductColor VARCHAR(100) NULL AFTER Category');
     }
     private function ensureProductPackageSizeSchema(): void
     {
-        if ($this->schemaReady) return;
         $exists = (int) $this->value('SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME="Products" AND COLUMN_NAME="PackageSizeGrams"');
         if (!$exists) $this->db->exec('ALTER TABLE Products ADD COLUMN PackageSizeGrams DECIMAL(12,3) NULL AFTER ProductColor');
     }
@@ -883,7 +833,6 @@ final class DepoApp
      */
     private function ensureSettingsTable(): void
     {
-        if ($this->schemaReady) return;
         $this->db->exec('CREATE TABLE IF NOT EXISTS settings (
             SettingKey VARCHAR(80) PRIMARY KEY,
             SettingValue LONGTEXT NOT NULL,
